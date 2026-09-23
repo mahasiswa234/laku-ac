@@ -1,0 +1,8 @@
+{
+  "name": "Sistem Manajemen Servis AC",
+  "description": "Sistem Informasi Manajemen Servis dan Pemeliharaan AC Berbasis Web",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
