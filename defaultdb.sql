@@ -2,8 +2,8 @@
 -- Skema Database MySQL: Sistem Manajemen Servis AC (Laku AC)
 -- ==========================================================
 
-CREATE DATABASE IF NOT EXISTS serrvis_ac;
-USE servis_ac;
+
+USE defaultdb;
 
 -- 1. Tabel Users (Otentikasi Utama)
 CREATE TABLE users (
