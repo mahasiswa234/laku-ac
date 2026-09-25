@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import authRoutes from './auth';
 import serviceRoutes from './services';
 import serviceAreaRoutes from './service_areas';
@@ -11,14 +12,13 @@ import scheduleRoutes from './schedules';
 const router = Router();
 
 router.get('/health', (req, res) => {
-  res.json({ 
-    status: 'ok', 
-    message: 'Sistem Manajemen Servis AC API is running', 
-    phase: 6 
+  res.json({
+    status: 'ok',
+    message: 'Sistem Manajemen Servis AC API is running',
+    phase: 6
   });
 });
 
-// Registrasi Route Utama
 router.use('/auth', authRoutes);
 router.use('/services', serviceRoutes);
 router.use('/service-areas', serviceAreaRoutes);

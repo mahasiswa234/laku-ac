@@ -5,7 +5,7 @@ import express from "express";
 import path from "path";
 import cors from "cors";
 import { createServer as createViteServer } from "vite";
-import apiRoutes from "./src/server/routes/api";
+import apiRoutes from "./src/server/routes/api.js";
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
