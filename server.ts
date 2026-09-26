@@ -4,7 +4,6 @@ import 'dotenv/config';
 import express from "express";
 import path from "path";
 import cors from "cors";
-import { createServer as createViteServer } from "vite";
 import apiRoutes from "./src/server/routes/api.js";
 
 const app = express();
@@ -36,6 +35,7 @@ app.use("/api", apiRoutes);
  */
 async function configureServer() {
   if (!process.env.VERCEL && process.env.NODE_ENV !== "production") {
+    const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
       server: {
         middlewareMode: true,
@@ -79,4 +79,3 @@ startServer().catch((error) => {
 
 // Export Express app untuk Vercel
 export default app;
-
