@@ -2,6 +2,8 @@ import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { LogOut, User, LayoutDashboard, Calendar, Wrench, Settings, ClipboardList, Menu, X, ShieldAlert } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { verifyServerSession, clearAuthSession, getAuthToken } from '../utils/auth';
+import { COMPANY_INFO } from '../config/companyInfo.js';
+import ThemeToggle from './ThemeToggle';
 
 export default function DashboardLayout({ role = 'customer' }: { role?: 'admin' | 'technician' | 'customer' }) {
   const navigate = useNavigate();
@@ -142,12 +144,12 @@ export default function DashboardLayout({ role = 'customer' }: { role?: 'admin' 
   const menuItems = getMenu();
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex transition-colors">
       {/* Sidebar */}
       <aside className="w-64 bg-slate-900 text-white hidden md:flex flex-col">
         <div className="h-16 flex items-center px-6 border-b border-slate-800">
           <Wrench className="w-6 h-6 text-blue-500 mr-2" />
-          <span className="font-bold text-lg">Laku AC</span>
+          <span className="font-bold text-lg">{COMPANY_INFO.name}</span>
         </div>
         
         <div className="p-4 border-b border-slate-800">
@@ -178,7 +180,11 @@ export default function DashboardLayout({ role = 'customer' }: { role?: 'admin' 
           })}
         </nav>
 
-        <div className="p-4 border-t border-slate-800">
+        <div className="p-4 border-t border-slate-800 space-y-2">
+          <div className="flex items-center justify-between px-1">
+            <span className="text-xs font-medium text-slate-400">Tampilan</span>
+            <ThemeToggle />
+          </div>
           <button onClick={handleLogout} className="flex items-center gap-3 px-3 py-2 w-full text-slate-300 hover:text-red-400 hover:bg-slate-800 rounded-lg transition-colors">
             <LogOut size={18} />
             <span className="text-sm font-medium">Keluar</span>
@@ -189,24 +195,27 @@ export default function DashboardLayout({ role = 'customer' }: { role?: 'admin' 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Mobile Header */}
-        <header className="h-16 bg-white shadow-xs border-b border-slate-200 flex items-center justify-between px-4 md:hidden">
+        <header className="h-16 bg-white dark:bg-slate-900 dark:border-slate-800 shadow-xs border-b border-slate-200 flex items-center justify-between px-4 md:hidden">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold">
               <Wrench size={18} />
             </div>
             <div>
-              <span className="font-extrabold text-sm text-slate-800">Laku AC</span>
+              <span className="font-extrabold text-sm text-slate-800 dark:text-slate-100">{COMPANY_INFO.name}</span>
               <span className="text-[10px] text-slate-400 block -mt-0.5 capitalize">{role} Panel</span>
             </div>
           </div>
-          <button 
-            type="button"
-            onClick={() => setMobileMenuOpen(true)}
-            className="p-2 text-slate-600 hover:text-blue-600 hover:bg-slate-100 rounded-lg transition-colors"
-            aria-label="Buka Menu"
-          >
-            <Menu size={22}/>
-          </button>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <button 
+              type="button"
+              onClick={() => setMobileMenuOpen(true)}
+              className="p-2 text-slate-600 dark:text-slate-300 hover:text-blue-600 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+              aria-label="Buka Menu"
+            >
+              <Menu size={22}/>
+            </button>
+          </div>
         </header>
 
         {/* Mobile Sidebar / Drawer */}
@@ -220,7 +229,7 @@ export default function DashboardLayout({ role = 'customer' }: { role?: 'admin' 
               <div className="h-16 flex items-center justify-between px-6 border-b border-slate-800">
                 <div className="flex items-center gap-2">
                   <Wrench className="w-6 h-6 text-blue-500" />
-                  <span className="font-bold text-base">Laku AC</span>
+                  <span className="font-bold text-base">{COMPANY_INFO.name}</span>
                 </div>
                 <button 
                   onClick={() => setMobileMenuOpen(false)}
@@ -276,7 +285,7 @@ export default function DashboardLayout({ role = 'customer' }: { role?: 'admin' 
           </div>
         )}
         
-        <main className="flex-1 p-4 sm:p-6 overflow-auto">
+        <main className="flex-1 p-4 sm:p-6 overflow-auto dark:bg-slate-950 dark:text-slate-100">
           <Outlet />
         </main>
       </div>

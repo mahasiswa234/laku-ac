@@ -3,6 +3,7 @@ import {createRoot} from 'react-dom/client';
 import App from './App';
 import './index.css';
 import { setupAuthInterceptor } from './utils/auth.js';
+import { ThemeProvider } from './context/ThemeContext';
 
 // Inisialisasi interceptor JWT untuk seluruh panggilan API
 try {
@@ -13,6 +14,8 @@ try {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <ThemeProvider>
+      <App />
+    </ThemeProvider>
   </StrictMode>,
 );

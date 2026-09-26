@@ -1,6 +1,8 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Wrench, Menu, X, LogIn, MessageCircle, User, LogOut } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { COMPANY_INFO } from '../config/companyInfo.js';
+import ThemeToggle from './ThemeToggle.js';
 
 export default function PublicLayout() {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,8 +47,8 @@ export default function PublicLayout() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 font-sans text-slate-800">
-      <header className="bg-white shadow-sm sticky top-0 z-50">
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 font-sans text-slate-800 dark:text-slate-100 transition-colors">
+      <header className="bg-white dark:bg-slate-900 dark:border-b dark:border-slate-800 shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
             {/* Logo */}
@@ -54,7 +56,7 @@ export default function PublicLayout() {
               <div className="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold">
                 <Wrench size={20} />
               </div>
-              <span className="font-bold text-xl text-blue-900">Laku AC</span>
+              <span className="font-bold text-xl text-blue-900">{COMPANY_INFO.name}</span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -76,6 +78,7 @@ export default function PublicLayout() {
 
             {/* Actions */}
             <div className="hidden md:flex items-center gap-3">
+              <ThemeToggle />
               {currentUser ? (
                 <>
                   <Link 
@@ -108,8 +111,9 @@ export default function PublicLayout() {
             </div>
 
             {/* Mobile menu button */}
-            <div className="md:hidden flex items-center">
-              <button onClick={() => setIsOpen(!isOpen)} className="text-slate-600 hover:text-blue-600 focus:outline-none p-1">
+            <div className="md:hidden flex items-center gap-2">
+              <ThemeToggle />
+              <button onClick={() => setIsOpen(!isOpen)} className="text-slate-600 dark:text-slate-300 hover:text-blue-600 focus:outline-none p-1">
                 {isOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
             </div>
@@ -118,7 +122,7 @@ export default function PublicLayout() {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden bg-white border-t border-slate-100 shadow-lg">
+          <div className="md:hidden bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 shadow-lg">
             <div className="px-3 pt-2 pb-4 space-y-1 sm:px-3">
               {navLinks.map((link) => (
                 <Link
@@ -180,7 +184,7 @@ export default function PublicLayout() {
               <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center font-bold text-white">
                 <Wrench size={20} />
               </div>
-              <span className="font-bold text-xl">Laku AC</span>
+              <span className="font-bold text-xl">{COMPANY_INFO.name}</span>
             </div>
             <p className="text-slate-400 text-sm leading-relaxed">
               Sistem Informasi Manajemen Servis dan Pemeliharaan Air Conditioner (AC). Melayani pembersihan, perbaikan, dan pemasangan AC dengan teknisi tersertifikasi.
@@ -189,10 +193,10 @@ export default function PublicLayout() {
           <div>
             <h3 className="font-semibold text-lg mb-4 text-slate-200">Kontak Informasi</h3>
             <ul className="space-y-2 text-sm text-slate-400">
-              <li>📞 02123456789</li>
-              <li>💬 WhatsApp: 08123456789</li>
-              <li>📧 Email: info@lakuac.com</li>
-              <li>📍 Alamat: Jl.Bareng-bareng </li>
+              <li>📞 {COMPANY_INFO.phone}</li>
+              <li>💬 WhatsApp: {COMPANY_INFO.phone}</li>
+              <li>📧 Email: {COMPANY_INFO.email}</li>
+              <li>📍 Alamat: {COMPANY_INFO.address}</li>
             </ul>
           </div>
           <div>
@@ -202,7 +206,7 @@ export default function PublicLayout() {
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-slate-800 text-center text-slate-500 text-sm">
-          <p>&copy; {new Date().getFullYear()} Laku AC. Seluruh hak cipta dilindungi.</p>
+          <p>&copy; {new Date().getFullYear()} {COMPANY_INFO.name}. Seluruh hak cipta dilindungi.</p>
         </div>
       </footer>
 

@@ -17,6 +17,7 @@ import {
   FileCheck2,
   ExternalLink
 } from 'lucide-react';
+import { COMPANY_INFO } from '../config/companyInfo.js';
 
 interface ServiceInvoiceData {
   id: number;
@@ -178,10 +179,10 @@ export default function Invoice() {
                 <Wrench size={26} />
               </div>
               <div>
-                <h1 className="text-xl font-extrabold text-blue-900 tracking-tight">[NAMA_PERUSAHAAN]</h1>
-                <p className="text-xs text-slate-500 font-medium">Sistem Informasi Servis & Pemeliharaan AC</p>
-                <p className="text-[11px] text-slate-400 mt-1">[ALAMAT_PERUSAHAAN]</p>
-                <p className="text-[11px] text-slate-400">Telp/WA: [NOMOR_TELEPON] | Email: [EMAIL]</p>
+                <h1 className="text-xl font-extrabold text-blue-900 dark:text-blue-300 tracking-tight">{COMPANY_INFO.name}</h1>
+                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">{COMPANY_INFO.tagline}</p>
+                <p className="text-[11px] text-slate-400 mt-1">{COMPANY_INFO.address}</p>
+                <p className="text-[11px] text-slate-400">Telp/WA: {COMPANY_INFO.phone} | Email: {COMPANY_INFO.email}</p>
               </div>
             </div>
 
@@ -509,7 +510,7 @@ export default function Invoice() {
             <p>Terima kasih atas kepercayaan Anda menggunakan layanan jasa kami.</p>
             <p>Invoice ini sah dan diterbitkan secara digital oleh sistem manajemen servis AC.</p>
             <p className="text-[10px] text-slate-400">
-              Pertanyaan & Bantuan: Email [EMAIL] | WhatsApp [NOMOR_TELEPON]
+              Pertanyaan & Bantuan: Email {COMPANY_INFO.email} | WhatsApp {COMPANY_INFO.phone}
             </p>
           </div>
 

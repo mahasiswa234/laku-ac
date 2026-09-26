@@ -73,7 +73,7 @@ CREATE TABLE service_requests (
     status ENUM('Menunggu', 'Dijadwalkan', 'Diproses', 'Selesai', 'Dibatalkan') DEFAULT 'Menunggu',
     customer_notes TEXT,
     -- Field Pembayaran & Invoice
-    payment_status ENUM('Belum Bayar', 'Menunggu Verifikasi', 'Lunas') DEFAULT 'Belum Bayar',
+    payment_status ENUM('Belum Bayar', 'Menunggu Verifikasi', 'Lunas', 'Ditolak') DEFAULT 'Belum Bayar',
     payment_method VARCHAR(50), -- 'Tunai (Cash)', 'Transfer Bank BCA', dsb
     payment_amount DECIMAL(10, 2),
     payment_date DATETIME,

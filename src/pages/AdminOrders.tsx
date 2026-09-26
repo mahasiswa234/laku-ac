@@ -147,8 +147,8 @@ export default function AdminOrders() {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          payment_status: decision,
-          verification_notes: verificationNotes.trim()
+          status: decision,
+          notes: verificationNotes.trim()
         })
       });
 
@@ -181,8 +181,8 @@ export default function AdminOrders() {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          payment_status: 'Lunas',
-          verification_notes: 'Diverifikasi langsung oleh Admin (Tunai/Cash)'
+          status: 'Lunas',
+          notes: 'Diverifikasi langsung oleh Admin (Tunai/Cash)'
         })
       });
       if (res.ok) {
