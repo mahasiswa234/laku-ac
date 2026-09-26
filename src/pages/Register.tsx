@@ -83,10 +83,10 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 overflow-hidden">
         <div className="bg-blue-600 p-8 text-center">
-          <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
+          <div className="w-16 h-16 bg-white dark:bg-slate-900/20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
             <Wrench size={32} className="text-white" />
           </div>
           <h2 className="text-2xl font-bold text-white mb-1">Daftar Akun Baru</h2>
@@ -95,7 +95,7 @@ export default function Register() {
         
         <div className="p-8">
           {serverError && (
-            <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm mb-6 border border-red-100">
+            <div className="bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 p-3 rounded-lg text-sm mb-6 border border-red-100 dark:border-red-800">
               {serverError}
             </div>
           )}
@@ -103,7 +103,7 @@ export default function Register() {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Nama Lengkap */}
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1">Nama Lengkap</label>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama Lengkap</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                   <User size={18} />
@@ -113,16 +113,16 @@ export default function Register() {
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleChange}
-                  className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${errors.fullName ? 'border-red-500 bg-red-50' : 'border-slate-200'}`}
+                  className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${errors.fullName ? 'border-red-500 dark:border-red-600 bg-red-50 dark:bg-red-900/30' : 'border-slate-200 dark:border-slate-800'}`}
                   placeholder="Masukkan nama lengkap"
                 />
               </div>
-              {errors.fullName && <p className="text-red-500 text-xs mt-1">{errors.fullName}</p>}
+              {errors.fullName && <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.fullName}</p>}
             </div>
 
             {/* Email */}
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1">Email</label>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Email</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                   <Mail size={18} />
@@ -132,16 +132,16 @@ export default function Register() {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${errors.email ? 'border-red-500 bg-red-50' : 'border-slate-200'}`}
+                  className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${errors.email ? 'border-red-500 dark:border-red-600 bg-red-50 dark:bg-red-900/30' : 'border-slate-200 dark:border-slate-800'}`}
                   placeholder="nama@email.com"
                 />
               </div>
-              {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+              {errors.email && <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.email}</p>}
             </div>
 
             {/* Phone */}
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1">No. WhatsApp</label>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">No. WhatsApp</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                   <Phone size={18} />
@@ -151,16 +151,16 @@ export default function Register() {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${errors.phone ? 'border-red-500 bg-red-50' : 'border-slate-200'}`}
+                  className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${errors.phone ? 'border-red-500 dark:border-red-600 bg-red-50 dark:bg-red-900/30' : 'border-slate-200 dark:border-slate-800'}`}
                   placeholder="081234567890"
                 />
               </div>
-              {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+              {errors.phone && <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.phone}</p>}
             </div>
 
             {/* Password */}
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1">Password</label>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Password</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                   <Lock size={18} />
@@ -170,23 +170,23 @@ export default function Register() {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className={`w-full pl-10 pr-10 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${errors.password ? 'border-red-500 bg-red-50' : 'border-slate-200'}`}
+                  className={`w-full pl-10 pr-10 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${errors.password ? 'border-red-500 dark:border-red-600 bg-red-50 dark:bg-red-900/30' : 'border-slate-200 dark:border-slate-800'}`}
                   placeholder="Minimal 6 karakter"
                 />
                 <button 
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-blue-600 transition-colors"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
-              {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+              {errors.password && <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.password}</p>}
             </div>
 
             {/* Confirm Password */}
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1">Konfirmasi Password</label>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Konfirmasi Password</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                   <Lock size={18} />
@@ -196,18 +196,18 @@ export default function Register() {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className={`w-full pl-10 pr-10 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${errors.confirmPassword ? 'border-red-500 bg-red-50' : 'border-slate-200'}`}
+                  className={`w-full pl-10 pr-10 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${errors.confirmPassword ? 'border-red-500 dark:border-red-600 bg-red-50 dark:bg-red-900/30' : 'border-slate-200 dark:border-slate-800'}`}
                   placeholder="Ulangi password"
                 />
                 <button 
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-blue-600 transition-colors"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                 >
                   {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
-              {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
+              {errors.confirmPassword && <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.confirmPassword}</p>}
             </div>
 
             <button 
@@ -219,8 +219,8 @@ export default function Register() {
             </button>
           </form>
 
-          <div className="mt-6 text-center text-sm text-slate-600">
-            Sudah punya akun? <Link to="/login" className="text-blue-600 font-bold hover:underline">Login di sini</Link>
+          <div className="mt-6 text-center text-sm text-slate-600 dark:text-slate-400">
+            Sudah punya akun? <Link to="/login" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">Login di sini</Link>
           </div>
         </div>
       </div>

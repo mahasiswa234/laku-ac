@@ -1,3 +1,46 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Base fallback agar seluruh halaman (termasuk halaman yang belum diberi kelas
+   dark: secara eksplisit) tetap berpindah ke skema gelap dengan teks yang jelas
+   terbaca, mirip pola dark mode Instagram: latar gelap pekat + teks putih pudar. */
+@layer base {
+  html.dark {
+    color-scheme: dark;
+  }
+
+  .dark body {
+    background-color: #020617; /* slate-950 */
+    color: #f1f5f9; /* slate-100 */
+  }
+
+  /* Elemen form (input, select, textarea) yang belum diberi kelas bg/text kustom
+     otomatis mengikuti tema gelap supaya tetap kontras & mudah dibaca. */
+  .dark input:not([class*="bg-"]),
+  .dark select:not([class*="bg-"]),
+  .dark textarea:not([class*="bg-"]) {
+    background-color: #0f172a; /* slate-900 */
+    color: #f1f5f9; /* slate-100 */
+    border-color: #334155; /* slate-700 */
+  }
+
+  .dark input::placeholder,
+  .dark textarea::placeholder {
+    color: #64748b; /* slate-500 */
+  }
+
+  .dark select option {
+    background-color: #0f172a;
+    color: #f1f5f9;
+  }
+
+  /* Scrollbar gelap agar konsisten di halaman panjang (dashboard, tabel, dsb.) */
+  .dark ::-webkit-scrollbar-track {
+    background-color: #0f172a;
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background-color: #334155;
+    border-radius: 9999px;
+  }
+}
+

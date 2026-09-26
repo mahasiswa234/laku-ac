@@ -1,8 +1,8 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Wrench, Menu, X, LogIn, MessageCircle, User, LogOut } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { COMPANY_INFO } from '../config/companyInfo.js';
-import ThemeToggle from './ThemeToggle.js';
+import { COMPANY_INFO } from '../config/companyInfo';
+import ThemeToggle from './ThemeToggle';
 
 export default function PublicLayout() {
   const [isOpen, setIsOpen] = useState(false);
@@ -56,7 +56,7 @@ export default function PublicLayout() {
               <div className="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold">
                 <Wrench size={20} />
               </div>
-              <span className="font-bold text-xl text-blue-900">{COMPANY_INFO.name}</span>
+              <span className="font-bold text-xl text-blue-900 dark:text-blue-300">{COMPANY_INFO.name}</span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -83,14 +83,14 @@ export default function PublicLayout() {
                 <>
                   <Link 
                     to={getDashboardUrl()} 
-                    className="flex items-center gap-1.5 bg-blue-50 text-blue-700 hover:bg-blue-100 px-3.5 py-2 rounded-lg text-sm font-bold transition-colors"
+                    className="flex items-center gap-1.5 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/30 px-3.5 py-2 rounded-lg text-sm font-bold transition-colors"
                   >
                     <User size={16} />
                     <span>Dashboard ({currentUser.role})</span>
                   </Link>
                   <button 
                     onClick={handleLogout}
-                    className="flex items-center gap-1.5 text-slate-500 hover:text-rose-600 px-3 py-2 rounded-lg text-sm font-semibold hover:bg-slate-100 transition-colors"
+                    className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 px-3 py-2 rounded-lg text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors"
                     title="Keluar"
                   >
                     <LogOut size={16} />
@@ -99,7 +99,7 @@ export default function PublicLayout() {
                 </>
               ) : (
                 <>
-                  <Link to="/layanan" className="bg-blue-50 text-blue-700 hover:bg-blue-100 px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
+                  <Link to="/layanan" className="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/30 px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
                     Pesan Servis
                   </Link>
                   <Link to="/login" className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-xs">
@@ -113,7 +113,7 @@ export default function PublicLayout() {
             {/* Mobile menu button */}
             <div className="md:hidden flex items-center gap-2">
               <ThemeToggle />
-              <button onClick={() => setIsOpen(!isOpen)} className="text-slate-600 dark:text-slate-300 hover:text-blue-600 focus:outline-none p-1">
+              <button onClick={() => setIsOpen(!isOpen)} className="text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 focus:outline-none p-1">
                 {isOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
             </div>
@@ -129,12 +129,12 @@ export default function PublicLayout() {
                   key={link.name}
                   to={link.path}
                   onClick={() => setIsOpen(false)}
-                  className="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-blue-600 hover:bg-slate-50"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-950"
                 >
                   {link.name}
                 </Link>
               ))}
-              <div className="pt-3 flex flex-col gap-2 border-t border-slate-100 mt-2">
+              <div className="pt-3 flex flex-col gap-2 border-t border-slate-100 dark:border-slate-800 mt-2">
                 {currentUser ? (
                   <>
                     <Link 
@@ -150,7 +150,7 @@ export default function PublicLayout() {
                         setIsOpen(false);
                         handleLogout();
                       }} 
-                      className="w-full text-center text-rose-600 bg-rose-50 hover:bg-rose-100 font-semibold py-2 rounded-lg text-sm flex items-center justify-center gap-2"
+                      className="w-full text-center text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-900/30 hover:bg-rose-100 dark:hover:bg-rose-900/30 font-semibold py-2 rounded-lg text-sm flex items-center justify-center gap-2"
                     >
                       <LogOut size={16} />
                       Keluar
@@ -158,7 +158,7 @@ export default function PublicLayout() {
                   </>
                 ) : (
                   <>
-                    <Link to="/layanan" onClick={() => setIsOpen(false)} className="w-full text-center bg-blue-50 text-blue-700 font-semibold py-2 rounded-lg text-sm">
+                    <Link to="/layanan" onClick={() => setIsOpen(false)} className="w-full text-center bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-semibold py-2 rounded-lg text-sm">
                       Pesan Servis
                     </Link>
                     <Link to="/login" onClick={() => setIsOpen(false)} className="w-full flex justify-center items-center gap-2 bg-blue-600 text-white font-medium py-2 rounded-lg text-sm">
@@ -205,7 +205,7 @@ export default function PublicLayout() {
             <p className="text-sm text-slate-400">Area Layanan: <br/><Link to="/layanan#area-jabodetabek" className="text-blue-400 hover:text-blue-300 underline font-medium">Jabodetabek</Link></p>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-slate-800 text-center text-slate-500 text-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-slate-800 text-center text-slate-500 dark:text-slate-400 text-sm">
           <p>&copy; {new Date().getFullYear()} {COMPANY_INFO.name}. Seluruh hak cipta dilindungi.</p>
         </div>
       </footer>

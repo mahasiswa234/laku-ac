@@ -270,7 +270,7 @@ export default function CustomerUnit() {
       {/* Alert Banner */}
       {banner && (
         <div className={`p-4 rounded-xl flex items-center justify-between text-sm font-medium ${
-          banner.type === 'success' ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-rose-50 text-rose-800 border border-rose-200'
+          banner.type === 'success' ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800' : 'bg-rose-50 dark:bg-rose-900/30 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800'
         }`}>
           <div className="flex items-center gap-2">
             {banner.type === 'success' ? <CheckCircle size={18} /> : <AlertCircle size={18} />}
@@ -283,10 +283,10 @@ export default function CustomerUnit() {
       )}
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Manajemen Unit AC</h1>
-          <p className="text-slate-500 text-sm mt-0.5">Daftar AC yang terpasang di lokasi Anda untuk kemudahan servis dan perawatan berkala.</p>
+          <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-200">Manajemen Unit AC</h1>
+          <p className="text-slate-500 dark:text-slate-400 text-sm mt-0.5">Daftar AC yang terpasang di lokasi Anda untuk kemudahan servis dan perawatan berkala.</p>
         </div>
         <button 
           id="btn-tambah-unit-page"
@@ -302,18 +302,18 @@ export default function CustomerUnit() {
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {[1, 2, 3].map(i => (
-            <div key={i} className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 animate-pulse space-y-4">
+            <div key={i} className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 p-6 animate-pulse space-y-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-slate-200 rounded-xl"></div>
+                <div className="w-12 h-12 bg-slate-200 dark:bg-slate-800 rounded-xl"></div>
                 <div className="space-y-2 flex-1">
-                  <div className="h-4 w-28 bg-slate-200 rounded"></div>
-                  <div className="h-3 w-20 bg-slate-100 rounded"></div>
+                  <div className="h-4 w-28 bg-slate-200 dark:bg-slate-800 rounded"></div>
+                  <div className="h-3 w-20 bg-slate-100 dark:bg-slate-900 rounded"></div>
                 </div>
               </div>
-              <div className="h-3 w-full bg-slate-100 rounded"></div>
-              <div className="h-3 w-3/4 bg-slate-100 rounded"></div>
-              <div className="pt-4 border-t border-slate-100 flex gap-2 justify-end">
-                <div className="h-8 w-20 bg-slate-200 rounded-lg"></div>
+              <div className="h-3 w-full bg-slate-100 dark:bg-slate-900 rounded"></div>
+              <div className="h-3 w-3/4 bg-slate-100 dark:bg-slate-900 rounded"></div>
+              <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex gap-2 justify-end">
+                <div className="h-8 w-20 bg-slate-200 dark:bg-slate-800 rounded-lg"></div>
               </div>
             </div>
           ))}
@@ -321,56 +321,56 @@ export default function CustomerUnit() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {units.map((unit) => (
-            <div key={unit.id} className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden flex flex-col justify-between hover:border-blue-200 transition-all">
+            <div key={unit.id} className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden flex flex-col justify-between hover:border-blue-200 dark:hover:border-blue-800 transition-all">
               <div>
-                <div className="p-5 border-b border-slate-100 flex justify-between items-start">
+                <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex justify-between items-start">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center flex-shrink-0">
                       <Wrench size={22} />
                     </div>
                     <div>
-                      <h3 className="font-bold text-slate-800 text-base">{unit.brand}</h3>
-                      <p className="text-xs text-slate-500">{unit.type}</p>
+                      <h3 className="font-bold text-slate-800 dark:text-slate-200 text-base">{unit.brand}</h3>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">{unit.type}</p>
                     </div>
                   </div>
                   <span className={`text-xs font-semibold px-2.5 py-1 rounded-md ${
-                    unit.status === 'Normal' ? 'bg-emerald-100 text-emerald-700' : 
-                    unit.status === 'Perlu Servis' ? 'bg-amber-100 text-amber-700' :
-                    'bg-rose-100 text-rose-700'
+                    unit.status === 'Normal' ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300' : 
+                    unit.status === 'Perlu Servis' ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300' :
+                    'bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-300'
                   }`}>
                     {unit.status}
                   </span>
                 </div>
 
                 <div className="p-5 space-y-2.5 text-xs">
-                  <div className="flex justify-between items-center text-slate-600">
+                  <div className="flex justify-between items-center text-slate-600 dark:text-slate-400">
                     <span className="flex items-center gap-1.5 text-slate-400">
                       <MapPin size={14} /> Lokasi Ruangan:
                     </span>
-                    <span className="font-semibold text-slate-800">{unit.location}</span>
+                    <span className="font-semibold text-slate-800 dark:text-slate-200">{unit.location}</span>
                   </div>
-                  <div className="flex justify-between items-center text-slate-600">
+                  <div className="flex justify-between items-center text-slate-600 dark:text-slate-400">
                     <span className="flex items-center gap-1.5 text-slate-400">
                       <Calendar size={14} /> Servis Terakhir:
                     </span>
-                    <span className="font-medium text-slate-700">
+                    <span className="font-medium text-slate-700 dark:text-slate-300">
                       {unit.last_service_date ? unit.last_service_date.split('T')[0] : 'Belum pernah'}
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center gap-2">
+              <div className="p-4 bg-slate-50 dark:bg-slate-950 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2">
                 <button 
                   onClick={() => handleOpenEditModal(unit)}
-                  className="bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 px-3 py-2 rounded-xl text-xs font-semibold transition-colors flex items-center gap-1.5 shadow-2xs"
+                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-900 text-slate-700 dark:text-slate-300 px-3 py-2 rounded-xl text-xs font-semibold transition-colors flex items-center gap-1.5 shadow-2xs"
                   title="Ubah Data Unit"
                 >
                   <Settings size={14} /> Ubah
                 </button>
                 <button 
                   onClick={() => handleDeleteUnit(unit.id)}
-                  className="bg-white border border-slate-200 hover:bg-rose-50 hover:text-rose-600 text-slate-500 p-2 rounded-xl text-xs transition-colors shadow-2xs"
+                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-rose-50 dark:hover:bg-rose-900/30 hover:text-rose-600 dark:hover:text-rose-400 text-slate-500 dark:text-slate-400 p-2 rounded-xl text-xs transition-colors shadow-2xs"
                   title="Hapus Unit"
                 >
                   <Trash2 size={14} />
@@ -388,12 +388,12 @@ export default function CustomerUnit() {
           {/* Add New Unit Quick Card */}
           <button 
             onClick={handleOpenAddModal}
-            className="border-2 border-dashed border-slate-200 hover:border-blue-400 hover:bg-blue-50/40 rounded-2xl p-8 flex flex-col items-center justify-center text-center transition-all group min-h-[220px]"
+            className="border-2 border-dashed border-slate-200 dark:border-slate-800 hover:border-blue-400 dark:hover:border-blue-700 hover:bg-blue-50/40 dark:hover:bg-blue-900/30 rounded-2xl p-8 flex flex-col items-center justify-center text-center transition-all group min-h-[220px]"
           >
-            <div className="w-12 h-12 rounded-full bg-slate-100 group-hover:bg-blue-100 text-slate-400 group-hover:text-blue-600 flex items-center justify-center mb-3 transition-colors">
+            <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-900 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/30 text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 flex items-center justify-center mb-3 transition-colors">
               <Plus size={24} />
             </div>
-            <h3 className="font-bold text-slate-700 group-hover:text-blue-700 text-sm">Tambah Unit AC Lainnya</h3>
+            <h3 className="font-bold text-slate-700 dark:text-slate-300 group-hover:text-blue-700 dark:group-hover:text-blue-300 text-sm">Tambah Unit AC Lainnya</h3>
             <p className="text-xs text-slate-400 mt-1 max-w-[200px]">Daftarkan seluruh AC di rumah atau kantor Anda untuk kemudahan tracking perawatan</p>
           </button>
         </div>
@@ -404,17 +404,17 @@ export default function CustomerUnit() {
       {/* ========================================================================= */}
       {isUnitModalOpen && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100 animate-scaleUp">
-            <div className="flex justify-between items-center pb-4 border-b border-slate-100">
-              <div className="flex items-center gap-2 text-slate-800">
-                <Wrench className="text-blue-600" size={22} />
+          <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100 dark:border-slate-800 animate-scaleUp">
+            <div className="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-slate-800">
+              <div className="flex items-center gap-2 text-slate-800 dark:text-slate-200">
+                <Wrench className="text-blue-600 dark:text-blue-400" size={22} />
                 <h3 className="text-lg font-bold">
                   {isEditMode ? 'Ubah Data Unit AC' : 'Tambah Unit AC Baru'}
                 </h3>
               </div>
               <button 
                 onClick={() => setIsUnitModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 p-1 rounded-lg"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-400 p-1 rounded-lg"
               >
                 <X size={20} />
               </button>
@@ -422,11 +422,11 @@ export default function CustomerUnit() {
 
             <form onSubmit={handleSaveUnit} className="mt-4 space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                   Merek AC *
                 </label>
                 <select
-                  className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-slate-900"
                   value={unitForm.brand}
                   onChange={e => setUnitForm({ ...unitForm, brand: e.target.value })}
                 >
@@ -446,7 +446,7 @@ export default function CustomerUnit() {
                   <input
                     type="text"
                     placeholder="Tulis merek AC..."
-                    className="w-full mt-2 px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full mt-2 px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                     value={unitForm.customBrand}
                     onChange={e => setUnitForm({ ...unitForm, customBrand: e.target.value })}
                   />
@@ -454,11 +454,11 @@ export default function CustomerUnit() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                   Tipe & Kapasitas *
                 </label>
                 <select
-                  className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-slate-900"
                   value={unitForm.type}
                   onChange={e => setUnitForm({ ...unitForm, type: e.target.value })}
                 >
@@ -476,13 +476,13 @@ export default function CustomerUnit() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                   Lokasi Penempatan *
                 </label>
                 <input
                   type="text"
                   placeholder="Contoh: Kamar Tidur Utama Lt. 2, Ruang Tamu"
-                  className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                   value={unitForm.location}
                   onChange={e => setUnitForm({ ...unitForm, location: e.target.value })}
                 />
@@ -490,11 +490,11 @@ export default function CustomerUnit() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                     Status Kondisi
                   </label>
                   <select
-                    className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+                    className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-slate-900"
                     value={unitForm.status}
                     onChange={e => setUnitForm({ ...unitForm, status: e.target.value })}
                   >
@@ -505,23 +505,23 @@ export default function CustomerUnit() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                     Servis Terakhir
                   </label>
                   <input
                     type="date"
-                    className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+                    className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-slate-900"
                     value={unitForm.last_service_date}
                     onChange={e => setUnitForm({ ...unitForm, last_service_date: e.target.value })}
                   />
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-slate-100 flex gap-3">
+              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex gap-3">
                 <button
                   type="button"
                   onClick={() => setIsUnitModalOpen(false)}
-                  className="flex-1 px-4 py-2.5 border border-slate-200 text-slate-600 rounded-xl text-sm font-medium hover:bg-slate-50 transition-colors"
+                  className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 rounded-xl text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-950 transition-colors"
                 >
                   Batal
                 </button>
@@ -550,20 +550,20 @@ export default function CustomerUnit() {
       {/* ========================================================================= */}
       {isBookingModalOpen && selectedUnitForBooking && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100 animate-scaleUp">
-            <div className="flex justify-between items-center pb-4 border-b border-slate-100">
-              <div className="flex items-center gap-2 text-slate-800">
-                <Calendar className="text-blue-600" size={22} />
+          <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100 dark:border-slate-800 animate-scaleUp">
+            <div className="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-slate-800">
+              <div className="flex items-center gap-2 text-slate-800 dark:text-slate-200">
+                <Calendar className="text-blue-600 dark:text-blue-400" size={22} />
                 <div>
                   <h3 className="text-base font-bold">Pesan Servis untuk AC Ini</h3>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
                     {selectedUnitForBooking.brand} ({selectedUnitForBooking.location})
                   </p>
                 </div>
               </div>
               <button 
                 onClick={() => setIsBookingModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 p-1 rounded-lg"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-400 p-1 rounded-lg"
               >
                 <X size={20} />
               </button>
@@ -571,11 +571,11 @@ export default function CustomerUnit() {
 
             <form onSubmit={handleSendBooking} className="mt-4 space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                   Pilih Layanan
                 </label>
                 <select
-                  className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-slate-900"
                   value={bookingForm.serviceType}
                   onChange={e => setBookingForm({ ...bookingForm, serviceType: e.target.value })}
                 >
@@ -588,35 +588,35 @@ export default function CustomerUnit() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                   Tanggal Kunjungan Diharapkan
                 </label>
                 <input
                   type="date"
                   min={new Date().toISOString().split('T')[0]}
-                  className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-slate-900"
                   value={bookingForm.date}
                   onChange={e => setBookingForm({ ...bookingForm, date: e.target.value })}
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                   Catatan Keluhan / Instruksi
                 </label>
                 <textarea
                   rows={3}
-                  className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-none"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-none"
                   value={bookingForm.notes}
                   onChange={e => setBookingForm({ ...bookingForm, notes: e.target.value })}
                 />
               </div>
 
-              <div className="pt-3 border-t border-slate-100 flex gap-3">
+              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex gap-3">
                 <button
                   type="button"
                   onClick={() => setIsBookingModalOpen(false)}
-                  className="flex-1 px-4 py-2.5 border border-slate-200 text-slate-600 rounded-xl text-sm font-medium hover:bg-slate-50 transition-colors"
+                  className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 rounded-xl text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-950 transition-colors"
                 >
                   Batal
                 </button>

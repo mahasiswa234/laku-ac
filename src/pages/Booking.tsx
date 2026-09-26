@@ -184,34 +184,34 @@ export default function Booking() {
   if (successCode) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-16">
-        <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 text-center space-y-6 animate-scaleUp">
-          <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-inner">
+        <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 text-center space-y-6 animate-scaleUp">
+          <div className="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center mx-auto shadow-inner">
             <CheckCircle size={44} />
           </div>
           <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 px-3 py-1 rounded-full">
               Permintaan Servis Diterima
             </span>
-            <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 mt-2">
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200 mt-2">
               Pesanan Anda Telah Tersampaikan ke Admin!
             </h1>
-            <p className="text-slate-600 text-sm mt-2 max-w-md mx-auto">
-              Kode pemesanan Anda adalah <span className="font-mono font-bold text-blue-600 text-base">{successCode}</span>. Admin kami akan segera memeriksa ketersediaan teknisi dan memperbarui status pesanan Anda.
+            <p className="text-slate-600 dark:text-slate-400 text-sm mt-2 max-w-md mx-auto">
+              Kode pemesanan Anda adalah <span className="font-mono font-bold text-blue-600 dark:text-blue-400 text-base">{successCode}</span>. Admin kami akan segera memeriksa ketersediaan teknisi dan memperbarui status pesanan Anda.
             </p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 text-left text-xs space-y-2 max-w-md mx-auto">
-            <div className="flex justify-between text-slate-600">
+          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 text-left text-xs space-y-2 max-w-md mx-auto">
+            <div className="flex justify-between text-slate-600 dark:text-slate-400">
               <span>Layanan:</span>
-              <span className="font-bold text-slate-800">{formData.serviceType}</span>
+              <span className="font-bold text-slate-800 dark:text-slate-200">{formData.serviceType}</span>
             </div>
-            <div className="flex justify-between text-slate-600">
+            <div className="flex justify-between text-slate-600 dark:text-slate-400">
               <span>Tanggal Rencana:</span>
-              <span className="font-bold text-slate-800">{formData.date}</span>
+              <span className="font-bold text-slate-800 dark:text-slate-200">{formData.date}</span>
             </div>
-            <div className="flex justify-between text-slate-600">
+            <div className="flex justify-between text-slate-600 dark:text-slate-400">
               <span>Status Awal:</span>
-              <span className="font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded">Menunggu Konfirmasi</span>
+              <span className="font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 px-2 py-0.5 rounded">Menunggu Konfirmasi</span>
             </div>
           </div>
 
@@ -227,7 +227,7 @@ export default function Booking() {
                 setSuccessCode(null);
                 setFormData(prev => ({ ...prev, complaint: '', ac_unit_id: '' }));
               }}
-              className="px-6 py-3 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold rounded-xl text-sm transition-all"
+              className="px-6 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-950 text-slate-700 dark:text-slate-300 font-semibold rounded-xl text-sm transition-all"
             >
               Buat Pesanan Lainnya
             </button>
@@ -239,21 +239,21 @@ export default function Booking() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
-      <div className="bg-white p-6 sm:p-10 rounded-3xl shadow-sm border border-slate-100">
+      <div className="bg-white dark:bg-slate-900 p-6 sm:p-10 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center">
+          <div className="w-10 h-10 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center">
             <Calendar size={22} />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-800">Form Pemesanan Servis AC</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">Form Pemesanan Servis AC</h1>
         </div>
-        <p className="text-slate-500 text-sm mb-8 pb-6 border-b border-slate-100">
+        <p className="text-slate-500 dark:text-slate-400 text-sm mb-8 pb-6 border-b border-slate-100 dark:border-slate-800">
           Silakan lengkapi formulir di bawah ini. Permintaan Anda langsung diteruskan ke sistem Admin untuk penjadwalan teknisi.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Nama Lengkap *
               </label>
               <input 
@@ -265,11 +265,11 @@ export default function Booking() {
                 value={formData.name}
                 onChange={(e) => setFormData({...formData, name: e.target.value})}
               />
-              {errors.name && <p className="text-rose-500 text-xs mt-1">{errors.name}</p>}
+              {errors.name && <p className="text-rose-500 dark:text-rose-400 text-xs mt-1">{errors.name}</p>}
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Nomor WhatsApp / Telepon *
               </label>
               <input 
@@ -281,20 +281,20 @@ export default function Booking() {
                 value={formData.phone}
                 onChange={(e) => setFormData({...formData, phone: e.target.value})}
               />
-              {errors.phone && <p className="text-rose-500 text-xs mt-1">{errors.phone}</p>}
+              {errors.phone && <p className="text-rose-500 dark:text-rose-400 text-xs mt-1">{errors.phone}</p>}
             </div>
           </div>
 
           {/* Area & Alamat Layanan */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Zona Area Layanan *
               </label>
               <select
                 value={formData.area}
                 onChange={(e) => setFormData({...formData, area: e.target.value})}
-                className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-white"
+                className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-white dark:bg-slate-900"
               >
                 <option value="Jakarta Selatan">Jakarta Selatan</option>
                 <option value="Jakarta Pusat & Barat">Jakarta Pusat & Barat</option>
@@ -303,12 +303,12 @@ export default function Booking() {
                 <option value="Jakarta Timur & Utara">Jakarta Timur & Utara</option>
                 <option value="Bekasi & Bogor">Bekasi & Bogor</option>
               </select>
-              <p className="text-[11px] text-emerald-600 mt-1 font-medium">
+              <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-1 font-medium">
                 ✓ Bebas ongkos transportasi (radius 10 km)
               </p>
             </div>
             <div className="sm:col-span-2">
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Alamat Lengkap / Patokan Lokasi *
               </label>
               <input 
@@ -320,18 +320,18 @@ export default function Booking() {
                 value={formData.address}
                 onChange={(e) => setFormData({...formData, address: e.target.value})}
               />
-              {errors.address && <p className="text-rose-500 text-xs mt-1">{errors.address}</p>}
+              {errors.address && <p className="text-rose-500 dark:text-rose-400 text-xs mt-1">{errors.address}</p>}
             </div>
           </div>
 
           {/* Unit AC Terdaftar */}
           {units.length > 0 && (
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Pilih Unit AC Terdaftar (Opsional)
               </label>
               <select
-                className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-white"
+                className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-white dark:bg-slate-900"
                 value={formData.ac_unit_id}
                 onChange={(e) => setFormData({...formData, ac_unit_id: e.target.value})}
               >
@@ -347,7 +347,7 @@ export default function Booking() {
 
           {/* Jenis Layanan */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
               Pilih Jenis Layanan *
             </label>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -368,59 +368,59 @@ export default function Booking() {
                         value={service.name}
                         checked={formData.serviceType === service.name}
                         onChange={() => setFormData({...formData, serviceType: service.name, service_id: String(service.id)})}
-                        className="text-blue-600"
+                        className="text-blue-600 dark:text-blue-400"
                       />
-                      <span className="font-bold text-sm text-slate-800">{service.name}</span>
+                      <span className="font-bold text-sm text-slate-800 dark:text-slate-200">{service.name}</span>
                     </div>
-                    <span className="font-bold text-blue-600 whitespace-nowrap">
+                    <span className="font-bold text-blue-600 dark:text-blue-400 whitespace-nowrap">
                       Rp {service.price.toLocaleString('id-ID')}
                     </span>
                   </div>
-                  <p className="text-[11px] text-slate-500 mt-2 pl-5">
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-2 pl-5">
                     {service.desc}
                   </p>
                 </label>
               ))}
             </div>
-            {errors.serviceType && <p className="text-rose-500 text-xs mt-1">{errors.serviceType}</p>}
+            {errors.serviceType && <p className="text-rose-500 dark:text-rose-400 text-xs mt-1">{errors.serviceType}</p>}
           </div>
 
           {/* Tanggal Kunjungan */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
               Rencana Tanggal Kunjungan *
             </label>
             <input 
               type="date" 
               min={new Date().toISOString().split('T')[0]}
-              className={`w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-white ${
+              className={`w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-white dark:bg-slate-900 ${
                 errors.date ? 'border-rose-500' : 'border-slate-200'
               }`}
               value={formData.date}
               onChange={(e) => setFormData({...formData, date: e.target.value})}
             />
-            {errors.date && <p className="text-rose-500 text-xs mt-1">{errors.date}</p>}
+            {errors.date && <p className="text-rose-500 dark:text-rose-400 text-xs mt-1">{errors.date}</p>}
           </div>
 
           {/* Keluhan / Catatan */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
               Keluhan atau Catatan Tambahan (Opsional)
             </label>
             <textarea 
               rows={4}
-              className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm resize-none"
+              className="w-full px-4 py-3 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm resize-none"
               placeholder="Jelaskan kendala AC Anda (misal: AC bocor air, bau apek, tidak dingin sama sekali, dll.)"
               value={formData.complaint}
               onChange={(e) => setFormData({...formData, complaint: e.target.value})}
             />
           </div>
 
-          <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-start gap-3 text-xs text-slate-600">
-            <ShieldCheck size={18} className="text-blue-600 flex-shrink-0 mt-0.5" />
+          <div className="bg-slate-50 dark:bg-slate-950 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 flex items-start gap-3 text-xs text-slate-600 dark:text-slate-400">
+            <ShieldCheck size={18} className="text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
             <div>
-              <span className="font-semibold text-slate-800">Transparansi dan Kualitas Terjamin:</span>
-              <p className="mt-0.5 text-slate-500">
+              <span className="font-semibold text-slate-800 dark:text-slate-200">Transparansi dan Kualitas Terjamin:</span>
+              <p className="mt-0.5 text-slate-500 dark:text-slate-400">
                 Permintaan ini tersambung langsung ke panel admin. Teknisi akan membawa peralatan lengkap dan melakukan diagnosa menyeluruh sebelum pengerjaan.
               </p>
             </div>

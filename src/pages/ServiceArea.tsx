@@ -159,19 +159,19 @@ export default function ServiceArea() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/50 py-12">
+    <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header Section */}
         <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold tracking-wide uppercase">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 text-xs font-semibold tracking-wide uppercase">
             <MapPin size={14} />
             <span>Jangkauan Layanan Jabodetabek</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
             Area Layanan Servis & Pemeliharaan AC
           </h1>
-          <p className="text-slate-600 text-base sm:text-lg leading-relaxed">
+          <p className="text-slate-600 dark:text-slate-400 text-base sm:text-lg leading-relaxed">
             Teknisi profesional kami tersebar di berbagai pos siaga strategis untuk menjamin kedatangan yang cepat, tepat waktu, dan bebas biaya transportasi tambahan.
           </p>
         </div>
@@ -202,7 +202,7 @@ export default function ServiceArea() {
                     if (!e.target.value) setCheckResult(null);
                   }}
                   placeholder="Ketik kecamatan (misal: Tebet, Cilandak, BSD, Margonda, Bintaro)..."
-                  className="w-full pl-10 pr-4 py-3 rounded-2xl bg-white text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm placeholder:text-slate-400"
+                  className="w-full pl-10 pr-4 py-3 rounded-2xl bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm placeholder:text-slate-400"
                 />
               </div>
               <button
@@ -218,7 +218,7 @@ export default function ServiceArea() {
             {checkResult && (
               <div className="pt-4 text-left animate-fadeIn">
                 {checkResult.found && checkResult.area ? (
-                  <div className="bg-emerald-500/20 border border-emerald-400/40 rounded-2xl p-4 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="bg-emerald-500/20 border border-emerald-400/40 dark:border-emerald-700 rounded-2xl p-4 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center shrink-0 mt-0.5">
                         <CheckCircle2 size={22} />
@@ -246,7 +246,7 @@ export default function ServiceArea() {
                     </button>
                   </div>
                 ) : (
-                  <div className="bg-rose-500/20 border border-rose-400/40 rounded-2xl p-4 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="bg-rose-500/20 border border-rose-400/40 dark:border-rose-700 rounded-2xl p-4 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 rounded-xl bg-rose-500 text-white flex items-center justify-center shrink-0 mt-0.5">
                         <AlertCircle size={22} />
@@ -262,7 +262,7 @@ export default function ServiceArea() {
                     </div>
                     <Link
                       to="/kontak"
-                      className="px-5 py-2.5 rounded-xl bg-white text-slate-800 hover:bg-slate-100 font-bold text-xs shadow-md transition-colors inline-flex items-center gap-1.5 shrink-0"
+                      className="px-5 py-2.5 rounded-xl bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-900 font-bold text-xs shadow-md transition-colors inline-flex items-center gap-1.5 shrink-0"
                     >
                       <PhoneCall size={14} />
                       <span>Hubungi Customer Service</span>
@@ -275,7 +275,7 @@ export default function ServiceArea() {
         </div>
 
         {/* Filter & Search Bar */}
-        <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/80 mb-8 space-y-4">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/80 dark:border-slate-800 mb-8 space-y-4">
           <div className="flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center">
             
             {/* Search Input */}
@@ -286,12 +286,12 @@ export default function ServiceArea() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Cari nama wilayah atau kecamatan..."
-                className="w-full pl-10 pr-9 py-2.5 bg-slate-50 text-slate-800 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all placeholder:text-slate-400"
+                className="w-full pl-10 pr-9 py-2.5 bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 text-sm rounded-xl border border-slate-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-400"
                 >
                   <X size={16} />
                 </button>
@@ -299,8 +299,8 @@ export default function ServiceArea() {
             </div>
 
             {/* Results Count */}
-            <div className="text-xs sm:text-sm text-slate-500 font-medium">
-              Menampilkan <strong className="text-slate-800">{filteredAreas.length}</strong> zona wilayah utama
+            <div className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium">
+              Menampilkan <strong className="text-slate-800 dark:text-slate-200">{filteredAreas.length}</strong> zona wilayah utama
             </div>
           </div>
 
@@ -315,7 +315,7 @@ export default function ServiceArea() {
                   className={`px-4 py-2 rounded-xl font-medium whitespace-nowrap transition-all duration-200 ${
                     isActive
                       ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/20'
-                      : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
+                      : 'bg-slate-100/80 dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-200/70 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100'
                   }`}
                 >
                   {reg}
@@ -330,16 +330,16 @@ export default function ServiceArea() {
           {filteredAreas.map((area) => (
             <div
               key={area.id}
-              className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80 hover:shadow-xl hover:border-blue-200 transition-all duration-300 flex flex-col justify-between group"
+              className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-slate-200/80 dark:border-slate-800 hover:shadow-xl hover:border-blue-200 dark:hover:border-blue-800 transition-all duration-300 flex flex-col justify-between group"
             >
               <div>
                 {/* Badge & Popular indicator */}
                 <div className="flex items-center justify-between gap-2 mb-3">
-                  <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-100">
+                  <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-100 dark:border-blue-800">
                     {area.badge}
                   </span>
                   {area.isPopular && (
-                    <span className="flex items-center gap-1 text-[11px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
+                    <span className="flex items-center gap-1 text-[11px] font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-800">
                       <Sparkles size={12} />
                       Pos Siaga Utama
                     </span>
@@ -348,28 +348,28 @@ export default function ServiceArea() {
 
                 {/* Region Title */}
                 <div className="flex items-center gap-2 mb-2">
-                  <MapPin className="text-blue-600 shrink-0" size={20} />
-                  <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                  <MapPin className="text-blue-600 dark:text-blue-400 shrink-0" size={20} />
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     {area.region}
                   </h3>
                 </div>
-                <p className="text-xs text-slate-500 font-medium mb-4">
+                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mb-4">
                   {area.coverageTag}
                 </p>
 
                 {/* Operational Quick Stats */}
-                <div className="grid grid-cols-2 gap-2 p-3 rounded-2xl bg-slate-50 border border-slate-100 mb-5 text-xs">
+                <div className="grid grid-cols-2 gap-2 p-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 mb-5 text-xs">
                   <div>
                     <span className="text-slate-400 block text-[11px] mb-0.5">Waktu Tiba:</span>
-                    <strong className="text-slate-800 flex items-center gap-1 font-semibold">
-                      <Clock size={13} className="text-blue-600" />
+                    <strong className="text-slate-800 dark:text-slate-200 flex items-center gap-1 font-semibold">
+                      <Clock size={13} className="text-blue-600 dark:text-blue-400" />
                       {area.responseTime}
                     </strong>
                   </div>
                   <div>
                     <span className="text-slate-400 block text-[11px] mb-0.5">Teknisi Pos:</span>
-                    <strong className="text-slate-800 flex items-center gap-1 font-semibold">
-                      <Users size={13} className="text-emerald-600" />
+                    <strong className="text-slate-800 dark:text-slate-200 flex items-center gap-1 font-semibold">
+                      <Users size={13} className="text-emerald-600 dark:text-emerald-400" />
                       {area.activeTechnicians} Siaga
                     </strong>
                   </div>
@@ -377,14 +377,14 @@ export default function ServiceArea() {
 
                 {/* Districts Chips */}
                 <div className="mb-5">
-                  <span className="text-xs font-bold text-slate-700 uppercase tracking-wide block mb-2">
+                  <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide block mb-2">
                     Kecamatan & Kelurahan:
                   </span>
                   <div className="flex flex-wrap gap-1.5">
                     {area.districts.map((district, i) => (
                       <span
                         key={i}
-                        className="text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded-lg border border-slate-200/60"
+                        className="text-xs bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 px-2.5 py-1 rounded-lg border border-slate-200/60 dark:border-slate-800"
                       >
                         {district}
                       </span>
@@ -393,10 +393,10 @@ export default function ServiceArea() {
                 </div>
 
                 {/* Area Features */}
-                <div className="space-y-1.5 pt-3 border-t border-slate-100 mb-6">
+                <div className="space-y-1.5 pt-3 border-t border-slate-100 dark:border-slate-800 mb-6">
                   {area.features.map((feat, idx) => (
-                    <div key={idx} className="flex items-start gap-2 text-xs text-slate-600">
-                      <CheckCircle2 size={13} className="text-emerald-500 shrink-0 mt-0.5" />
+                    <div key={idx} className="flex items-start gap-2 text-xs text-slate-600 dark:text-slate-400">
+                      <CheckCircle2 size={13} className="text-emerald-500 dark:text-emerald-400 shrink-0 mt-0.5" />
                       <span>{feat}</span>
                     </div>
                   ))}
@@ -418,46 +418,46 @@ export default function ServiceArea() {
         </div>
 
         {/* Value Prop Banner */}
-        <div className="bg-white rounded-3xl p-8 sm:p-10 border border-slate-200/80 shadow-sm mb-16">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 sm:p-10 border border-slate-200/80 dark:border-slate-800 shadow-sm mb-16">
           <div className="text-center max-w-2xl mx-auto mb-10">
-            <span className="text-blue-600 text-xs font-bold uppercase tracking-wider block mb-2">
+            <span className="text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider block mb-2">
               Keunggulan Pos Tersebar
             </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-100">
               Mengapa Sistem Pos Siaga Kami Menguntungkan Anda?
             </h2>
-            <p className="text-sm text-slate-600 mt-2">
+            <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">
               Kami tidak beroperasi dari satu titik kantor saja, melainkan menempatkan armada teknisi di titik pos strategis kota Anda.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col items-center text-center">
-              <div className="w-14 h-14 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center mb-4">
+            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 flex flex-col items-center text-center">
+              <div className="w-14 h-14 rounded-2xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4">
                 <Clock size={28} />
               </div>
-              <h3 className="font-bold text-slate-900 text-lg mb-2">Respon Cepat & Tepat Waktu</h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              <h3 className="font-bold text-slate-900 dark:text-slate-100 text-lg mb-2">Respon Cepat & Tepat Waktu</h3>
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                 Karena teknisi berangkat dari pos terdekat di wilayah Anda, waktu tempuh menjadi sangat singkat tanpa terhambat kemacetan lintas kota.
               </p>
             </div>
 
-            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col items-center text-center">
-              <div className="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-4">
+            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 flex flex-col items-center text-center">
+              <div className="w-14 h-14 rounded-2xl bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-4">
                 <ShieldCheck size={28} />
               </div>
-              <h3 className="font-bold text-slate-900 text-lg mb-2">Bebas Biaya Transportasi</h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              <h3 className="font-bold text-slate-900 dark:text-slate-100 text-lg mb-2">Bebas Biaya Transportasi</h3>
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                 Tidak ada biaya tersembunyi untuk ongkos jalan teknisi pada radius 10 km dari pos siaga kami. Harga yang Anda bayar murni untuk jasa yang dipesan.
               </p>
             </div>
 
-            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col items-center text-center">
-              <div className="w-14 h-14 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center mb-4">
+            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 flex flex-col items-center text-center">
+              <div className="w-14 h-14 rounded-2xl bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-4">
                 <Users size={28} />
               </div>
-              <h3 className="font-bold text-slate-900 text-lg mb-2">Teknisi Tersertifikasi</h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              <h3 className="font-bold text-slate-900 dark:text-slate-100 text-lg mb-2">Teknisi Tersertifikasi</h3>
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                 Seluruh teknisi telah lolos pelatihan standarisasi pendingin, beretika sopan, dan dilengkapi alat kerja modern serta alat pelindung diri.
               </p>
             </div>
@@ -467,11 +467,11 @@ export default function ServiceArea() {
         {/* FAQ Section */}
         <div className="max-w-4xl mx-auto mb-16">
           <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 flex items-center justify-center gap-2">
-              <HelpCircle size={26} className="text-blue-600" />
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 flex items-center justify-center gap-2">
+              <HelpCircle size={26} className="text-blue-600 dark:text-blue-400" />
               <span>Pertanyaan Seputar Area Jangkauan</span>
             </h2>
-            <p className="text-slate-600 text-sm mt-2">
+            <p className="text-slate-600 dark:text-slate-400 text-sm mt-2">
               Jawaban atas hal-hal yang sering ditanyakan mengenai wilayah operasional kami.
             </p>
           </div>
@@ -482,17 +482,17 @@ export default function ServiceArea() {
               return (
                 <div
                   key={index}
-                  className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm transition-colors"
+                  className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm transition-colors"
                 >
                   <button
                     onClick={() => setOpenFaqIndex(isOpen ? null : index)}
-                    className="w-full text-left p-5 flex items-center justify-between gap-4 font-bold text-slate-800 hover:text-blue-600 transition-colors"
+                    className="w-full text-left p-5 flex items-center justify-between gap-4 font-bold text-slate-800 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   >
                     <span className="text-sm sm:text-base">{faq.q}</span>
-                    {isOpen ? <ChevronUp size={18} className="shrink-0 text-blue-600" /> : <ChevronDown size={18} className="shrink-0 text-slate-400" />}
+                    {isOpen ? <ChevronUp size={18} className="shrink-0 text-blue-600 dark:text-blue-400" /> : <ChevronDown size={18} className="shrink-0 text-slate-400" />}
                   </button>
                   {isOpen && (
-                    <div className="px-5 pb-5 pt-1 text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+                    <div className="px-5 pb-5 pt-1 text-sm text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-800">
                       {faq.a}
                     </div>
                   )}
@@ -505,7 +505,7 @@ export default function ServiceArea() {
         {/* Bottom Consultation Banner */}
         <div className="rounded-3xl bg-gradient-to-r from-blue-700 to-indigo-800 text-white p-8 sm:p-10 shadow-xl relative overflow-hidden">
           <div className="relative z-10 max-w-2xl space-y-4">
-            <span className="px-3 py-1 rounded-full bg-white/20 text-white text-xs font-bold uppercase tracking-wider backdrop-blur-sm">
+            <span className="px-3 py-1 rounded-full bg-white dark:bg-slate-900/20 text-white text-xs font-bold uppercase tracking-wider backdrop-blur-sm">
               Layanan Seluruh Wilayah
             </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
@@ -517,7 +517,7 @@ export default function ServiceArea() {
             <div className="pt-2 flex flex-wrap gap-3">
               <Link
                 to="/kontak"
-                className="px-6 py-3 rounded-xl bg-white text-blue-800 hover:bg-blue-50 font-bold text-sm shadow-md transition-colors inline-flex items-center gap-2"
+                className="px-6 py-3 rounded-xl bg-white dark:bg-slate-900 text-blue-800 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/30 font-bold text-sm shadow-md transition-colors inline-flex items-center gap-2"
               >
                 <PhoneCall size={16} />
                 <span>Konsultasi WhatsApp</span>

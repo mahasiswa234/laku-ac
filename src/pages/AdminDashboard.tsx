@@ -66,32 +66,32 @@ export default function AdminDashboard() {
       value: pendingRequests.length, 
       desc: 'Perlu konfirmasi & jadwal',
       icon: Clock, 
-      color: 'text-amber-600', 
-      bg: 'bg-amber-50 border-amber-200' 
+      color: 'text-amber-600 dark:text-amber-400', 
+      bg: 'bg-amber-50 dark:bg-amber-900/30 border-amber-200 dark:border-amber-800' 
     },
     { 
       label: 'Jadwal Aktif / Proses', 
       value: scheduledRequests.length, 
       desc: 'Dalam penanganan teknisi',
       icon: CalendarCheck, 
-      color: 'text-blue-600', 
-      bg: 'bg-blue-50 border-blue-200' 
+      color: 'text-blue-600 dark:text-blue-400', 
+      bg: 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800' 
     },
     { 
       label: 'Teknisi Tersedia', 
       value: totalTechnicians || 3, 
       desc: 'Siap ditugaskan',
       icon: Wrench, 
-      color: 'text-emerald-600', 
-      bg: 'bg-emerald-50 border-emerald-200' 
+      color: 'text-emerald-600 dark:text-emerald-400', 
+      bg: 'bg-emerald-50 dark:bg-emerald-900/30 border-emerald-200 dark:border-emerald-800' 
     },
     { 
       label: 'Total Pelanggan', 
       value: totalCustomers || 12, 
       desc: 'Pelanggan terdaftar',
       icon: Users, 
-      color: 'text-indigo-600', 
-      bg: 'bg-indigo-50 border-indigo-200' 
+      color: 'text-indigo-600 dark:text-indigo-400', 
+      bg: 'bg-indigo-50 dark:bg-indigo-900/30 border-indigo-200 dark:border-indigo-800' 
     },
   ];
 
@@ -99,12 +99,12 @@ export default function AdminDashboard() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Ringkasan Admin</h1>
-          <p className="text-slate-500 text-sm">Monitoring operasional servis dan permintaan masuk secara real-time.</p>
+          <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-200">Ringkasan Admin</h1>
+          <p className="text-slate-500 dark:text-slate-400 text-sm">Monitoring operasional servis dan permintaan masuk secara real-time.</p>
         </div>
         <button
           onClick={fetchDashboardData}
-          className="flex items-center gap-2 text-xs font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 px-3.5 py-2 rounded-xl transition-colors shadow-2xs"
+          className="flex items-center gap-2 text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-950 px-3.5 py-2 rounded-xl transition-colors shadow-2xs"
         >
           <RefreshCw size={14} className={isLoading ? 'animate-spin' : ''} />
           Segarkan Data
@@ -114,10 +114,10 @@ export default function AdminDashboard() {
       {/* Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, i) => (
-          <div key={i} className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
+          <div key={i} className="bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex items-center justify-between">
             <div>
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{stat.label}</p>
-              <p className="text-2xl font-bold text-slate-800 mt-1">{stat.value}</p>
+              <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{stat.label}</p>
+              <p className="text-2xl font-bold text-slate-800 dark:text-slate-200 mt-1">{stat.value}</p>
               <p className="text-xs text-slate-400 mt-1">{stat.desc}</p>
             </div>
             <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${stat.bg} ${stat.color}`}>
@@ -129,12 +129,12 @@ export default function AdminDashboard() {
 
       {/* Alert for Pending Orders */}
       {pendingRequests.length > 0 && (
-        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-amber-900 shadow-2xs">
+        <div className="bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-amber-900 dark:text-amber-300 shadow-2xs">
           <div className="flex items-center gap-3">
-            <AlertCircle className="text-amber-600 flex-shrink-0" size={22} />
+            <AlertCircle className="text-amber-600 dark:text-amber-400 flex-shrink-0" size={22} />
             <div>
               <p className="text-sm font-bold">Ada {pendingRequests.length} Permintaan Servis Menunggu Konfirmasi!</p>
-              <p className="text-xs text-amber-700">Pelanggan baru saja mengajukan pesanan. Segera tentukan jadwal dan tugaskan teknisi.</p>
+              <p className="text-xs text-amber-700 dark:text-amber-300">Pelanggan baru saja mengajukan pesanan. Segera tentukan jadwal dan tugaskan teknisi.</p>
             </div>
           </div>
           <Link
@@ -147,13 +147,13 @@ export default function AdminDashboard() {
       )}
 
       {/* Pesanan Terbaru Masuk */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-        <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
+        <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
           <div>
-            <h2 className="text-base font-bold text-slate-800">Permintaan Servis Terbaru</h2>
-            <p className="text-xs text-slate-500">Daftar pesanan yang diajukan langsung oleh pelanggan</p>
+            <h2 className="text-base font-bold text-slate-800 dark:text-slate-200">Permintaan Servis Terbaru</h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Daftar pesanan yang diajukan langsung oleh pelanggan</p>
           </div>
-          <Link to="/admin/pesanan" className="text-xs font-semibold text-blue-600 hover:underline flex items-center gap-1">
+          <Link to="/admin/pesanan" className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1">
             Lihat Semua Pesanan <ArrowRight size={14} />
           </Link>
         </div>
@@ -161,7 +161,7 @@ export default function AdminDashboard() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider font-semibold">
+              <tr className="bg-slate-50 dark:bg-slate-950 text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider font-semibold">
                 <th className="px-6 py-3.5">Kode / ID</th>
                 <th className="px-6 py-3.5">Pelanggan</th>
                 <th className="px-6 py-3.5">Layanan & Unit</th>
@@ -170,7 +170,7 @@ export default function AdminDashboard() {
                 <th className="px-6 py-3.5 text-right">Aksi</th>
               </tr>
             </thead>
-            <tbody className="text-sm divide-y divide-slate-100">
+            <tbody className="text-sm divide-y divide-slate-100 dark:divide-slate-800">
               {isLoading ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-8 text-center text-slate-400 text-sm">
@@ -185,32 +185,32 @@ export default function AdminDashboard() {
                 </tr>
               ) : (
                 requests.slice(0, 6).map((req) => (
-                  <tr key={req.id} className="hover:bg-slate-50/60 transition-colors">
-                    <td className="px-6 py-4 font-mono font-bold text-xs text-blue-600">
+                  <tr key={req.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-950 transition-colors">
+                    <td className="px-6 py-4 font-mono font-bold text-xs text-blue-600 dark:text-blue-400">
                       {req.request_code || `#REQ-${req.id}`}
                     </td>
                     <td className="px-6 py-4">
-                      <p className="font-semibold text-slate-800 text-sm">{req.customer}</p>
+                      <p className="font-semibold text-slate-800 dark:text-slate-200 text-sm">{req.customer}</p>
                       {req.customer_phone && (
                         <p className="text-xs text-slate-400">{req.customer_phone}</p>
                       )}
                     </td>
                     <td className="px-6 py-4">
-                      <p className="font-medium text-slate-700 text-sm">{req.service}</p>
+                      <p className="font-medium text-slate-700 dark:text-slate-300 text-sm">{req.service}</p>
                       {req.ac_brand && (
                         <p className="text-xs text-slate-400">Unit: {req.ac_brand} ({req.ac_location || 'AC'})</p>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-xs text-slate-600">
+                    <td className="px-6 py-4 text-xs text-slate-600 dark:text-slate-400">
                       {req.date}
                     </td>
                     <td className="px-6 py-4">
                       <span className={`px-2.5 py-1 rounded-md text-xs font-semibold inline-flex items-center gap-1 ${
-                        req.status === 'Menunggu' ? 'bg-amber-100 text-amber-700' :
-                        req.status === 'Dijadwalkan' ? 'bg-blue-100 text-blue-700' :
-                        req.status === 'Diproses' ? 'bg-purple-100 text-purple-700' :
-                        req.status === 'Selesai' ? 'bg-emerald-100 text-emerald-700' :
-                        'bg-rose-100 text-rose-700'
+                        req.status === 'Menunggu' ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300' :
+                        req.status === 'Dijadwalkan' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' :
+                        req.status === 'Diproses' ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300' :
+                        req.status === 'Selesai' ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300' :
+                        'bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-300'
                       }`}>
                         {req.status === 'Menunggu' && <Clock size={12} />}
                         {req.status === 'Selesai' && <CheckCircle size={12} />}
@@ -220,7 +220,7 @@ export default function AdminDashboard() {
                     <td className="px-6 py-4 text-right">
                       <Link
                         to="/admin/pesanan"
-                        className="text-xs font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 px-2.5 py-1 rounded-lg transition-colors"
+                        className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 bg-blue-50 dark:bg-blue-900/30 px-2.5 py-1 rounded-lg transition-colors"
                       >
                         Tinjau
                       </Link>

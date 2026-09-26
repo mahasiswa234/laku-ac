@@ -99,10 +99,10 @@ export default function Pricing() {
     <div className="py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <div className="text-center mb-12 max-w-3xl mx-auto space-y-3">
         
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
           Daftar Harga & Paket Layanan AC
         </h1>
-        <p className="text-slate-600 text-base leading-relaxed">
+        <p className="text-slate-600 dark:text-slate-400 text-base leading-relaxed">
           Semua harga transparan tanpa biaya tersembunyi. Dikerjakan oleh teknisi bersertifikat menggunakan peralatan standar pabrikan dan bergaransi resmi.
         </p>
       </div>
@@ -111,22 +111,22 @@ export default function Pricing() {
         {services.map((service, index) => (
           <div
             key={index}
-            className="bg-white rounded-3xl shadow-sm border border-slate-200/80 overflow-hidden flex flex-col justify-between hover:shadow-xl hover:border-blue-200 transition-all duration-300 relative group"
+            className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200/80 dark:border-slate-800 overflow-hidden flex flex-col justify-between hover:shadow-xl hover:border-blue-200 dark:hover:border-blue-800 transition-all duration-300 relative group"
           >
             <div>
-              <div className="p-6 border-b border-slate-100 bg-slate-50/70">
+              <div className="p-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950">
                 <div className="flex items-center justify-between gap-2 mb-2">
-                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 text-blue-800">
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
                     {service.badge}
                   </span>
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                   {service.name}
                 </h3>
-                <p className="text-slate-500 text-xs leading-relaxed min-h-[36px]">
+                <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed min-h-[36px]">
                   {service.description}
                 </p>
-                <div className="mt-4 flex items-baseline text-blue-600">
+                <div className="mt-4 flex items-baseline text-blue-600 dark:text-blue-400">
                   <span className="text-2xl sm:text-3xl font-extrabold tracking-tight">
                     Rp {service.price}
                   </span>
@@ -137,13 +137,13 @@ export default function Pricing() {
               </div>
 
               <div className="p-6">
-                <span className="text-xs font-bold text-slate-700 uppercase tracking-wide block mb-3">
+                <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide block mb-3">
                   Fitur & Jaminan Layanan:
                 </span>
                 <ul className="space-y-2.5">
                   {service.features.map((feature, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-xs text-slate-600">
-                      <Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                    <li key={i} className="flex items-start gap-2.5 text-xs text-slate-600 dark:text-slate-400">
+                      <Check className="h-4 w-4 text-emerald-500 dark:text-emerald-400 shrink-0 mt-0.5" />
                       <span>{feature}</span>
                     </li>
                   ))}
@@ -164,12 +164,12 @@ export default function Pricing() {
         ))}
       </div>
 
-      <div className="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 sm:p-8 text-center border border-blue-100/80 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 sm:p-8 text-center border border-blue-100/80 dark:border-blue-800 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="text-left space-y-1">
-          <h4 className="font-bold text-slate-800 text-base">
+          <h4 className="font-bold text-slate-800 dark:text-slate-200 text-base">
             Butuh penawaran untuk gedung kantor atau unit dalam jumlah banyak?
           </h4>
-          <p className="text-xs sm:text-sm text-slate-600">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
             Dapatkan tarif khusus korporat dan survei teknisi gratis ke lokasi Anda.
           </p>
         </div>

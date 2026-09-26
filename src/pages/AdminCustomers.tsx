@@ -115,16 +115,16 @@ export default function AdminCustomers() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Manajemen Pelanggan</h1>
-          <p className="text-slate-600">Daftar semua pelanggan yang terdaftar di sistem.</p>
+          <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-200">Manajemen Pelanggan</h1>
+          <p className="text-slate-600 dark:text-slate-400">Daftar semua pelanggan yang terdaftar di sistem.</p>
         </div>
         <button onClick={openAddModal} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-medium transition-colors">
           <Plus size={18} /> Tambah Pelanggan
         </button>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-        <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+      <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
+        <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
           <div className="relative w-full max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
             <input 
@@ -132,7 +132,7 @@ export default function AdminCustomers() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Cari nama, email, atau no handphone..." 
-              className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-10 pr-4 py-2 border border-slate-200 dark:border-slate-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
@@ -140,7 +140,7 @@ export default function AdminCustomers() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-50 text-slate-500 text-sm">
+              <tr className="bg-slate-50 dark:bg-slate-950 text-slate-500 dark:text-slate-400 text-sm">
                 <th className="px-6 py-4 font-medium">ID Pelanggan</th>
                 <th className="px-6 py-4 font-medium">Nama Pelanggan</th>
                 <th className="px-6 py-4 font-medium">Kontak</th>
@@ -149,37 +149,37 @@ export default function AdminCustomers() {
                 <th className="px-6 py-4 font-medium text-right">Aksi</th>
               </tr>
             </thead>
-            <tbody className="text-sm divide-y divide-slate-100">
+            <tbody className="text-sm divide-y divide-slate-100 dark:divide-slate-800">
               {isLoading ? (
-                <tr><td colSpan={6} className="text-center py-8 text-slate-500">Memuat data...</td></tr>
+                <tr><td colSpan={6} className="text-center py-8 text-slate-500 dark:text-slate-400">Memuat data...</td></tr>
               ) : filteredCustomers.length === 0 ? (
-                <tr><td colSpan={6} className="text-center py-8 text-slate-500">Data tidak ditemukan</td></tr>
+                <tr><td colSpan={6} className="text-center py-8 text-slate-500 dark:text-slate-400">Data tidak ditemukan</td></tr>
               ) : (
                 filteredCustomers.map((cust, i) => (
-                  <tr key={cust.id || i} className="hover:bg-slate-50">
-                    <td className="px-6 py-4 font-medium text-slate-700">{cust.id}</td>
-                    <td className="px-6 py-4 font-bold text-slate-800">{cust.full_name}</td>
+                  <tr key={cust.id || i} className="hover:bg-slate-50 dark:hover:bg-slate-950">
+                    <td className="px-6 py-4 font-medium text-slate-700 dark:text-slate-300">{cust.id}</td>
+                    <td className="px-6 py-4 font-bold text-slate-800 dark:text-slate-200">{cust.full_name}</td>
                     <td className="px-6 py-4">
                       <p>{cust.email || '-'}</p>
-                      <p className="text-slate-500">{cust.phone || '-'}</p>
+                      <p className="text-slate-500 dark:text-slate-400">{cust.phone || '-'}</p>
                     </td>
-                    <td className="px-6 py-4 text-slate-600 max-w-xs truncate">{cust.address || '-'}</td>
+                    <td className="px-6 py-4 text-slate-600 dark:text-slate-400 max-w-xs truncate">{cust.address || '-'}</td>
                     <td className="px-6 py-4">
                       <button
                         onClick={() => handleViewCustomerUnits(cust)}
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg text-xs font-semibold border border-blue-200 transition-colors"
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-lg text-xs font-semibold border border-blue-200 dark:border-blue-800 transition-colors"
                       >
-                        <Wind size={13} className="text-blue-500" />
+                        <Wind size={13} className="text-blue-500 dark:text-blue-400" />
                         <span>{cust.total_ac_units || 0} Unit AC</span>
                         <Eye size={12} className="ml-0.5 text-blue-400" />
                       </button>
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex justify-end gap-2">
-                        <button onClick={() => openEditModal(cust)} className="text-blue-500 hover:text-blue-700 p-1" title="Edit Pelanggan">
+                        <button onClick={() => openEditModal(cust)} className="text-blue-500 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 p-1" title="Edit Pelanggan">
                           <Edit2 size={18} />
                         </button>
-                        <button onClick={() => handleDelete(cust.id)} className="text-red-500 hover:text-red-700 p-1" title="Hapus Pelanggan">
+                        <button onClick={() => handleDelete(cust.id)} className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 p-1" title="Hapus Pelanggan">
                           <Trash2 size={18} />
                         </button>
                       </div>
@@ -194,10 +194,10 @@ export default function AdminCustomers() {
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden">
+          <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl w-full max-w-md overflow-hidden">
             <div className="flex justify-between items-center p-4 border-b">
               <h2 className="font-bold text-lg">{isEdit ? 'Edit Pelanggan' : 'Tambah Pelanggan'}</h2>
-              <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-600">
+              <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-400">
                 <X size={20} />
               </button>
             </div>
@@ -219,7 +219,7 @@ export default function AdminCustomers() {
                 <textarea required value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} className="w-full border rounded-lg px-3 py-2" rows={3}></textarea>
               </div>
               <div className="flex justify-end gap-2 pt-4">
-                <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg">Batal</button>
+                <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg">Batal</button>
                 <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Simpan</button>
               </div>
             </form>
@@ -229,22 +229,22 @@ export default function AdminCustomers() {
       {/* Modal Daftar Unit AC Pelanggan */}
       {selectedCustomerForUnits && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl animate-scaleUp">
-            <div className="flex justify-between items-center pb-3 border-b border-slate-100">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full p-6 shadow-2xl animate-scaleUp">
+            <div className="flex justify-between items-center pb-3 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                <div className="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center">
                   <Wind size={20} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-slate-800 text-lg">Unit AC Terdaftar</h3>
-                  <p className="text-xs text-slate-500">
-                    Pelanggan: <span className="font-semibold text-slate-700">{selectedCustomerForUnits.full_name}</span> ({selectedCustomerForUnits.phone || '-'})
+                  <h3 className="font-bold text-slate-800 dark:text-slate-200 text-lg">Unit AC Terdaftar</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Pelanggan: <span className="font-semibold text-slate-700 dark:text-slate-300">{selectedCustomerForUnits.full_name}</span> ({selectedCustomerForUnits.phone || '-'})
                   </p>
                 </div>
               </div>
               <button 
                 onClick={() => setSelectedCustomerForUnits(null)}
-                className="text-slate-400 hover:text-slate-600 p-1"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-400 p-1"
               >
                 <X size={20} />
               </button>
@@ -252,13 +252,13 @@ export default function AdminCustomers() {
 
             <div className="py-4">
               {loadingUnits ? (
-                <div className="py-12 text-center text-slate-500 text-sm">
+                <div className="py-12 text-center text-slate-500 dark:text-slate-400 text-sm">
                   Memuat data unit AC...
                 </div>
               ) : customerUnits.length === 0 ? (
-                <div className="py-12 text-center text-slate-500 space-y-2">
+                <div className="py-12 text-center text-slate-500 dark:text-slate-400 space-y-2">
                   <Wind size={36} className="mx-auto text-slate-300" />
-                  <p className="font-semibold text-slate-700">Belum ada unit AC terdaftar untuk pelanggan ini</p>
+                  <p className="font-semibold text-slate-700 dark:text-slate-300">Belum ada unit AC terdaftar untuk pelanggan ini</p>
                   <p className="text-xs text-slate-400">Unit AC yang ditambahkan oleh pelanggan melalui dashboard mereka akan muncul di sini.</p>
                 </div>
               ) : (
@@ -266,19 +266,19 @@ export default function AdminCustomers() {
                   {customerUnits.map((u, idx) => (
                     <div 
                       key={u.id || idx}
-                      className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3"
+                      className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-950 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3"
                     >
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
-                          <span className="font-bold text-slate-800 text-base">{u.brand}</span>
-                          <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-100 text-blue-800">
+                          <span className="font-bold text-slate-800 dark:text-slate-200 text-base">{u.brand}</span>
+                          <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
                             {u.type}
                           </span>
                         </div>
-                        <div className="flex items-center gap-4 text-xs text-slate-500">
-                          <span className="flex items-center gap-1 text-slate-700">
+                        <div className="flex items-center gap-4 text-xs text-slate-500 dark:text-slate-400">
+                          <span className="flex items-center gap-1 text-slate-700 dark:text-slate-300">
                             <MapPin size={13} className="text-slate-400" />
-                            Lokasi: <span className="font-medium text-slate-800">{u.location}</span>
+                            Lokasi: <span className="font-medium text-slate-800 dark:text-slate-200">{u.location}</span>
                           </span>
                           {u.last_service_date && (
                             <span className="flex items-center gap-1">
@@ -292,10 +292,10 @@ export default function AdminCustomers() {
                       <div className="flex items-center gap-2 self-end sm:self-center">
                         <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
                           u.status === 'Normal' 
-                            ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                            ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
                             : u.status === 'Perlu Servis'
-                            ? 'bg-amber-100 text-amber-800 border border-amber-200'
-                            : 'bg-rose-100 text-rose-800 border border-rose-200'
+                            ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800'
+                            : 'bg-rose-100 dark:bg-rose-900/30 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800'
                         }`}>
                           {u.status || 'Normal'}
                         </span>
@@ -306,9 +306,9 @@ export default function AdminCustomers() {
               )}
             </div>
 
-            <div className="pt-3 border-t border-slate-100 flex justify-between items-center">
-              <span className="text-xs text-slate-500">
-                Total: <span className="font-semibold text-slate-800">{customerUnits.length}</span> unit AC
+            <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
+              <span className="text-xs text-slate-500 dark:text-slate-400">
+                Total: <span className="font-semibold text-slate-800 dark:text-slate-200">{customerUnits.length}</span> unit AC
               </span>
               <button 
                 onClick={() => setSelectedCustomerForUnits(null)}

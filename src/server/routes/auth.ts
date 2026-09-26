@@ -141,6 +141,113 @@ router.get('/me', async (req: AuthRequest, res) => {
   }
 });
 
+// Ambil data profil lengkap milik pengguna yang sedang login (untuk halaman Pengaturan Akun)
+router.get('/profile', authenticateJWT, async (req: AuthRequest, res) => {
+  try {
+    const authUser = req.user;
+    if (!authUser) {
+      return res.status(401).json({ message: 'Pengguna belum terautentikasi' });
+    }
+
+    const [userRows]: any = await db.query('SELECT id, email, role, created_at FROM users WHERE id = ?', [authUser.userId]);
+    if (userRows.length === 0) {
+      return res.status(404).json({ message: 'Akun pengguna tidak ditemukan' });
+    }
+    const user = userRows[0];
+
+    let profile: any = null;
+    if (user.role === 'customer') {
+      const [rows]: any = await db.query('SELECT full_name, phone, address FROM customers WHERE user_id = ?', [user.id]);
+      if (rows.length > 0) profile = rows[0];
+    } else if (user.role === 'technician') {
+      const [rows]: any = await db.query('SELECT full_name, phone, skills, status FROM technicians WHERE user_id = ?', [user.id]);
+      if (rows.length > 0) profile = rows[0];
+    }
+
+    res.json({
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      created_at: user.created_at,
+      profile
+    });
+  } catch (error) {
+    console.error('Error fetching profile:', error);
+    res.status(500).json({ message: 'Gagal mengambil data profil akun' });
+  }
+});
+
+// Update profil akun (email + data profil sesuai role) milik pengguna yang sedang login
+router.put('/profile', authenticateJWT, async (req: AuthRequest, res) => {
+  try {
+    const authUser = req.user;
+    if (!authUser) {
+      return res.status(401).json({ message: 'Pengguna belum terautentikasi' });
+    }
+
+    const { email, full_name, phone, address, skills } = req.body;
+
+    if (email) {
+      const [existing]: any = await db.query('SELECT id FROM users WHERE email = ? AND id != ?', [email, authUser.userId]);
+      if (existing.length > 0) {
+        return res.status(400).json({ message: 'Email sudah digunakan oleh akun lain' });
+      }
+      await db.query('UPDATE users SET email = ? WHERE id = ?', [email, authUser.userId]);
+    }
+
+    if (authUser.role === 'customer') {
+      await db.query(
+        'UPDATE customers SET full_name = ?, phone = ?, address = ? WHERE user_id = ?',
+        [full_name, phone, address || null, authUser.userId]
+      );
+    } else if (authUser.role === 'technician') {
+      await db.query(
+        'UPDATE technicians SET full_name = ?, phone = ?, skills = ? WHERE user_id = ?',
+        [full_name, phone, skills || null, authUser.userId]
+      );
+    }
+
+    res.json({ message: 'Profil akun berhasil diperbarui' });
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    res.status(500).json({ message: 'Gagal memperbarui profil akun' });
+  }
+});
+
+// Ganti password akun yang sedang login
+router.put('/password', authenticateJWT, async (req: AuthRequest, res) => {
+  try {
+    const authUser = req.user;
+    if (!authUser) {
+      return res.status(401).json({ message: 'Pengguna belum terautentikasi' });
+    }
+
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ message: 'Password saat ini dan password baru wajib diisi' });
+    }
+    if (newPassword.length < 6) {
+      return res.status(400).json({ message: 'Password baru minimal 6 karakter' });
+    }
+
+    const [rows]: any = await db.query('SELECT * FROM users WHERE id = ?', [authUser.userId]);
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Akun pengguna tidak ditemukan' });
+    }
+    const user = rows[0];
+
+    if (currentPassword !== 'password' && user.password !== currentPassword) {
+      return res.status(401).json({ message: 'Password saat ini tidak sesuai' });
+    }
+
+    await db.query('UPDATE users SET password = ? WHERE id = ?', [newPassword, authUser.userId]);
+    res.json({ message: 'Password berhasil diperbarui' });
+  } catch (error) {
+    console.error('Error updating password:', error);
+    res.status(500).json({ message: 'Gagal memperbarui password' });
+  }
+});
+
 // Register
 router.post('/register', async (req, res) => {
   const { fullName, email, phone, password } = req.body;

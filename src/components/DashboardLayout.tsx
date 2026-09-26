@@ -1,5 +1,5 @@
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { LogOut, User, LayoutDashboard, Calendar, Wrench, Settings, ClipboardList, Menu, X, ShieldAlert } from 'lucide-react';
+import { LogOut, User, LayoutDashboard, Calendar, Wrench, Settings, ClipboardList, Menu, X, ShieldAlert, UserCog } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { verifyServerSession, clearAuthSession, getAuthToken } from '../utils/auth';
 import { COMPANY_INFO } from '../config/companyInfo.js';
@@ -105,34 +105,37 @@ export default function DashboardLayout({ role = 'customer' }: { role?: 'admin' 
           { name: 'Teknisi', icon: Wrench, path: '/admin/teknisi' },
           { name: 'Pelanggan', icon: User, path: '/admin/pelanggan' },
           { name: 'Layanan & Harga', icon: Settings, path: '/admin/layanan' },
+          { name: 'Pengaturan Akun', icon: UserCog, path: '/admin/pengaturan' },
         ];
       case 'technician':
         return [
           { name: 'Jadwal Hari Ini', icon: Calendar, path: '/teknisi/jadwal' },
           { name: 'Riwayat Servis', icon: ClipboardList, path: '/teknisi/riwayat' },
+          { name: 'Pengaturan Akun', icon: UserCog, path: '/teknisi/pengaturan' },
         ];
       default:
         return [
           { name: 'Dashboard Saya', icon: LayoutDashboard, path: '/pelanggan/dashboard' },
           { name: 'Buat Pesanan', icon: Calendar, path: '/pelanggan/pesan' },
           { name: 'Unit AC Saya', icon: Settings, path: '/pelanggan/unit' },
+          { name: 'Pengaturan Akun', icon: UserCog, path: '/pelanggan/pengaturan' },
         ];
     }
   };
 
   if (isAuthorized === null || !isAuthorized) {
     return (
-      <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
-        <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200/80 max-w-sm w-full text-center space-y-4">
+      <div className="min-h-screen bg-slate-100 dark:bg-slate-900 flex items-center justify-center p-4">
+        <div className="bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-800 max-w-sm w-full text-center space-y-4">
           <div className="relative w-12 h-12 mx-auto">
             <div className="w-12 h-12 border-3 border-blue-600/20 border-t-blue-600 rounded-full animate-spin"></div>
-            <div className="absolute inset-0 flex items-center justify-center text-blue-600">
+            <div className="absolute inset-0 flex items-center justify-center text-blue-600 dark:text-blue-400">
               <Wrench size={18} />
             </div>
           </div>
           <div>
-            <h3 className="text-sm font-bold text-slate-800">Verifikasi Keamanan Sesi</h3>
-            <p className="text-xs text-slate-500 mt-1">
+            <h3 className="text-sm font-bold text-slate-800 dark:text-slate-200">Verifikasi Keamanan Sesi</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
               Memvalidasi token otentikasi JWT dan hak akses dashboard...
             </p>
           </div>
@@ -148,7 +151,7 @@ export default function DashboardLayout({ role = 'customer' }: { role?: 'admin' 
       {/* Sidebar */}
       <aside className="w-64 bg-slate-900 text-white hidden md:flex flex-col">
         <div className="h-16 flex items-center px-6 border-b border-slate-800">
-          <Wrench className="w-6 h-6 text-blue-500 mr-2" />
+          <Wrench className="w-6 h-6 text-blue-500 dark:text-blue-400 mr-2" />
           <span className="font-bold text-lg">{COMPANY_INFO.name}</span>
         </div>
         
@@ -210,7 +213,7 @@ export default function DashboardLayout({ role = 'customer' }: { role?: 'admin' 
             <button 
               type="button"
               onClick={() => setMobileMenuOpen(true)}
-              className="p-2 text-slate-600 dark:text-slate-300 hover:text-blue-600 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+              className="p-2 text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
               aria-label="Buka Menu"
             >
               <Menu size={22}/>
@@ -228,7 +231,7 @@ export default function DashboardLayout({ role = 'customer' }: { role?: 'admin' 
             <div className="relative w-4/5 max-w-xs bg-slate-900 text-white h-full flex flex-col z-10 shadow-2xl">
               <div className="h-16 flex items-center justify-between px-6 border-b border-slate-800">
                 <div className="flex items-center gap-2">
-                  <Wrench className="w-6 h-6 text-blue-500" />
+                  <Wrench className="w-6 h-6 text-blue-500 dark:text-blue-400" />
                   <span className="font-bold text-base">{COMPANY_INFO.name}</span>
                 </div>
                 <button 

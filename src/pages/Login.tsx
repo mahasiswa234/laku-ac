@@ -60,32 +60,32 @@ export default function Login() {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
-      <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 w-full max-w-md">
+      <div className="bg-white dark:bg-slate-900 p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 w-full max-w-md">
         <div className="flex justify-center mb-6">
           <div className="w-12 h-12 bg-blue-600 text-white rounded-xl flex items-center justify-center font-bold">
             <Wrench size={28} />
           </div>
         </div>
-        <h1 className="text-2xl font-bold text-center text-slate-800 mb-2">Masuk ke Sistem</h1>
-        <p className="text-center text-slate-500 mb-8">Silakan masuk menggunakan akun Anda</p>
+        <h1 className="text-2xl font-bold text-center text-slate-800 dark:text-slate-200 mb-2">Masuk ke Sistem</h1>
+        <p className="text-center text-slate-500 dark:text-slate-400 mb-8">Silakan masuk menggunakan akun Anda</p>
 
         {flashMessage && (
           <div className={`p-3.5 rounded-xl text-sm mb-5 flex items-start gap-2.5 border ${
             isWarningMessage 
-              ? 'bg-amber-50 text-amber-900 border-amber-200/80' 
-              : 'bg-emerald-50 text-emerald-800 border-emerald-200'
+              ? 'bg-amber-50 dark:bg-amber-900/30 text-amber-900 dark:text-amber-300 border-amber-200/80 dark:border-amber-800' 
+              : 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
           }`}>
             {isWarningMessage ? (
-              <ShieldAlert className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+              <ShieldAlert className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
             ) : (
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
             )}
             <span className="font-medium leading-relaxed">{flashMessage}</span>
           </div>
         )}
         {error && (
-          <div className="bg-rose-50 text-rose-800 p-3.5 rounded-xl text-sm mb-5 border border-rose-200 flex items-start gap-2.5">
-            <ShieldAlert className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
+          <div className="bg-rose-50 dark:bg-rose-900/30 text-rose-800 dark:text-rose-300 p-3.5 rounded-xl text-sm mb-5 border border-rose-200 dark:border-rose-800 flex items-start gap-2.5">
+            <ShieldAlert className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
             <span className="font-medium leading-relaxed">{error}</span>
           </div>
         )}
@@ -96,21 +96,21 @@ export default function Login() {
        
         <form onSubmit={handleLogin} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email</label>
             <input 
               type="email" 
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
               placeholder="email@contoh.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Password</label>
             <div className="relative">
               <input 
                 type={showPassword ? 'text' : 'password'} 
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none pr-10"
+                className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none pr-10"
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -118,7 +118,7 @@ export default function Login() {
               <button 
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-blue-600 transition-colors"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
@@ -130,8 +130,8 @@ export default function Login() {
           </button>
         </form>
         
-        <p className="text-center text-sm text-slate-500 mt-6">
-          Belum punya akun? <Link to="/daftar" className="text-blue-600 font-semibold hover:underline">Daftar sekarang</Link>
+        <p className="text-center text-sm text-slate-500 dark:text-slate-400 mt-6">
+          Belum punya akun? <Link to="/daftar" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">Daftar sekarang</Link>
         </p>
       </div>
     </div>

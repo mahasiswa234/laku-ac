@@ -32,13 +32,14 @@ import TechnicianDashboard from './pages/TechnicianDashboard';
 import TechnicianHistory from './pages/TechnicianHistory';
 import CustomerDashboard from './pages/CustomerDashboard';
 import CustomerUnit from './pages/CustomerUnit';
+import AccountSettings from './pages/AccountSettings';
 
 // Placeholder for unbuilt pages
 function BlankWireframe({ title }: { title: string }) {
   return (
     <div className="max-w-7xl mx-auto px-4 py-16 text-center">
       <h1 className="text-3xl font-bold mb-4">{title}</h1>
-      <p className="text-slate-500">Wireframe / Layout untuk {title} (Tahap 5).</p>
+      <p className="text-slate-500 dark:text-slate-400">Wireframe / Layout untuk {title} (Tahap 5).</p>
     </div>
   );
 }
@@ -69,12 +70,14 @@ export default function App() {
           <Route path="teknisi" element={<AdminTechnicians />} />
           <Route path="pelanggan" element={<AdminCustomers />} />
           <Route path="layanan" element={<AdminServices />} />
+          <Route path="pengaturan" element={<AccountSettings />} />
         </Route>
 
         {/* Technician Dashboard Routes */}
         <Route path="/teknisi" element={<DashboardLayout role="technician" />}>
           <Route path="jadwal" element={<TechnicianDashboard />} />
           <Route path="riwayat" element={<TechnicianHistory />} />
+          <Route path="pengaturan" element={<AccountSettings />} />
         </Route>
 
         {/* Customer Dashboard Routes */}
@@ -82,6 +85,7 @@ export default function App() {
           <Route path="dashboard" element={<CustomerDashboard />} />
           <Route path="pesan" element={<Booking />} />
           <Route path="unit" element={<CustomerUnit />} />
+          <Route path="pengaturan" element={<AccountSettings />} />
         </Route>
         
         {/* Standalone Invoice Route */}
