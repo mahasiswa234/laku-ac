@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import db from '../db/connection';
-import { authenticateJWT } from '../middleware/authMiddleware';
+import db from '../db/connection.js';
+import { authenticateJWT } from '../middleware/authMiddleware.js';
 
 const router = Router();
 

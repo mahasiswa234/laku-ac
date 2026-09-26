@@ -2,7 +2,7 @@ import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
 import App from './App';
 import './index.css';
-import { setupAuthInterceptor } from './utils/auth';
+import { setupAuthInterceptor } from './utils/auth.js';
 
 // Inisialisasi interceptor JWT untuk seluruh panggilan API
 try {

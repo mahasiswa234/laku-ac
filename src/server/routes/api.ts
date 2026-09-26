@@ -1,13 +1,13 @@
 import { Router } from 'express';
 
-import authRoutes from './auth';
-import serviceRoutes from './services';
-import serviceAreaRoutes from './service_areas';
-import requestRoutes from './requests';
-import customerRoutes from './customers';
-import technicianRoutes from './technicians';
-import acUnitRoutes from './ac_units';
-import scheduleRoutes from './schedules';
+import authRoutes from './auth.js';
+import serviceRoutes from './services.js';
+import serviceAreaRoutes from './service_areas.js';
+import requestRoutes from './requests.js';
+import customerRoutes from './customers.js';
+import technicianRoutes from './technicians.js';
+import acUnitRoutes from './ac_units.js';
+import scheduleRoutes from './schedules.js';
 
 const router = Router();
 
