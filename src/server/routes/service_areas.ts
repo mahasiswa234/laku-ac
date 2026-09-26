@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { SERVICE_AREAS, ServiceAreaItem } from '../../data/serviceAreasData';
+import { SERVICE_AREAS, ServiceAreaItem } from '../../data/serviceAreasData.js';
 
 export type { ServiceAreaItem };
 export { SERVICE_AREAS };
