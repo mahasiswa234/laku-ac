@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // Layouts
 import PublicLayout from './components/PublicLayout';
 import DashboardLayout from './components/DashboardLayout';
+import DialogHost from './components/DialogHost';
 
 // Public Pages
 import Home from './pages/Home';
@@ -48,6 +49,7 @@ function BlankWireframe({ title }: { title: string }) {
 export default function App() {
   return (
     <BrowserRouter>
+      <DialogHost />
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<PublicLayout />}>

@@ -429,13 +429,7 @@ export default function Gallery() {
                     {activeModalItem.locationType}
                   </strong>
                 </div>
-                <div>
-                  <span className="text-slate-400 block mb-0.5">Tanggal Dokumentasi</span>
-                  <strong className="text-slate-800 dark:text-slate-200 flex items-center gap-1 font-semibold">
-                    <Calendar size={13} className="text-emerald-500 dark:text-emerald-400" />
-                    {activeModalItem.date}
-                  </strong>
-                </div>
+               
               </div>
 
               {/* Action Description */}

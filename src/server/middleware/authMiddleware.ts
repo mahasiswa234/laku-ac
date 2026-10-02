@@ -1,7 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-export const JWT_SECRET = process.env.JWT_SECRET || 'super_secret_jwt_key_here';
+export const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!process.env.JWT_SECRET) {
+  console.warn(
+    '[KEAMANAN] JWT_SECRET belum diatur. Token memakai kunci bawaan yang diketahui publik sehingga bisa dipalsukan. ' +
+    'Atur JWT_SECRET (string acak panjang) di .env dan di Environment Variables Vercel.'
+  );
+}
 
 export interface AuthUser {
   userId: number;

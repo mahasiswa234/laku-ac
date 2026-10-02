@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { compressImageToDataUrl } from '../utils/imageCompression.js';
 import { 
   MapPin, 
   Calendar, 
@@ -28,6 +29,8 @@ export default function TechnicianDashboard() {
   const [techNotes, setTechNotes] = useState('');
   const [beforePhoto, setBeforePhoto] = useState<string | null>(null);
   const [afterPhoto, setAfterPhoto] = useState<string | null>(null);
+  const [isCompressingBefore, setIsCompressingBefore] = useState(false);
+  const [isCompressingAfter, setIsCompressingAfter] = useState(false);
 
   // Form Pembayaran Teknisi (Opsi 1)
   const [additionalCost, setAdditionalCost] = useState<number>(0);
@@ -127,10 +130,13 @@ export default function TechnicianDashboard() {
         setTimeout(() => setFeedback(null), 4000);
         fetchJobs();
       } else {
-        alert('Gagal mengubah status pekerjaan.');
+        const data = await res.json().catch(() => ({}));
+        setFeedback({ type: 'error', message: data.message || 'Gagal mengubah status pekerjaan.' });
+        setTimeout(() => setFeedback(null), 6000);
       }
     } catch (err) {
-      alert('Terjadi kesalahan koneksi.');
+      setFeedback({ type: 'error', message: 'Terjadi kesalahan koneksi.' });
+      setTimeout(() => setFeedback(null), 6000);
     }
   };
 
@@ -146,54 +152,33 @@ export default function TechnicianDashboard() {
     setShowModal(true);
   };
 
-  // Process file to base64 with image resizing
-  const processImageFile = (file: File, callback: (base64: string) => void) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const img = document.createElement('img');
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        let width = img.width;
-        let height = img.height;
-        const maxDimension = 1200;
-
-        if (width > maxDimension || height > maxDimension) {
-          if (width > height) {
-            height = Math.round((height * maxDimension) / width);
-            width = maxDimension;
-          } else {
-            width = Math.round((width * maxDimension) / height);
-            height = maxDimension;
-          }
-        }
-
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        if (ctx) {
-          ctx.drawImage(img, 0, 0, width, height);
-          const compressed = canvas.toDataURL('image/jpeg', 0.85);
-          callback(compressed);
-        } else {
-          callback(e.target?.result as string);
-        }
-      };
-      img.src = e.target?.result as string;
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleBeforePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleBeforePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      processImageFile(file, (dataUrl) => setBeforePhoto(dataUrl));
+    if (!file) return;
+    setIsCompressingBefore(true);
+    try {
+      const dataUrl = await compressImageToDataUrl(file);
+      setBeforePhoto(dataUrl);
+    } catch (err) {
+      setFeedback({ type: 'error', message: 'Gagal memproses foto sebelum servis. Coba foto lain.' });
+      setTimeout(() => setFeedback(null), 5000);
+    } finally {
+      setIsCompressingBefore(false);
     }
   };
 
-  const handleAfterPhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAfterPhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      processImageFile(file, (dataUrl) => setAfterPhoto(dataUrl));
+    if (!file) return;
+    setIsCompressingAfter(true);
+    try {
+      const dataUrl = await compressImageToDataUrl(file);
+      setAfterPhoto(dataUrl);
+    } catch (err) {
+      setFeedback({ type: 'error', message: 'Gagal memproses foto sesudah servis. Coba foto lain.' });
+      setTimeout(() => setFeedback(null), 5000);
+    } finally {
+      setIsCompressingAfter(false);
     }
   };
 
@@ -227,18 +212,23 @@ export default function TechnicianDashboard() {
       });
 
       if (res.ok) {
+        const okData = await res.json().catch(() => ({}));
         setShowModal(false);
         setFeedback({ 
-          type: 'success', 
-          message: `Pekerjaan ${selectedJob.requestCode} berhasil diselesaikan! Pembayaran tercatat ${finalPaymentStatus}.` 
+          type: okData.warning ? 'error' : 'success', 
+          message: `Pekerjaan ${selectedJob.requestCode} berhasil diselesaikan! Pembayaran tercatat ${finalPaymentStatus}.` +
+            (okData.warning ? ` Peringatan: ${okData.warning}` : '')
         });
-        setTimeout(() => setFeedback(null), 5000);
+        setTimeout(() => setFeedback(null), okData.warning ? 12000 : 5000);
         fetchJobs();
       } else {
-        alert('Gagal menyelesaikan pekerjaan.');
+        const data = await res.json().catch(() => ({}));
+        setFeedback({ type: 'error', message: data.message || 'Gagal menyelesaikan pekerjaan.' });
+        setTimeout(() => setFeedback(null), 6000);
       }
     } catch (err) {
-      alert('Terjadi kesalahan saat menyimpan.');
+      setFeedback({ type: 'error', message: 'Terjadi kesalahan saat menyimpan.' });
+      setTimeout(() => setFeedback(null), 6000);
     } finally {
       setIsSubmitting(false);
     }
@@ -255,7 +245,7 @@ export default function TechnicianDashboard() {
           feedback.type === 'success' ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800' : 'bg-rose-50 dark:bg-rose-900/30 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800'
         }`}>
           <div className="flex items-center gap-2">
-            <CheckCircle size={18} />
+            {feedback.type === 'success' ? <CheckCircle size={18} /> : <AlertCircle size={18} />}
             <span>{feedback.message}</span>
           </div>
           <button onClick={() => setFeedback(null)} className="opacity-70 hover:opacity-100">
@@ -476,7 +466,12 @@ export default function TechnicianDashboard() {
                       <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                         Foto Sebelum (Kondisi Awal)
                       </label>
-                      {beforePhoto ? (
+                      {isCompressingBefore ? (
+                        <div className="border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl p-4 flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 h-28">
+                          <RefreshCw size={18} className="mb-1 animate-spin" />
+                          <span className="text-[11px] font-medium">Mengompres...</span>
+                        </div>
+                      ) : beforePhoto ? (
                         <div className="relative rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900">
                           <img src={beforePhoto} alt="Sebelum" className="w-full h-28 object-cover" />
                           <button
@@ -504,7 +499,12 @@ export default function TechnicianDashboard() {
                       <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                         Foto Sesudah (Hasil Servis)
                       </label>
-                      {afterPhoto ? (
+                      {isCompressingAfter ? (
+                        <div className="border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl p-4 flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 h-28">
+                          <RefreshCw size={18} className="mb-1 animate-spin" />
+                          <span className="text-[11px] font-medium">Mengompres...</span>
+                        </div>
+                      ) : afterPhoto ? (
                         <div className="relative rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900">
                           <img src={afterPhoto} alt="Sesudah" className="w-full h-28 object-cover" />
                           <button
@@ -703,7 +703,7 @@ export default function TechnicianDashboard() {
                 </button>
                 <button 
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || isCompressingBefore || isCompressingAfter}
                   className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm text-xs"
                 >
                   <CheckCircle size={16} />

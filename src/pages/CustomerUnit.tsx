@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Wrench, Settings, Trash2, Calendar, AlertCircle, CheckCircle, X, MapPin, Loader2 } from 'lucide-react';
+import { showAlert, showConfirm } from '../utils/dialog';
 
 interface ACUnit {
   id: number;
@@ -193,7 +194,7 @@ export default function CustomerUnit() {
   };
 
   const handleDeleteUnit = async (id: number) => {
-    if (!confirm('Apakah Anda yakin ingin menghapus unit AC ini?')) return;
+    if (!(await showConfirm('Apakah Anda yakin ingin menghapus unit AC ini? Tindakan ini tidak dapat dibatalkan.', { variant: 'danger', title: 'Hapus Unit AC?' }))) return;
     try {
       const res = await fetch(`/api/ac-units/${id}`, { method: 'DELETE' });
       if (res.ok) {
@@ -201,10 +202,10 @@ export default function CustomerUnit() {
         setTimeout(() => setBanner(null), 4000);
         fetchUnits(userData);
       } else {
-        alert('Gagal menghapus unit AC.');
+        showAlert('Gagal menghapus unit AC.');
       }
     } catch (err) {
-      alert('Terjadi kesalahan koneksi.');
+      showAlert('Terjadi kesalahan koneksi.');
     }
   };
 
@@ -221,7 +222,7 @@ export default function CustomerUnit() {
   const handleSendBooking = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!bookingForm.date) {
-      alert('Pilih tanggal servis terlebih dahulu');
+      showAlert('Pilih tanggal servis terlebih dahulu');
       return;
     }
 
@@ -256,10 +257,10 @@ export default function CustomerUnit() {
         setTimeout(() => setBanner(null), 6000);
         fetchUnits(userData);
       } else {
-        alert(data.message || 'Gagal mengirim permintaan servis');
+        showAlert(data.message || 'Gagal mengirim permintaan servis');
       }
     } catch (err) {
-      alert('Gagal menghubungi server.');
+      showAlert('Gagal menghubungi server.');
     } finally {
       setBookingSubmitting(false);
     }

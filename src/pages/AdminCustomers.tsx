@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Plus, Edit2, Trash2, X, Wind, Eye, Calendar, MapPin } from 'lucide-react';
+import { showAlert, showConfirm } from '../utils/dialog';
 
 export default function AdminCustomers() {
   const [customers, setCustomers] = useState<any[]>([]);
@@ -30,7 +31,7 @@ export default function AdminCustomers() {
       }
     } catch (error) {
       console.error('Database connection failed');
-      alert('Gagal memuat data pelanggan dari server database.');
+      showAlert('Gagal memuat data pelanggan dari server database.');
     } finally {
       setIsLoading(false);
     }
@@ -68,29 +69,29 @@ export default function AdminCustomers() {
       });
       
       if (res.ok) {
-        alert(isEdit ? 'Data berhasil diupdate!' : 'Data berhasil ditambahkan!');
+        showAlert(isEdit ? 'Data berhasil diupdate!' : 'Data berhasil ditambahkan!');
         setIsModalOpen(false);
         fetchCustomers();
       } else {
         throw new Error('Gagal menyimpan');
       }
     } catch (error) {
-      alert('Gagal menyimpan data ke server database.');
+      showAlert('Gagal menyimpan data ke server database.');
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Hapus pelanggan ini?')) return;
+    if (!(await showConfirm('Data pelanggan akan dihapus. Tindakan ini tidak dapat dibatalkan.', { variant: 'danger', title: 'Hapus Pelanggan?' }))) return;
     try {
       const res = await fetch(`/api/customers/${id}`, { method: 'DELETE' });
       if (res.ok) {
-        alert('Data berhasil dihapus');
+        showAlert('Data berhasil dihapus');
         fetchCustomers();
       } else {
         throw new Error('Gagal menghapus');
       }
     } catch (error) {
-      alert('Gagal menghapus data dari server database.');
+      showAlert('Gagal menghapus data dari server database.');
     }
   };
 

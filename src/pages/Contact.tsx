@@ -1,5 +1,7 @@
 import React from 'react';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { COMPANY_INFO } from '../config/companyInfo';
+import OfficeMap from '../components/OfficeMap';
 
 export default function Contact() {
   return (
@@ -43,8 +45,7 @@ export default function Contact() {
             <div>
               <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 mb-1">Kantor Pusat</h3>
               <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                Jl. Sudirman No. 123, Kel. Senayan, Kec. Kebayoran Baru<br />
-                Jakarta Selatan, 12190
+                {COMPANY_INFO.address}
               </p>
             </div>
           </div>
@@ -93,6 +94,11 @@ export default function Contact() {
             </button>
           </form>
         </div>
+      </div>
+
+      {/* Peta Lokasi Kantor */}
+      <div className="mt-12">
+        <OfficeMap heightClass="h-80 sm:h-96" />
       </div>
     </div>
   );

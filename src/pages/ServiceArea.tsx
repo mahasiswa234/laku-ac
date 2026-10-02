@@ -18,6 +18,8 @@ import {
   Navigation
 } from 'lucide-react';
 import { SERVICE_AREAS, ServiceAreaItem } from '../data/serviceAreasData';
+import NearestOfficeFinder from '../components/NearestOfficeFinder';
+import OfficeMap from '../components/OfficeMap';
 
 const FAQS = [
   {
@@ -271,7 +273,26 @@ export default function ServiceArea() {
                 )}
               </div>
             )}
+
+            {/* Pencarian kantor terdekat via GPS */}
+            <div className="pt-5 mt-1 border-t border-white/15">
+              <div className="flex items-center gap-3 max-w-xl mx-auto mb-4 text-blue-200 text-xs font-semibold uppercase tracking-wide">
+                <span className="h-px flex-1 bg-white/15" />
+                <span>atau cari kantor terdekat dengan GPS</span>
+                <span className="h-px flex-1 bg-white/15" />
+              </div>
+              <NearestOfficeFinder onOrder={() => navigate('/pelanggan/pesan')} />
+            </div>
           </div>
+        </div>
+
+        {/* Lokasi Kantor (Peta) */}
+        <div className="mb-12">
+          <div className="text-center max-w-2xl mx-auto mb-6 space-y-2">
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">Lokasi Kantor Kami</h2>
+            <p className="text-sm text-slate-600 dark:text-slate-400">Kunjungi kantor kami atau gunakan petunjuk arah langsung dari lokasi Anda.</p>
+          </div>
+          <OfficeMap />
         </div>
 
         {/* Filter & Search Bar */}

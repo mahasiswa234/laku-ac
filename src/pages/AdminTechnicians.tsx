@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Search, MoreVertical, Plus, Edit2, Trash2, X } from 'lucide-react';
+import { showAlert, showConfirm } from '../utils/dialog';
 
 export default function AdminTechnicians() {
   const [technicians, setTechnicians] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({ id: '', full_name: '', phone: '', skills: '', status: 'Aktif' });
+  const [formData, setFormData] = useState({ id: '', full_name: '', phone: '', skills: '', status: 'Aktif', email: '', password: '' });
   const [isEdit, setIsEdit] = useState(false);
 
   useEffect(() => {
@@ -25,7 +26,7 @@ export default function AdminTechnicians() {
       }
     } catch (error) {
       console.error('Database connection failed');
-      alert('Gagal memuat data dari server database.');
+      showAlert('Gagal memuat data dari server database.');
     } finally {
       setIsLoading(false);
     }
@@ -42,42 +43,44 @@ export default function AdminTechnicians() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
+      const data = await res.json().catch(() => ({}));
       
       if (res.ok) {
-        alert(isEdit ? 'Data berhasil diupdate!' : 'Data berhasil ditambahkan!');
+        showAlert(isEdit ? 'Data berhasil diupdate!' : 'Data teknisi & akun login berhasil ditambahkan! Teknisi dapat login memakai email dan password yang Anda isi.');
         setIsModalOpen(false);
         fetchTechnicians();
       } else {
-        throw new Error('Gagal menyimpan');
+        showAlert(data.error || data.message || 'Gagal menyimpan data teknisi.');
       }
     } catch (error) {
-      alert('Gagal menyimpan data ke server database.');
+      showAlert('Gagal menyimpan data ke server database.');
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Hapus teknisi ini?')) return;
+    if (!(await showConfirm('Teknisi dan data penugasannya akan dihapus. Tindakan ini tidak dapat dibatalkan.', { variant: 'danger', title: 'Hapus Teknisi?' }))) return;
     try {
       const res = await fetch(`/api/technicians/${id}`, { method: 'DELETE' });
       if (res.ok) {
-        alert('Data berhasil dihapus');
+        showAlert('Data berhasil dihapus');
         fetchTechnicians();
       } else {
-        throw new Error('Gagal menghapus');
+        const data = await res.json().catch(() => ({}));
+        showAlert(data.error || data.message || 'Gagal menghapus teknisi.');
       }
     } catch (error) {
-      alert('Gagal menghapus data dari server database.');
+      showAlert('Gagal menghapus data dari server database.');
     }
   };
 
   const openEditModal = (tech: any) => {
-    setFormData(tech);
+    setFormData({ ...tech, email: tech.email || '', password: '' });
     setIsEdit(true);
     setIsModalOpen(true);
   };
 
   const openAddModal = () => {
-    setFormData({ id: '', full_name: '', phone: '', skills: '', status: 'Aktif' });
+    setFormData({ id: '', full_name: '', phone: '', skills: '', status: 'Aktif', email: '', password: '' });
     setIsEdit(false);
     setIsModalOpen(true);
   };
@@ -118,6 +121,7 @@ export default function AdminTechnicians() {
               <tr className="bg-slate-50 dark:bg-slate-950 text-slate-500 dark:text-slate-400 text-sm">
                 <th className="px-6 py-4 font-medium">ID Teknisi</th>
                 <th className="px-6 py-4 font-medium">Nama Teknisi</th>
+                <th className="px-6 py-4 font-medium">Email Login</th>
                 <th className="px-6 py-4 font-medium">Keahlian</th>
                 <th className="px-6 py-4 font-medium">Status</th>
                 <th className="px-6 py-4 font-medium text-right">Aksi</th>
@@ -125,9 +129,9 @@ export default function AdminTechnicians() {
             </thead>
             <tbody className="text-sm divide-y divide-slate-100 dark:divide-slate-800">
               {isLoading ? (
-                <tr><td colSpan={5} className="text-center py-8 text-slate-500 dark:text-slate-400">Memuat data...</td></tr>
+                <tr><td colSpan={6} className="text-center py-8 text-slate-500 dark:text-slate-400">Memuat data...</td></tr>
               ) : filtered.length === 0 ? (
-                <tr><td colSpan={5} className="text-center py-8 text-slate-500 dark:text-slate-400">Data tidak ditemukan</td></tr>
+                <tr><td colSpan={6} className="text-center py-8 text-slate-500 dark:text-slate-400">Data tidak ditemukan</td></tr>
               ) : (
                 filtered.map((tech, i) => (
                   <tr key={tech.id || i} className="hover:bg-slate-50 dark:hover:bg-slate-950">
@@ -136,6 +140,7 @@ export default function AdminTechnicians() {
                       <p>{tech.full_name}</p>
                       <p className="text-xs font-normal text-slate-500 dark:text-slate-400">{tech.phone}</p>
                     </td>
+                    <td className="px-6 py-4 text-slate-600 dark:text-slate-400 text-xs">{tech.email || <span className="italic text-rose-500">Belum ada akun</span>}</td>
                     <td className="px-6 py-4 text-slate-600 dark:text-slate-400">{tech.skills}</td>
                     <td className="px-6 py-4">
                       <span className={`px-2 py-1 rounded-full text-xs font-bold ${
@@ -180,6 +185,14 @@ export default function AdminTechnicians() {
               <div>
                 <label className="block text-sm font-medium mb-1">No Telepon</label>
                 <input required type="text" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full border rounded-lg px-3 py-2" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Email Login Teknisi</label>
+                <input required={!isEdit} type="email" placeholder="teknisi@lakuac.com" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full border rounded-lg px-3 py-2" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">{isEdit ? 'Password Baru (kosongkan jika tidak diubah)' : 'Password Login Teknisi'}</label>
+                <input required={!isEdit} type="password" minLength={6} placeholder="Minimal 6 karakter" value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})} className="w-full border rounded-lg px-3 py-2" autoComplete="new-password" />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">Keahlian</label>

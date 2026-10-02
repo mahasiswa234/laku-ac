@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search, MoreVertical, Plus, Edit2, Trash2, X } from 'lucide-react';
+import { showAlert, showConfirm } from '../utils/dialog';
 
 export default function AdminServices() {
   const [services, setServices] = useState<any[]>([]);
@@ -25,7 +26,7 @@ export default function AdminServices() {
       }
     } catch (error) {
       console.error('Database connection failed');
-      alert('Gagal memuat data dari server database.');
+      showAlert('Gagal memuat data dari server database.');
     } finally {
       setIsLoading(false);
     }
@@ -44,29 +45,29 @@ export default function AdminServices() {
       });
       
       if (res.ok) {
-        alert(isEdit ? 'Data berhasil diupdate!' : 'Data berhasil ditambahkan!');
+        showAlert(isEdit ? 'Data berhasil diupdate!' : 'Data berhasil ditambahkan!');
         setIsModalOpen(false);
         fetchServices();
       } else {
         throw new Error('Gagal menyimpan');
       }
     } catch (error) {
-      alert('Gagal menyimpan data ke server database.');
+      showAlert('Gagal menyimpan data ke server database.');
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Hapus layanan ini?')) return;
+    if (!(await showConfirm('Layanan akan dihapus dari daftar. Tindakan ini tidak dapat dibatalkan.', { variant: 'danger', title: 'Hapus Layanan?' }))) return;
     try {
       const res = await fetch(`/api/services/${id}`, { method: 'DELETE' });
       if (res.ok) {
-        alert('Data berhasil dihapus');
+        showAlert('Data berhasil dihapus');
         fetchServices();
       } else {
         throw new Error('Gagal menghapus');
       }
     } catch (error) {
-      alert('Gagal menghapus data dari server database.');
+      showAlert('Gagal menghapus data dari server database.');
     }
   };
 

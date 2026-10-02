@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import db from '../db/connection.js';
-import { authenticateJWT } from '../middleware/authMiddleware.js';
+import { authenticateJWT, authorizeRoles, AuthRequest } from '../middleware/authMiddleware.js';
+import { getTechnicianIdsByUserId } from '../utils/technician.js';
 
 const router = Router();
 
@@ -8,9 +9,18 @@ const router = Router();
 router.use(authenticateJWT);
 
 // GET all schedules (with optional technician_id filter)
-router.get('/', async (req, res) => {
-  const { technician_id } = req.query;
+router.get('/', async (req: AuthRequest, res) => {
+  let technician_id: any = req.query.technician_id;
+  let technicianIds: number[] | null = null;
   try {
+    // Teknisi hanya boleh melihat jadwal miliknya sendiri, apa pun query yang dikirim
+    if (req.user?.role === 'technician') {
+      technicianIds = await getTechnicianIdsByUserId(req.user.userId);
+      if (technicianIds.length === 0) return res.json([]);
+    } else if (req.user?.role !== 'admin') {
+      return res.status(403).json({ error: 'Akses ditolak' });
+    }
+
     let query = `
       SELECT 
         s.*, 
@@ -41,7 +51,10 @@ router.get('/', async (req, res) => {
     `;
     const params: any[] = [];
 
-    if (technician_id) {
+    if (technicianIds) {
+      query += ' WHERE s.technician_id IN (?)';
+      params.push(technicianIds);
+    } else if (technician_id) {
       query += ' WHERE s.technician_id = ?';
       params.push(technician_id);
     }
@@ -55,10 +68,19 @@ router.get('/', async (req, res) => {
   }
 });
 
-// POST new schedule
-router.post('/', async (req, res) => {
+// POST new schedule / penugasan teknisi (Admin Only)
+router.post('/', authorizeRoles('admin'), async (req, res) => {
   const { request_id, technician_id, scheduled_date, start_time, end_time } = req.body;
   try {
+    if (!request_id || !technician_id) {
+      return res.status(400).json({ error: 'request_id dan technician_id wajib diisi' });
+    }
+    // Satu permintaan hanya boleh ditugaskan ke satu teknisi: hapus jadwal lama yang belum dikerjakan
+    await db.query(
+      'DELETE FROM service_schedules WHERE request_id = ? AND NOT EXISTS (SELECT 1 FROM service_history h WHERE h.schedule_id = service_schedules.id)',
+      [request_id]
+    );
+
     const sDate = scheduled_date || new Date().toISOString().split('T')[0];
     const sTime = start_time || '09:00:00';
     const eTime = end_time || '11:00:00';

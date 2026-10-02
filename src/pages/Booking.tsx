@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Calendar, CheckCircle, AlertCircle, Wrench, Clock, ShieldCheck } from 'lucide-react';
+import { showAlert } from '../utils/dialog';
 
 interface ACUnit {
   id: number;
@@ -171,11 +172,11 @@ export default function Booking() {
         const code = result.data?.request_code || 'REQ-BARU';
         setSuccessCode(code);
       } else {
-        alert(result.message || 'Gagal mengirim permintaan servis.');
+        showAlert(result.message || 'Gagal mengirim permintaan servis.');
       }
     } catch (error) {
       console.error('Error submitting booking:', error);
-      alert('Terjadi kesalahan saat menghubungi server.');
+      showAlert('Terjadi kesalahan saat menghubungi server.');
     } finally {
       setIsSubmitting(false);
     }

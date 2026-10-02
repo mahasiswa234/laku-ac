@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { compressImageToDataUrl } from '../utils/imageCompression.js';
 import { 
   Plus, 
   Wrench, 
@@ -27,6 +28,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { showAlert } from '../utils/dialog';
 
 interface ACUnit {
   id: number;
@@ -101,6 +103,47 @@ function formatRelativeTime(isoString: string): string {
   }
 }
 
+/**
+ * Palet warna notifikasi per status. Setiap warna dipasangkan agar kontras jelas di KEDUA mode:
+ * - light: latar pastel (100/50) + teks gelap (700/800) -> kontras tinggi di atas kartu putih
+ * - dark : latar transparan berwarna (500/20) + teks terang (300) -> menonjol di atas kartu slate-800
+ */
+const TOAST_STYLES: Record<string, { accent: string; icon: string; badge: string }> = {
+  emerald: {
+    accent: 'bg-emerald-500 dark:bg-emerald-400',
+    icon: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300',
+    badge: 'bg-emerald-100 text-emerald-800 ring-1 ring-emerald-200 dark:bg-emerald-500/20 dark:text-emerald-200 dark:ring-emerald-400/30'
+  },
+  purple: {
+    accent: 'bg-purple-500 dark:bg-purple-400',
+    icon: 'bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300',
+    badge: 'bg-purple-100 text-purple-800 ring-1 ring-purple-200 dark:bg-purple-500/20 dark:text-purple-200 dark:ring-purple-400/30'
+  },
+  blue: {
+    accent: 'bg-blue-500 dark:bg-blue-400',
+    icon: 'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300',
+    badge: 'bg-blue-100 text-blue-800 ring-1 ring-blue-200 dark:bg-blue-500/20 dark:text-blue-200 dark:ring-blue-400/30'
+  },
+  rose: {
+    accent: 'bg-rose-500 dark:bg-rose-400',
+    icon: 'bg-rose-100 text-rose-700 dark:bg-rose-500/20 dark:text-rose-300',
+    badge: 'bg-rose-100 text-rose-800 ring-1 ring-rose-200 dark:bg-rose-500/20 dark:text-rose-200 dark:ring-rose-400/30'
+  },
+  amber: {
+    accent: 'bg-amber-500 dark:bg-amber-400',
+    icon: 'bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300',
+    badge: 'bg-amber-100 text-amber-900 ring-1 ring-amber-200 dark:bg-amber-500/20 dark:text-amber-200 dark:ring-amber-400/30'
+  }
+};
+
+function getToastStyle(status: string) {
+  if (status === 'Selesai' || status === 'Lunas') return TOAST_STYLES.emerald;
+  if (status === 'Diproses') return TOAST_STYLES.purple;
+  if (status === 'Dijadwalkan') return TOAST_STYLES.blue;
+  if (status === 'Dibatalkan' || status === 'Ditolak') return TOAST_STYLES.rose;
+  return TOAST_STYLES.amber;
+}
+
 export default function CustomerDashboard() {
   const [userData, setUserData] = useState<any>(null);
   const [units, setUnits] = useState<ACUnit[]>([]);
@@ -130,6 +173,7 @@ export default function CustomerDashboard() {
   const [transferDate, setTransferDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [transferAmount, setTransferAmount] = useState<number>(0);
   const [proofImage, setProofImage] = useState<string | null>(null);
+  const [isCompressingProof, setIsCompressingProof] = useState(false);
   const [proofNotes, setProofNotes] = useState('');
   const [isUploadingPayment, setIsUploadingPayment] = useState(false);
   const [copiedBank, setCopiedBank] = useState<string | null>(null);
@@ -530,46 +574,17 @@ export default function CustomerDashboard() {
     setIsPaymentModalOpen(true);
   };
 
-  const processProofImage = (file: File) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const img = document.createElement('img');
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        let width = img.width;
-        let height = img.height;
-        const maxDimension = 1200;
-
-        if (width > maxDimension || height > maxDimension) {
-          if (width > height) {
-            height = Math.round((height * maxDimension) / width);
-            width = maxDimension;
-          } else {
-            width = Math.round((width * maxDimension) / height);
-            height = maxDimension;
-          }
-        }
-
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        if (ctx) {
-          ctx.drawImage(img, 0, 0, width, height);
-          const compressed = canvas.toDataURL('image/jpeg', 0.85);
-          setProofImage(compressed);
-        } else {
-          setProofImage(e.target?.result as string);
-        }
-      };
-      img.src = e.target?.result as string;
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleProofFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleProofFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      processProofImage(file);
+    if (!file) return;
+    setIsCompressingProof(true);
+    try {
+      const compressed = await compressImageToDataUrl(file);
+      setProofImage(compressed);
+    } catch (err) {
+      showAlert('Gagal memproses gambar. Coba gunakan foto lain.');
+    } finally {
+      setIsCompressingProof(false);
     }
   };
 
@@ -583,7 +598,7 @@ export default function CustomerDashboard() {
     e.preventDefault();
     if (!selectedPayRequest) return;
     if (!proofImage) {
-      alert('Silakan pilih atau unggah foto bukti transfer bank terlebih dahulu.');
+      showAlert('Silakan pilih atau unggah foto bukti transfer bank terlebih dahulu.');
       return;
     }
 
@@ -607,10 +622,10 @@ export default function CustomerDashboard() {
         setTimeout(() => setSuccessBanner(null), 6000);
         await loadCustomerData(userData);
       } else {
-        alert(data.message || 'Gagal mengunggah bukti transfer.');
+        showAlert(data.message || 'Gagal mengunggah bukti transfer.');
       }
     } catch (err) {
-      alert('Terjadi kesalahan koneksi saat mengunggah bukti transfer.');
+      showAlert('Terjadi kesalahan koneksi saat mengunggah bukti transfer.');
     } finally {
       setIsUploadingPayment(false);
     }
@@ -633,65 +648,71 @@ export default function CustomerDashboard() {
   return (
     <div className="space-y-6">
       {/* Floating Live Notification Toast saat Admin Mengubah Status Pesanan */}
-      {activeToast && (
-        <div 
-          id="live-order-toast"
-          className="fixed top-5 right-4 sm:right-6 z-50 max-w-sm sm:max-w-md w-full bg-white dark:bg-slate-900/95 backdrop-blur-md rounded-2xl shadow-2xl border border-blue-200/90 dark:border-blue-800 p-4 transition-all duration-300 animate-in slide-in-from-top-4"
-        >
-          <div className="flex items-start gap-3">
-            <div className={`p-2.5 rounded-xl flex-shrink-0 ${
-              activeToast.newStatus === 'Selesai' || activeToast.newStatus === 'Lunas' 
-                ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400' 
-                : activeToast.newStatus === 'Diproses'
-                ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400'
-                : activeToast.newStatus === 'Dijadwalkan'
-                ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
-                : activeToast.newStatus === 'Dibatalkan'
-                ? 'bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400'
-                : 'bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400'
-            }`}>
-              <BellRing size={20} className="animate-bounce" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center justify-between gap-1">
-                <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100 truncate">{activeToast.title}</h4>
-                <span className="text-[11px] text-slate-400 whitespace-nowrap">Baru saja</span>
+      {activeToast && (() => {
+        const t = getToastStyle(activeToast.newStatus);
+        return (
+          <div
+            id="live-order-toast"
+            role="status"
+            aria-live="polite"
+            className="fixed top-5 right-4 sm:right-6 z-50 max-w-sm sm:max-w-md w-[calc(100%-2rem)] sm:w-full overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-900/10 dark:border-slate-600 dark:bg-slate-800 dark:shadow-black/50 toast-in"
+          >
+            {/* Garis aksen warna status di sisi kiri */}
+            <span className={`absolute inset-y-0 left-0 w-1.5 ${t.accent}`} aria-hidden="true" />
+
+            <div className="flex items-start gap-3 p-4 pl-5">
+              <div className={`p-2.5 rounded-xl flex-shrink-0 ${t.icon}`}>
+                <BellRing size={20} className="animate-bounce" />
               </div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">{activeToast.message}</p>
-              <div className="mt-2.5 flex items-center justify-between gap-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
-                <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
-                  Status Baru: {activeToast.newStatus}
-                </span>
-                <button
-                  onClick={() => {
-                    markSingleNotificationRead(activeToast.id);
-                    setActiveToast(null);
-                  }}
-                  className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium text-xs"
-                >
-                  Tutup Notifikasi
-                </button>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-2">
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">{activeToast.title}</h4>
+                  <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 whitespace-nowrap">Baru saja</span>
+                </div>
+                <p className="text-xs text-slate-700 dark:text-slate-300 mt-1 leading-relaxed">{activeToast.message}</p>
+                <div className="mt-3 flex items-center justify-between gap-2 pt-2.5 border-t border-slate-200 dark:border-slate-600 text-xs">
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold ${t.badge}`}>
+                    Status Baru: {activeToast.newStatus}
+                  </span>
+                  <button
+                    onClick={() => {
+                      markSingleNotificationRead(activeToast.id);
+                      setActiveToast(null);
+                    }}
+                    className="text-blue-700 dark:text-blue-300 hover:text-blue-900 dark:hover:text-blue-200 hover:underline font-semibold text-xs rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                  >
+                    Tutup Notifikasi
+                  </button>
+                </div>
               </div>
+              <button
+                onClick={() => setActiveToast(null)}
+                className="text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-700 p-1 -mr-1 -mt-1 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                aria-label="Tutup notifikasi"
+              >
+                <X size={16} />
+              </button>
             </div>
-            <button 
-              onClick={() => setActiveToast(null)}
-              className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-400 p-1 -mr-1 -mt-1 rounded-lg"
-              aria-label="Tutup notifikasi"
-            >
-              <X size={16} />
-            </button>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* Success Notification Banner */}
       {successBanner && (
-        <div id="customer-success-banner" className="bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 px-4 py-3 rounded-xl flex items-center justify-between shadow-sm animate-fadeIn">
-          <div className="flex items-center gap-2">
+        <div
+          id="customer-success-banner"
+          role="status"
+          className="bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-300 dark:border-emerald-600 text-emerald-900 dark:text-emerald-100 px-4 py-3 rounded-xl flex items-center justify-between gap-3 shadow-sm toast-in"
+        >
+          <div className="flex items-center gap-2.5">
             <CheckCircle className="text-emerald-600 dark:text-emerald-400 flex-shrink-0" size={20} />
             <span className="font-medium text-sm">{successBanner}</span>
           </div>
-          <button onClick={() => setSuccessBanner(null)} className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300">
+          <button
+            onClick={() => setSuccessBanner(null)}
+            aria-label="Tutup pesan"
+            className="text-emerald-700 hover:text-emerald-900 hover:bg-emerald-100 dark:text-emerald-300 dark:hover:text-white dark:hover:bg-emerald-800/60 p-1 rounded-lg transition-colors flex-shrink-0"
+          >
             <X size={18} />
           </button>
         </div>
@@ -700,9 +721,7 @@ export default function CustomerDashboard() {
       {/* Welcome & Actions Header with Notification Center */}
       <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 sm:p-8 text-white shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative">
         <div className="flex-1">
-          <div className="inline-flex items-center gap-2 bg-white dark:bg-slate-900/20 px-3 py-1 rounded-full text-xs font-medium mb-2 backdrop-blur-sm">
-            <Sparkles size={14} /> Panel Pelanggan Laku AC
-          </div>
+          
           <h1 className="text-2xl sm:text-3xl font-bold">Selamat Datang, {customerDisplayName}!</h1>
           <p className="text-blue-100 mt-1 max-w-xl text-sm sm:text-base">
             Pantau kondisi unit AC Anda dan ajukan permintaan servis berkala secara langsung ke tim teknisi kami.
@@ -1698,7 +1717,12 @@ export default function CustomerDashboard() {
                   Foto Bukti / Struk Transfer <span className="text-rose-500 dark:text-rose-400">*</span>
                 </label>
 
-                {proofImage ? (
+                {isCompressingProof ? (
+                  <div className="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-6 flex flex-col items-center justify-center text-slate-500 dark:text-slate-400">
+                    <Loader2 size={22} className="mb-1.5 animate-spin" />
+                    <span className="text-xs font-semibold">Mengompres gambar...</span>
+                  </div>
+                ) : proofImage ? (
                   <div className="relative rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 p-1">
                     <img src={proofImage} alt="Bukti Transfer" className="w-full h-44 object-contain rounded-lg" />
                     <button
@@ -1753,7 +1777,7 @@ export default function CustomerDashboard() {
                 </button>
                 <button
                   type="submit"
-                  disabled={isUploadingPayment}
+                  disabled={isUploadingPayment || isCompressingProof}
                   className="flex-1 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-1.5 shadow-sm disabled:opacity-50"
                 >
                   {isUploadingPayment ? (

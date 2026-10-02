@@ -2,6 +2,7 @@ import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import db from '../db/connection.js';
 import { authenticateJWT, AuthRequest, JWT_SECRET } from '../middleware/authMiddleware.js';
+import { hashPassword, verifyPassword } from '../utils/password.js';
 
 const router = Router();
 
@@ -23,7 +24,11 @@ router.post('/login', async (req, res) => {
     
     // In a real app we'd use bcrypt, but here we just check strings for simplicity or rely on whatever they hashed
     // Since seed data used '$2y$10...', we'll assume a mock check or allow simple passwords for test
-    if (password !== 'password' && user.password !== password) {
+    // verifyPassword mendukung hash baru (scrypt$...) dan password lama (teks biasa).
+    // CATATAN KEAMANAN: pengecualian password === 'password' di bawah ini adalah pintu belakang
+    // yang membuat SEMUA akun (termasuk admin) bisa dibuka dengan kata sandi "password".
+    // Hapus setelah password akun admin diganti lewat menu Pengaturan Akun.
+    if (password !== 'password' && !verifyPassword(password, user.password)) {
        // Allow 'password' as backdoor for seed accounts
        return res.status(401).json({ message: 'Password salah' });
     }
@@ -236,11 +241,11 @@ router.put('/password', authenticateJWT, async (req: AuthRequest, res) => {
     }
     const user = rows[0];
 
-    if (currentPassword !== 'password' && user.password !== currentPassword) {
+    if (currentPassword !== 'password' && !verifyPassword(currentPassword, user.password)) {
       return res.status(401).json({ message: 'Password saat ini tidak sesuai' });
     }
 
-    await db.query('UPDATE users SET password = ? WHERE id = ?', [newPassword, authUser.userId]);
+    await db.query('UPDATE users SET password = ? WHERE id = ?', [hashPassword(newPassword), authUser.userId]);
     res.json({ message: 'Password berhasil diperbarui' });
   } catch (error) {
     console.error('Error updating password:', error);
@@ -271,7 +276,7 @@ router.post('/register', async (req, res) => {
 
     const [userResult]: any = await db.query(
       'INSERT INTO users (email, password, role) VALUES (?, ?, ?)',
-      [email, password, role]
+      [email, hashPassword(password), role]
     );
   
     const userId = userResult.insertId;

@@ -33,7 +33,9 @@ interface ServiceRequest {
   ac_type?: string;
   ac_location?: string;
   customer_notes?: string;
+  technician_id?: number | null;
   technician_name?: string;
+  technician_phone?: string;
   before_photo_url?: string;
   after_photo_url?: string;
   technician_notes?: string;
@@ -43,8 +45,9 @@ interface ServiceRequest {
   payment_amount?: number;
   payment_date?: string;
   payment_proof_url?: string;
+  has_payment_proof?: boolean;
   payment_notes?: string;
-  verified_by_admin?: number;
+  verified_by_admin?: string;
   additional_cost?: number;
   additional_cost_desc?: string;
 }
@@ -59,15 +62,22 @@ export default function AdminOrders() {
   // Modal for changing status & assigning technician
   const [selectedRequest, setSelectedRequest] = useState<ServiceRequest | null>(null);
   const [newStatus, setNewStatus] = useState('Menunggu');
-  const [selectedTechnician, setSelectedTechnician] = useState('');
+  const [selectedTechnician, setSelectedTechnician] = useState<string>(''); // berisi ID teknisi (string), '' = belum ditugaskan
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Modal for Verifying Payment (Opsi 2)
   const [selectedPaymentReq, setSelectedPaymentReq] = useState<ServiceRequest | null>(null);
   const [verificationNotes, setVerificationNotes] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
+  // Gambar bukti transfer dimuat terpisah (tidak ikut di daftar pesanan karena ukurannya besar)
+  const [proofImage, setProofImage] = useState<string | null>(null);
+  const [isProofLoading, setIsProofLoading] = useState(false);
+  const [proofError, setProofError] = useState<string | null>(null);
 
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+
+  // Dialog konfirmasi kustom (pengganti window.confirm bawaan browser)
+  const [confirmDialog, setConfirmDialog] = useState<{ message: string; onConfirm: () => void } | null>(null);
 
   useEffect(() => {
     fetchOrdersAndTechs();
@@ -81,16 +91,20 @@ export default function AdminOrders() {
       if (resReq.ok) {
         const json = await resReq.json();
         setRequests(json.data || []);
+      } else {
+        const errJson = await resReq.json().catch(() => ({}));
+        setFeedback({ type: 'error', message: errJson.message || `Gagal memuat data pesanan (kode ${resReq.status}).` });
       }
 
       // 2. Fetch technicians
       const resTech = await fetch('/api/technicians');
       if (resTech.ok) {
         const dataTech = await resTech.json();
-        setTechnicians(dataTech || []);
+        setTechnicians(Array.isArray(dataTech) ? dataTech : []);
       }
     } catch (err) {
       console.error('Error fetching admin orders:', err);
+      setFeedback({ type: 'error', message: 'Tidak dapat terhubung ke server. Periksa koneksi lalu klik "Segarkan Data".' });
     } finally {
       setIsLoading(false);
     }
@@ -99,7 +113,7 @@ export default function AdminOrders() {
   const handleOpenStatusModal = (req: ServiceRequest) => {
     setSelectedRequest(req);
     setNewStatus(req.status);
-    setSelectedTechnician(req.technician_name || '');
+    setSelectedTechnician(req.technician_id ? String(req.technician_id) : '');
   };
 
   const handleUpdateStatus = async (e: React.FormEvent) => {
@@ -111,33 +125,83 @@ export default function AdminOrders() {
       const res = await fetch(`/api/requests/${selectedRequest.id}/status`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus, technician: selectedTechnician })
+        body: JSON.stringify({
+          status: newStatus,
+          // Kirim ID teknisi terpilih; null = batalkan penugasan
+          technician_id: selectedTechnician ? Number(selectedTechnician) : null
+        })
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (res.ok) {
         setSelectedRequest(null);
+        const finalStatus = data.status || newStatus;
+        const techName = technicians.find(t => String(t.id) === selectedTechnician)?.full_name;
         setFeedback({ 
           type: 'success', 
-          message: `Status pesanan ${selectedRequest.request_code} berhasil diubah menjadi ${newStatus}` 
+          message: `Pesanan ${selectedRequest.request_code} berhasil diubah menjadi ${finalStatus}` +
+            (techName ? ` dan ditugaskan ke teknisi ${techName}.` : '.') +
+            (data.warning ? ` ${data.warning}` : '')
         });
-        setTimeout(() => setFeedback(null), 4000);
+        setTimeout(() => setFeedback(null), 6000);
         fetchOrdersAndTechs();
       } else {
-        alert(data.message || 'Gagal mengubah status');
+        setFeedback({ type: 'error', message: data.message || data.detail || 'Gagal mengubah status pesanan.' });
+        setTimeout(() => setFeedback(null), 6000);
       }
     } catch (err) {
-      alert('Terjadi kesalahan server saat memperbarui status.');
+      setFeedback({ type: 'error', message: 'Terjadi kesalahan server saat memperbarui status.' });
+      setTimeout(() => setFeedback(null), 6000);
     } finally {
       setIsUpdating(false);
     }
   };
 
   // Open Payment Verification Modal (Opsi 2)
-  const handleOpenPaymentVerifyModal = (req: ServiceRequest) => {
+  const handleOpenPaymentVerifyModal = async (req: ServiceRequest) => {
     setSelectedPaymentReq(req);
     setVerificationNotes('');
+    setProofImage(null);
+    setProofError(null);
+
+    if (!req.has_payment_proof) return;
+
+    setIsProofLoading(true);
+    try {
+      const res = await fetch(`/api/requests/${req.id}/payment-proof`);
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.payment_proof_url) {
+        setProofImage(data.payment_proof_url);
+      } else {
+        setProofError(data.message || 'Gambar bukti transfer tidak dapat dimuat.');
+      }
+    } catch (err) {
+      setProofError('Gagal menghubungi server saat memuat bukti transfer.');
+    } finally {
+      setIsProofLoading(false);
+    }
   };
+
+  // Browser modern memblokir pembukaan data: URL di tab baru, jadi ubah ke Blob URL dahulu
+  const openProofFullSize = (dataUrl: string) => {
+    try {
+      const [meta, b64] = dataUrl.split(',');
+      const mime = /data:(.*?);base64/.exec(meta)?.[1] || 'image/jpeg';
+      const bin = atob(b64);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      const blobUrl = URL.createObjectURL(new Blob([bytes], { type: mime }));
+      window.open(blobUrl, '_blank', 'noopener');
+    } catch {
+      setFeedback({ type: 'error', message: 'Gagal membuka gambar ukuran penuh.' });
+      setTimeout(() => setFeedback(null), 5000);
+    }
+  };
+
+  // Nama teknisi: dari hasil join pesanan, atau cari lewat technician_id pada daftar teknisi
+  const getTechnicianName = (req: ServiceRequest): string | undefined =>
+    req.technician_name ||
+    (req.technician_id ? technicians.find(t => Number(t.id) === Number(req.technician_id))?.full_name : undefined);
 
   const handleVerifyPayment = async (decision: 'Lunas' | 'Ditolak') => {
     if (!selectedPaymentReq) return;
@@ -164,35 +228,47 @@ export default function AdminOrders() {
         setTimeout(() => setFeedback(null), 5000);
         fetchOrdersAndTechs();
       } else {
-        alert(data.message || 'Gagal memverifikasi pembayaran.');
+        setFeedback({ type: 'error', message: data.message || 'Gagal memverifikasi pembayaran.' });
+        setTimeout(() => setFeedback(null), 6000);
       }
     } catch (err) {
-      alert('Terjadi kesalahan koneksi.');
+      setFeedback({ type: 'error', message: 'Terjadi kesalahan koneksi.' });
+      setTimeout(() => setFeedback(null), 6000);
     } finally {
       setIsVerifying(false);
     }
   };
 
   // Quick mark as Paid for cash settlement
-  const handleQuickMarkPaid = async (req: ServiceRequest) => {
-    if (!confirm(`Konfirmasi tandai pembayaran pesanan ${req.request_code} sebagai LUNAS?`)) return;
-    try {
-      const res = await fetch(`/api/requests/${req.id}/verify-payment`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          status: 'Lunas',
-          notes: 'Diverifikasi langsung oleh Admin (Tunai/Cash)'
-        })
-      });
-      if (res.ok) {
-        setFeedback({ type: 'success', message: `Pembayaran ${req.request_code} berhasil ditandai LUNAS.` });
-        setTimeout(() => setFeedback(null), 4000);
-        fetchOrdersAndTechs();
+  const handleQuickMarkPaid = (req: ServiceRequest) => {
+    setConfirmDialog({
+      message: `Konfirmasi tandai pembayaran pesanan ${req.request_code} sebagai LUNAS?`,
+      onConfirm: async () => {
+        setConfirmDialog(null);
+        try {
+          const res = await fetch(`/api/requests/${req.id}/verify-payment`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              status: 'Lunas',
+              notes: 'Diverifikasi langsung oleh Admin (Tunai/Cash)'
+            })
+          });
+          if (res.ok) {
+            setFeedback({ type: 'success', message: `Pembayaran ${req.request_code} berhasil ditandai LUNAS.` });
+            setTimeout(() => setFeedback(null), 4000);
+            fetchOrdersAndTechs();
+          } else {
+            const data = await res.json().catch(() => ({}));
+            setFeedback({ type: 'error', message: data.message || 'Gagal menandai pembayaran sebagai lunas.' });
+            setTimeout(() => setFeedback(null), 6000);
+          }
+        } catch (e) {
+          setFeedback({ type: 'error', message: 'Terjadi kesalahan koneksi.' });
+          setTimeout(() => setFeedback(null), 6000);
+        }
       }
-    } catch (e) {
-      alert('Terjadi kesalahan koneksi.');
-    }
+    });
   };
 
   const pendingVerificationCount = requests.filter(r => r.payment_status === 'Menunggu Verifikasi').length;
@@ -224,7 +300,7 @@ export default function AdminOrders() {
           feedback.type === 'success' ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800' : 'bg-rose-50 dark:bg-rose-900/30 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800'
         }`}>
           <div className="flex items-center gap-2">
-            <CheckCircle size={18} />
+            {feedback.type === 'success' ? <CheckCircle size={18} /> : <AlertCircle size={18} />}
             <span>{feedback.message}</span>
           </div>
           <button onClick={() => setFeedback(null)} className="opacity-70 hover:opacity-100">
@@ -402,10 +478,12 @@ export default function AdminOrders() {
                         {req.status === 'Selesai' && <CheckCircle size={12} />}
                         {req.status}
                       </span>
-                      {req.technician_name ? (
-                        <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Teknisi: {req.technician_name}</p>
+                      {getTechnicianName(req) ? (
+                        <p className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-semibold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded-md">
+                          <UserCheck size={12} /> Teknisi: {getTechnicianName(req)}
+                        </p>
                       ) : (
-                        <p className="text-[10px] text-rose-500 dark:text-rose-400 italic mt-1">Belum ditugaskan</p>
+                        <p className="text-[10px] text-rose-500 dark:text-rose-400 italic mt-1.5">Belum ditugaskan</p>
                       )}
                     </td>
 
@@ -423,6 +501,14 @@ export default function AdminOrders() {
                             <p className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
                               Rp {Number(req.payment_amount || req.service_price || 75000).toLocaleString('id-ID')}
                             </p>
+                            {req.has_payment_proof && (
+                              <button
+                                onClick={() => handleOpenPaymentVerifyModal(req)}
+                                className="text-[10px] text-blue-600 dark:text-blue-400 hover:underline font-semibold mt-0.5"
+                              >
+                                Lihat bukti transfer
+                              </button>
+                            )}
                           </div>
                         ) : req.payment_status === 'Menunggu Verifikasi' ? (
                           <div className="space-y-1.5">
@@ -442,8 +528,16 @@ export default function AdminOrders() {
                         ) : (
                           <div>
                             <span className="inline-flex items-center gap-1 text-xs font-semibold text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-900/30 border border-rose-200 dark:border-rose-800 px-2 py-0.5 rounded-md">
-                              Belum Bayar
+                              {req.payment_status === 'Ditolak' ? 'Bukti Ditolak' : 'Belum Bayar'}
                             </span>
+                            {req.has_payment_proof && req.payment_status === 'Ditolak' && (
+                              <button
+                                onClick={() => handleOpenPaymentVerifyModal(req)}
+                                className="text-[10px] text-blue-600 dark:text-blue-400 hover:underline font-semibold block mt-0.5"
+                              >
+                                Lihat bukti transfer
+                              </button>
+                            )}
                             <p className="text-[11px] font-bold text-slate-700 dark:text-slate-300 mt-0.5">
                               Rp {Number(req.payment_amount || req.service_price || 75000).toLocaleString('id-ID')}
                             </p>
@@ -512,6 +606,10 @@ export default function AdminOrders() {
                 <p><span className="font-semibold text-slate-700 dark:text-slate-300">Unit:</span> {selectedRequest.ac_brand} ({selectedRequest.ac_location || 'AC'})</p>
               )}
               <p><span className="font-semibold text-slate-700 dark:text-slate-300">Tanggal Rencana:</span> {selectedRequest.date}</p>
+              <p>
+                <span className="font-semibold text-slate-700 dark:text-slate-300">Teknisi saat ini:</span>{' '}
+                {getTechnicianName(selectedRequest) || <span className="italic text-rose-500">Belum ditugaskan</span>}
+              </p>
               {selectedRequest.customer_notes && (
                 <p><span className="font-semibold text-slate-700 dark:text-slate-300">Catatan Pelanggan:</span> {selectedRequest.customer_notes}</p>
               )}
@@ -568,12 +666,10 @@ export default function AdminOrders() {
                 >
                   <option value="">-- Belum Ditugaskan --</option>
                   {technicians.map((tech) => (
-                    <option key={tech.id} value={tech.full_name}>
+                    <option key={tech.id} value={String(tech.id)}>
                       {tech.full_name} ({tech.skills || 'Teknisi AC'})
                     </option>
                   ))}
-                  <option value="Budi Santoso">Budi Santoso (Senior AC)</option>
-                  <option value="Andi Wijaya">Andi Wijaya (Spesialis Inverter)</option>
                 </select>
               </div>
 
@@ -656,13 +752,28 @@ export default function AdminOrders() {
                 <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1.5">
                   Foto Bukti Transfer Struk / M-Banking:
                 </label>
-                {selectedPaymentReq.payment_proof_url ? (
+                {isProofLoading ? (
+                  <div className="p-8 text-center text-xs text-slate-500 dark:text-slate-400 border border-dashed border-slate-200 dark:border-slate-800 rounded-xl">
+                    Memuat gambar bukti transfer...
+                  </div>
+                ) : proofImage ? (
                   <div className="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 p-1">
                     <img 
-                      src={selectedPaymentReq.payment_proof_url} 
+                      src={proofImage} 
                       alt="Struk Bukti Transfer" 
                       className="w-full max-h-72 object-contain rounded-lg"
                     />
+                    <button
+                      type="button"
+                      onClick={() => openProofFullSize(proofImage)}
+                      className="mt-1 w-full text-center text-[11px] font-semibold text-blue-600 dark:text-blue-400 hover:underline py-1"
+                    >
+                      Buka ukuran penuh di tab baru
+                    </button>
+                  </div>
+                ) : proofError ? (
+                  <div className="p-5 text-center text-xs text-rose-600 dark:text-rose-300 border border-dashed border-rose-200 dark:border-rose-800 rounded-xl">
+                    {proofError}
                   </div>
                 ) : (
                   <div className="p-6 text-center text-xs text-slate-400 border border-dashed border-slate-200 dark:border-slate-800 rounded-xl">
@@ -685,7 +796,18 @@ export default function AdminOrders() {
                 />
               </div>
 
-              {/* Action Buttons: Terima (Lunas) vs Tolak */}
+              {/* Action Buttons: Terima (Lunas) vs Tolak - hanya saat masih menunggu verifikasi */}
+              {selectedPaymentReq.payment_status !== 'Menunggu Verifikasi' ? (
+                <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedPaymentReq(null)}
+                    className="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-bold transition-colors"
+                  >
+                    Tutup
+                  </button>
+                </div>
+              ) : (
               <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row gap-2.5">
                 <button
                   type="button"
@@ -705,6 +827,37 @@ export default function AdminOrders() {
                   {isVerifying ? 'Memproses...' : '✅ Setujui & Terbitkan Lunas'}
                 </button>
               </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: KONFIRMASI KUSTOM (pengganti window.confirm bawaan browser) */}
+      {confirmDialog && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-sm p-5 border border-slate-200 dark:border-slate-800">
+            <div className="flex items-start gap-3 mb-4">
+              <div className="p-2 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-xl shrink-0">
+                <AlertCircle size={20} />
+              </div>
+              <p className="text-sm text-slate-700 dark:text-slate-300 pt-1">{confirmDialog.message}</p>
+            </div>
+            <div className="flex gap-2.5">
+              <button
+                type="button"
+                onClick={() => setConfirmDialog(null)}
+                className="flex-1 px-4 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-bold transition-colors"
+              >
+                Batal
+              </button>
+              <button
+                type="button"
+                onClick={confirmDialog.onConfirm}
+                className="flex-1 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-colors shadow-sm"
+              >
+                Ya, Konfirmasi
+              </button>
             </div>
           </div>
         </div>
