@@ -805,8 +805,7 @@ export default function CustomerDashboard() {
             {isNotificationOpen && (
               <div 
                 id="popup-notifikasi-pelanggan"
-                className="absolute right-0 sm:right-0 top-12 mt-2 w-80 sm:w-96 bg-white dark:bg-black text-slate-800 dark:text-slate-200 rounded-2xl shadow-2xl border border-slate-200 dark:border-white/10 z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-150"
-              >
+               className="fixed sm:absolute top-20 sm:top-12 right-3 sm:right-0 mt-0 sm:mt-2 w-[calc(100vw-1.5rem)] max-w-sm sm:w-96 bg-white dark:bg-black text-slate-800 dark:text-slate-200 rounded-2xl shadow-2xl border border-slate-200 dark:border-white/10 z-[100] overflow-hidden animate-in fade-in zoom-in-95 duration-150"
                 {/* Header Dropdown */}
                 <div className="p-4 border-b border-slate-100 dark:border-white/10 flex items-center justify-between bg-slate-50/80 dark:bg-black">
                   <div className="flex items-center gap-2">
