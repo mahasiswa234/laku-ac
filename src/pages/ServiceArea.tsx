@@ -161,7 +161,7 @@ export default function ServiceArea() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 py-12">
+    <div className="min-h-screen bg-slate-50/50 dark:bg-black py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header Section */}
@@ -204,7 +204,7 @@ export default function ServiceArea() {
                     if (!e.target.value) setCheckResult(null);
                   }}
                   placeholder="Ketik kecamatan (misal: Tebet, Cilandak, BSD, Margonda, Bintaro)..."
-                  className="w-full pl-10 pr-4 py-3 rounded-2xl bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm placeholder:text-slate-400"
+                  className="w-full pl-10 pr-4 py-3 rounded-2xl bg-white dark:bg-black text-slate-800 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm placeholder:text-slate-400"
                 />
               </div>
               <button
@@ -264,7 +264,7 @@ export default function ServiceArea() {
                     </div>
                     <Link
                       to="/kontak"
-                      className="px-5 py-2.5 rounded-xl bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-900 font-bold text-xs shadow-md transition-colors inline-flex items-center gap-1.5 shrink-0"
+                      className="px-5 py-2.5 rounded-xl bg-white dark:bg-black text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-black font-bold text-xs shadow-md transition-colors inline-flex items-center gap-1.5 shrink-0"
                     >
                       <PhoneCall size={14} />
                       <span>Hubungi Customer Service</span>
@@ -296,7 +296,7 @@ export default function ServiceArea() {
         </div>
 
         {/* Filter & Search Bar */}
-        <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/80 dark:border-slate-800 mb-8 space-y-4">
+        <div className="bg-white dark:bg-black rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/80 dark:border-white/10 mb-8 space-y-4">
           <div className="flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center">
             
             {/* Search Input */}
@@ -307,7 +307,7 @@ export default function ServiceArea() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Cari nama wilayah atau kecamatan..."
-                className="w-full pl-10 pr-9 py-2.5 bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 text-sm rounded-xl border border-slate-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                className="w-full pl-10 pr-9 py-2.5 bg-slate-50 dark:bg-black text-slate-800 dark:text-slate-200 text-sm rounded-xl border border-slate-200 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-black transition-all placeholder:text-slate-400"
               />
               {searchQuery && (
                 <button
@@ -336,7 +336,7 @@ export default function ServiceArea() {
                   className={`px-4 py-2 rounded-xl font-medium whitespace-nowrap transition-all duration-200 ${
                     isActive
                       ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/20'
-                      : 'bg-slate-100/80 dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-200/70 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100'
+                      : 'bg-slate-100/80 dark:bg-black text-slate-600 dark:text-slate-400 hover:bg-slate-200/70 dark:hover:bg-black hover:text-slate-900 dark:hover:text-slate-100'
                   }`}
                 >
                   {reg}
@@ -351,7 +351,7 @@ export default function ServiceArea() {
           {filteredAreas.map((area) => (
             <div
               key={area.id}
-              className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-slate-200/80 dark:border-slate-800 hover:shadow-xl hover:border-blue-200 dark:hover:border-blue-800 transition-all duration-300 flex flex-col justify-between group"
+              className="bg-white dark:bg-black rounded-3xl p-6 shadow-sm border border-slate-200/80 dark:border-white/10 hover:shadow-xl hover:border-blue-200 dark:hover:border-blue-800 transition-all duration-300 flex flex-col justify-between group"
             >
               <div>
                 {/* Badge & Popular indicator */}
@@ -379,7 +379,7 @@ export default function ServiceArea() {
                 </p>
 
                 {/* Operational Quick Stats */}
-                <div className="grid grid-cols-2 gap-2 p-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 mb-5 text-xs">
+                <div className="grid grid-cols-2 gap-2 p-3 rounded-2xl bg-slate-50 dark:bg-black border border-slate-100 dark:border-white/10 mb-5 text-xs">
                   <div>
                     <span className="text-slate-400 block text-[11px] mb-0.5">Waktu Tiba:</span>
                     <strong className="text-slate-800 dark:text-slate-200 flex items-center gap-1 font-semibold">
@@ -405,7 +405,7 @@ export default function ServiceArea() {
                     {area.districts.map((district, i) => (
                       <span
                         key={i}
-                        className="text-xs bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 px-2.5 py-1 rounded-lg border border-slate-200/60 dark:border-slate-800"
+                        className="text-xs bg-slate-100 dark:bg-black text-slate-700 dark:text-slate-300 px-2.5 py-1 rounded-lg border border-slate-200/60 dark:border-white/10"
                       >
                         {district}
                       </span>
@@ -414,7 +414,7 @@ export default function ServiceArea() {
                 </div>
 
                 {/* Area Features */}
-                <div className="space-y-1.5 pt-3 border-t border-slate-100 dark:border-slate-800 mb-6">
+                <div className="space-y-1.5 pt-3 border-t border-slate-100 dark:border-white/10 mb-6">
                   {area.features.map((feat, idx) => (
                     <div key={idx} className="flex items-start gap-2 text-xs text-slate-600 dark:text-slate-400">
                       <CheckCircle2 size={13} className="text-emerald-500 dark:text-emerald-400 shrink-0 mt-0.5" />
@@ -439,7 +439,7 @@ export default function ServiceArea() {
         </div>
 
         {/* Value Prop Banner */}
-        <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 sm:p-10 border border-slate-200/80 dark:border-slate-800 shadow-sm mb-16">
+        <div className="bg-white dark:bg-black rounded-3xl p-8 sm:p-10 border border-slate-200/80 dark:border-white/10 shadow-sm mb-16">
           <div className="text-center max-w-2xl mx-auto mb-10">
             <span className="text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider block mb-2">
               Keunggulan Pos Tersebar
@@ -453,7 +453,7 @@ export default function ServiceArea() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 flex flex-col items-center text-center">
+            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-black border border-slate-100 dark:border-white/10 flex flex-col items-center text-center">
               <div className="w-14 h-14 rounded-2xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4">
                 <Clock size={28} />
               </div>
@@ -463,7 +463,7 @@ export default function ServiceArea() {
               </p>
             </div>
 
-            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 flex flex-col items-center text-center">
+            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-black border border-slate-100 dark:border-white/10 flex flex-col items-center text-center">
               <div className="w-14 h-14 rounded-2xl bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-4">
                 <ShieldCheck size={28} />
               </div>
@@ -473,7 +473,7 @@ export default function ServiceArea() {
               </p>
             </div>
 
-            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 flex flex-col items-center text-center">
+            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-black border border-slate-100 dark:border-white/10 flex flex-col items-center text-center">
               <div className="w-14 h-14 rounded-2xl bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-4">
                 <Users size={28} />
               </div>
@@ -503,7 +503,7 @@ export default function ServiceArea() {
               return (
                 <div
                   key={index}
-                  className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm transition-colors"
+                  className="bg-white dark:bg-black rounded-2xl border border-slate-200/80 dark:border-white/10 overflow-hidden shadow-sm transition-colors"
                 >
                   <button
                     onClick={() => setOpenFaqIndex(isOpen ? null : index)}
@@ -513,7 +513,7 @@ export default function ServiceArea() {
                     {isOpen ? <ChevronUp size={18} className="shrink-0 text-blue-600 dark:text-blue-400" /> : <ChevronDown size={18} className="shrink-0 text-slate-400" />}
                   </button>
                   {isOpen && (
-                    <div className="px-5 pb-5 pt-1 text-sm text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-800">
+                    <div className="px-5 pb-5 pt-1 text-sm text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-white/10">
                       {faq.a}
                     </div>
                   )}
@@ -526,7 +526,7 @@ export default function ServiceArea() {
         {/* Bottom Consultation Banner */}
         <div className="rounded-3xl bg-gradient-to-r from-blue-700 to-indigo-800 text-white p-8 sm:p-10 shadow-xl relative overflow-hidden">
           <div className="relative z-10 max-w-2xl space-y-4">
-            <span className="px-3 py-1 rounded-full bg-white dark:bg-slate-900/20 text-white text-xs font-bold uppercase tracking-wider backdrop-blur-sm">
+            <span className="px-3 py-1 rounded-full bg-white dark:bg-black text-white text-xs font-bold uppercase tracking-wider backdrop-blur-sm">
               Layanan Seluruh Wilayah
             </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
@@ -538,7 +538,7 @@ export default function ServiceArea() {
             <div className="pt-2 flex flex-wrap gap-3">
               <Link
                 to="/kontak"
-                className="px-6 py-3 rounded-xl bg-white dark:bg-slate-900 text-blue-800 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/30 font-bold text-sm shadow-md transition-colors inline-flex items-center gap-2"
+                className="px-6 py-3 rounded-xl bg-white dark:bg-black text-blue-800 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/30 font-bold text-sm shadow-md transition-colors inline-flex items-center gap-2"
               >
                 <PhoneCall size={16} />
                 <span>Konsultasi WhatsApp</span>

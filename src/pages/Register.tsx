@@ -124,35 +124,19 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 overflow-hidden">
-
-        {/* HEADER */}
-        <div className="bg-blue-600 p-8 text-center">
+    <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
+      <div className="bg-white dark:bg-black p-8 rounded-2xl shadow-[0_8px_30px_rgba(37,99,235,0.18)] dark:shadow-[0_8px_30px_rgba(59,130,246,0.28)] border border-slate-100 dark:border-white/10 w-full max-w-md transition-colors duration-300">
 
           {/* LOGO LAKU AC */}
-          <div className="flex justify-center mb-4">
-            <div className="w-20 h-20 bg-white rounded-xl shadow-lg flex items-center justify-center overflow-hidden p-2">
+          <div className="flex justify-center mb-6">
               <img
                 src="/logo.png"
                 alt="LAKU AC"
-                className="w-full h-full object-contain"
-              />
-            </div>
+                className="h-20 w-auto object-contain" />
           </div>
-
-          <h2 className="text-2xl font-bold text-white mb-1">
-            Daftar Akun Baru
-          </h2>
-
-          <p className="text-blue-100 text-sm">
-            Bergabung untuk kemudahan layanan AC
-          </p>
-        </div>
 
         {/* FORM */}
         <div className="p-8">
-
           {/* SERVER ERROR */}
           {serverError && (
             <div className="bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 p-3 rounded-lg text-sm mb-6 border border-red-100 dark:border-red-800">
@@ -181,7 +165,7 @@ export default function Register() {
                   className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
                     errors.fullName
                       ? 'border-red-500 dark:border-red-600 bg-red-50 dark:bg-red-900/30'
-                      : 'border-slate-200 dark:border-slate-800'
+                      : 'border-slate-200 dark:border-white/10'
                   }`}
                   placeholder="Masukkan nama lengkap"
                 />
@@ -213,7 +197,7 @@ export default function Register() {
                   className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
                     errors.email
                       ? 'border-red-500 dark:border-red-600 bg-red-50 dark:bg-red-900/30'
-                      : 'border-slate-200 dark:border-slate-800'
+                      : 'border-slate-200 dark:border-white/10'
                   }`}
                   placeholder="nama@email.com"
                 />
@@ -245,7 +229,7 @@ export default function Register() {
                   className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
                     errors.phone
                       ? 'border-red-500 dark:border-red-600 bg-red-50 dark:bg-red-900/30'
-                      : 'border-slate-200 dark:border-slate-800'
+                      : 'border-slate-200 dark:border-white/10'
                   }`}
                   placeholder="081234567890"
                 />
@@ -277,7 +261,7 @@ export default function Register() {
                   className={`w-full pl-10 pr-10 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
                     errors.password
                       ? 'border-red-500 dark:border-red-600 bg-red-50 dark:bg-red-900/30'
-                      : 'border-slate-200 dark:border-slate-800'
+                      : 'border-slate-200 dark:border-white/10'
                   }`}
                   placeholder="Minimal 6 karakter"
                 />
@@ -326,7 +310,7 @@ export default function Register() {
                   className={`w-full pl-10 pr-10 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
                     errors.confirmPassword
                       ? 'border-red-500 dark:border-red-600 bg-red-50 dark:bg-red-900/30'
-                      : 'border-slate-200 dark:border-slate-800'
+                      : 'border-slate-200 dark:border-white/10'
                   }`}
                   placeholder="Ulangi password"
                 />

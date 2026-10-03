@@ -284,7 +284,7 @@ export default function CustomerUnit() {
       )}
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-black p-6 rounded-2xl border border-slate-100 dark:border-white/10 shadow-sm">
         <div>
           <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-200">Manajemen Unit AC</h1>
           <p className="text-slate-500 dark:text-slate-400 text-sm mt-0.5">Daftar AC yang terpasang di lokasi Anda untuk kemudahan servis dan perawatan berkala.</p>
@@ -303,18 +303,18 @@ export default function CustomerUnit() {
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {[1, 2, 3].map(i => (
-            <div key={i} className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 p-6 animate-pulse space-y-4">
+            <div key={i} className="bg-white dark:bg-black rounded-2xl shadow-sm border border-slate-100 dark:border-white/10 p-6 animate-pulse space-y-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-slate-200 dark:bg-slate-800 rounded-xl"></div>
+                <div className="w-12 h-12 bg-slate-200 dark:bg-black rounded-xl"></div>
                 <div className="space-y-2 flex-1">
-                  <div className="h-4 w-28 bg-slate-200 dark:bg-slate-800 rounded"></div>
-                  <div className="h-3 w-20 bg-slate-100 dark:bg-slate-900 rounded"></div>
+                  <div className="h-4 w-28 bg-slate-200 dark:bg-black rounded"></div>
+                  <div className="h-3 w-20 bg-slate-100 dark:bg-black rounded"></div>
                 </div>
               </div>
-              <div className="h-3 w-full bg-slate-100 dark:bg-slate-900 rounded"></div>
-              <div className="h-3 w-3/4 bg-slate-100 dark:bg-slate-900 rounded"></div>
-              <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex gap-2 justify-end">
-                <div className="h-8 w-20 bg-slate-200 dark:bg-slate-800 rounded-lg"></div>
+              <div className="h-3 w-full bg-slate-100 dark:bg-black rounded"></div>
+              <div className="h-3 w-3/4 bg-slate-100 dark:bg-black rounded"></div>
+              <div className="pt-4 border-t border-slate-100 dark:border-white/10 flex gap-2 justify-end">
+                <div className="h-8 w-20 bg-slate-200 dark:bg-black rounded-lg"></div>
               </div>
             </div>
           ))}
@@ -322,9 +322,9 @@ export default function CustomerUnit() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {units.map((unit) => (
-            <div key={unit.id} className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden flex flex-col justify-between hover:border-blue-200 dark:hover:border-blue-800 transition-all">
+            <div key={unit.id} className="bg-white dark:bg-black rounded-2xl shadow-sm border border-slate-100 dark:border-white/10 overflow-hidden flex flex-col justify-between hover:border-blue-200 dark:hover:border-blue-800 transition-all">
               <div>
-                <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex justify-between items-start">
+                <div className="p-5 border-b border-slate-100 dark:border-white/10 flex justify-between items-start">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center flex-shrink-0">
                       <Wrench size={22} />
@@ -361,17 +361,17 @@ export default function CustomerUnit() {
                 </div>
               </div>
 
-              <div className="p-4 bg-slate-50 dark:bg-slate-950 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2">
+              <div className="p-4 bg-slate-50 dark:bg-black border-t border-slate-100 dark:border-white/10 flex items-center gap-2">
                 <button 
                   onClick={() => handleOpenEditModal(unit)}
-                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-900 text-slate-700 dark:text-slate-300 px-3 py-2 rounded-xl text-xs font-semibold transition-colors flex items-center gap-1.5 shadow-2xs"
+                  className="bg-white dark:bg-black border border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-black text-slate-700 dark:text-slate-300 px-3 py-2 rounded-xl text-xs font-semibold transition-colors flex items-center gap-1.5 shadow-2xs"
                   title="Ubah Data Unit"
                 >
                   <Settings size={14} /> Ubah
                 </button>
                 <button 
                   onClick={() => handleDeleteUnit(unit.id)}
-                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-rose-50 dark:hover:bg-rose-900/30 hover:text-rose-600 dark:hover:text-rose-400 text-slate-500 dark:text-slate-400 p-2 rounded-xl text-xs transition-colors shadow-2xs"
+                  className="bg-white dark:bg-black border border-slate-200 dark:border-white/10 hover:bg-rose-50 dark:hover:bg-rose-900/30 hover:text-rose-600 dark:hover:text-rose-400 text-slate-500 dark:text-slate-400 p-2 rounded-xl text-xs transition-colors shadow-2xs"
                   title="Hapus Unit"
                 >
                   <Trash2 size={14} />
@@ -389,9 +389,9 @@ export default function CustomerUnit() {
           {/* Add New Unit Quick Card */}
           <button 
             onClick={handleOpenAddModal}
-            className="border-2 border-dashed border-slate-200 dark:border-slate-800 hover:border-blue-400 dark:hover:border-blue-700 hover:bg-blue-50/40 dark:hover:bg-blue-900/30 rounded-2xl p-8 flex flex-col items-center justify-center text-center transition-all group min-h-[220px]"
+            className="border-2 border-dashed border-slate-200 dark:border-white/10 hover:border-blue-400 dark:hover:border-blue-700 hover:bg-blue-50/40 dark:hover:bg-blue-900/30 rounded-2xl p-8 flex flex-col items-center justify-center text-center transition-all group min-h-[220px]"
           >
-            <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-900 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/30 text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 flex items-center justify-center mb-3 transition-colors">
+            <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-black group-hover:bg-blue-100 dark:group-hover:bg-blue-900/30 text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 flex items-center justify-center mb-3 transition-colors">
               <Plus size={24} />
             </div>
             <h3 className="font-bold text-slate-700 dark:text-slate-300 group-hover:text-blue-700 dark:group-hover:text-blue-300 text-sm">Tambah Unit AC Lainnya</h3>
@@ -405,8 +405,8 @@ export default function CustomerUnit() {
       {/* ========================================================================= */}
       {isUnitModalOpen && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100 dark:border-slate-800 animate-scaleUp">
-            <div className="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-slate-800">
+          <div className="bg-white dark:bg-black rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100 dark:border-white/10 animate-scaleUp">
+            <div className="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-white/10">
               <div className="flex items-center gap-2 text-slate-800 dark:text-slate-200">
                 <Wrench className="text-blue-600 dark:text-blue-400" size={22} />
                 <h3 className="text-lg font-bold">
@@ -427,7 +427,7 @@ export default function CustomerUnit() {
                   Merek AC *
                 </label>
                 <select
-                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-slate-900"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-black"
                   value={unitForm.brand}
                   onChange={e => setUnitForm({ ...unitForm, brand: e.target.value })}
                 >
@@ -447,7 +447,7 @@ export default function CustomerUnit() {
                   <input
                     type="text"
                     placeholder="Tulis merek AC..."
-                    className="w-full mt-2 px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full mt-2 px-3 py-2 text-sm border border-slate-200 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                     value={unitForm.customBrand}
                     onChange={e => setUnitForm({ ...unitForm, customBrand: e.target.value })}
                   />
@@ -459,7 +459,7 @@ export default function CustomerUnit() {
                   Tipe & Kapasitas *
                 </label>
                 <select
-                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-slate-900"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-black"
                   value={unitForm.type}
                   onChange={e => setUnitForm({ ...unitForm, type: e.target.value })}
                 >
@@ -483,7 +483,7 @@ export default function CustomerUnit() {
                 <input
                   type="text"
                   placeholder="Contoh: Kamar Tidur Utama Lt. 2, Ruang Tamu"
-                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                   value={unitForm.location}
                   onChange={e => setUnitForm({ ...unitForm, location: e.target.value })}
                 />
@@ -495,7 +495,7 @@ export default function CustomerUnit() {
                     Status Kondisi
                   </label>
                   <select
-                    className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-slate-900"
+                    className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-black"
                     value={unitForm.status}
                     onChange={e => setUnitForm({ ...unitForm, status: e.target.value })}
                   >
@@ -511,18 +511,18 @@ export default function CustomerUnit() {
                   </label>
                   <input
                     type="date"
-                    className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-slate-900"
+                    className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-black"
                     value={unitForm.last_service_date}
                     onChange={e => setUnitForm({ ...unitForm, last_service_date: e.target.value })}
                   />
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex gap-3">
+              <div className="pt-3 border-t border-slate-100 dark:border-white/10 flex gap-3">
                 <button
                   type="button"
                   onClick={() => setIsUnitModalOpen(false)}
-                  className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 rounded-xl text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-950 transition-colors"
+                  className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 rounded-xl text-sm font-medium hover:bg-slate-50 dark:hover:bg-black transition-colors"
                 >
                   Batal
                 </button>
@@ -551,8 +551,8 @@ export default function CustomerUnit() {
       {/* ========================================================================= */}
       {isBookingModalOpen && selectedUnitForBooking && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100 dark:border-slate-800 animate-scaleUp">
-            <div className="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-slate-800">
+          <div className="bg-white dark:bg-black rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100 dark:border-white/10 animate-scaleUp">
+            <div className="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-white/10">
               <div className="flex items-center gap-2 text-slate-800 dark:text-slate-200">
                 <Calendar className="text-blue-600 dark:text-blue-400" size={22} />
                 <div>
@@ -576,7 +576,7 @@ export default function CustomerUnit() {
                   Pilih Layanan
                 </label>
                 <select
-                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-slate-900"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-black"
                   value={bookingForm.serviceType}
                   onChange={e => setBookingForm({ ...bookingForm, serviceType: e.target.value })}
                 >
@@ -595,7 +595,7 @@ export default function CustomerUnit() {
                 <input
                   type="date"
                   min={new Date().toISOString().split('T')[0]}
-                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-slate-900"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-black"
                   value={bookingForm.date}
                   onChange={e => setBookingForm({ ...bookingForm, date: e.target.value })}
                 />
@@ -607,17 +607,17 @@ export default function CustomerUnit() {
                 </label>
                 <textarea
                   rows={3}
-                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-none"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-none"
                   value={bookingForm.notes}
                   onChange={e => setBookingForm({ ...bookingForm, notes: e.target.value })}
                 />
               </div>
 
-              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex gap-3">
+              <div className="pt-3 border-t border-slate-100 dark:border-white/10 flex gap-3">
                 <button
                   type="button"
                   onClick={() => setIsBookingModalOpen(false)}
-                  className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 rounded-xl text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-950 transition-colors"
+                  className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 rounded-xl text-sm font-medium hover:bg-slate-50 dark:hover:bg-black transition-colors"
                 >
                   Batal
                 </button>

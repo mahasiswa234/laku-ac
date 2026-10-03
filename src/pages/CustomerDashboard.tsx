@@ -84,12 +84,35 @@ export interface OrderNotification {
   read: boolean;
 }
 
+// Format tanggal dan waktu notifikasi sesuai waktu lokal Indonesia.
+// Contoh: 03 Oktober 2026, 18.25 WIB
+function formatNotificationDateTime(isoString: string): string {
+  try {
+    const date = new Date(isoString);
+    if (Number.isNaN(date.getTime())) return 'Tanggal tidak tersedia';
+
+    return new Intl.DateTimeFormat('id-ID', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+      timeZone: 'Asia/Jakarta'
+    }).format(date).replace(/\./g, ':') + ' WIB';
+  } catch (e) {
+    return 'Tanggal tidak tersedia';
+  }
+}
+
 // Helper untuk format waktu relatif notifikasi
 function formatRelativeTime(isoString: string): string {
   try {
     const past = new Date(isoString).getTime();
+    if (Number.isNaN(past)) return 'Tanggal tidak tersedia';
+
     const now = Date.now();
-    const diffSec = Math.floor((now - past) / 1000);
+    const diffSec = Math.max(0, Math.floor((now - past) / 1000));
 
     if (diffSec < 45) return 'Baru saja';
     const diffMin = Math.floor(diffSec / 60);
@@ -97,9 +120,12 @@ function formatRelativeTime(isoString: string): string {
     const diffHours = Math.floor(diffMin / 60);
     if (diffHours < 24) return `${diffHours} jam lalu`;
     const diffDays = Math.floor(diffHours / 24);
-    return `${diffDays} hari lalu`;
+    if (diffDays < 30) return `${diffDays} hari lalu`;
+    const diffMonths = Math.floor(diffDays / 30);
+    if (diffMonths < 12) return `${diffMonths} bulan lalu`;
+    return `${Math.floor(diffMonths / 12)} tahun lalu`;
   } catch (e) {
-    return 'Baru saja';
+    return 'Tanggal tidak tersedia';
   }
 }
 
@@ -655,7 +681,7 @@ export default function CustomerDashboard() {
             id="live-order-toast"
             role="status"
             aria-live="polite"
-            className="fixed top-5 right-4 sm:right-6 z-50 max-w-sm sm:max-w-md w-[calc(100%-2rem)] sm:w-full overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-900/10 dark:border-slate-600 dark:bg-slate-800 dark:shadow-black/50 toast-in"
+            className="fixed top-5 right-4 sm:right-6 z-50 max-w-sm sm:max-w-md w-[calc(100%-2rem)] sm:w-full overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-900/10 dark:border-white/10 dark:bg-black dark:shadow-black/50 toast-in"
           >
             {/* Garis aksen warna status di sisi kiri */}
             <span className={`absolute inset-y-0 left-0 w-1.5 ${t.accent}`} aria-hidden="true" />
@@ -670,7 +696,7 @@ export default function CustomerDashboard() {
                   <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 whitespace-nowrap">Baru saja</span>
                 </div>
                 <p className="text-xs text-slate-700 dark:text-slate-300 mt-1 leading-relaxed">{activeToast.message}</p>
-                <div className="mt-3 flex items-center justify-between gap-2 pt-2.5 border-t border-slate-200 dark:border-slate-600 text-xs">
+                <div className="mt-3 flex items-center justify-between gap-2 pt-2.5 border-t border-slate-200 dark:border-white/10 text-xs">
                   <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold ${t.badge}`}>
                     Status Baru: {activeToast.newStatus}
                   </span>
@@ -687,7 +713,7 @@ export default function CustomerDashboard() {
               </div>
               <button
                 onClick={() => setActiveToast(null)}
-                className="text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-700 p-1 -mr-1 -mt-1 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                className="text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-black p-1 -mr-1 -mt-1 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                 aria-label="Tutup notifikasi"
               >
                 <X size={16} />
@@ -751,20 +777,26 @@ export default function CustomerDashboard() {
             <button
               id="btn-lonceng-notifikasi"
               onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-              className="relative p-2.5 bg-white dark:bg-slate-900/10 hover:bg-white dark:hover:bg-slate-900/20 text-white rounded-xl transition-colors border border-white/20 flex items-center justify-center"
+              className="relative p-2.5 bg-white/10 dark:bg-black hover:bg-white/20 dark:hover:bg-black text-white rounded-xl transition-colors border border-white/20 dark:border-white/10 flex items-center justify-center shadow-sm"
               title="Notifikasi Status Pesanan"
               aria-label="Lihat Notifikasi"
             >
               {notifications.some(n => !n.read) ? (
-                <BellRing size={20} className="text-amber-300" />
+                <BellRing
+                  size={20}
+                  className="text-amber-200 dark:text-amber-300 drop-shadow-sm"
+                />
               ) : (
-                <Bell size={20} />
+                <Bell
+                  size={20}
+                  className="text-white/90 dark:text-slate-100"
+                />
               )}
 
               {/* Badge Jumlah Unread */}
               {notifications.filter(n => !n.read).length > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 bg-rose-500 text-white text-[10px] font-extrabold rounded-full h-5 min-w-[20px] px-1 flex items-center justify-center border-2 border-indigo-700 shadow-sm animate-pulse">
-                  {notifications.filter(n => !n.read).length}
+                <span className="absolute -top-1.5 -right-1.5 bg-rose-500 dark:bg-rose-500 text-white text-[10px] font-extrabold rounded-full h-5 min-w-[20px] px-1 flex items-center justify-center border-2 border-indigo-700 dark:border-indigo-900 shadow-sm animate-pulse">
+                  {notifications.filter(n => !n.read).length > 99 ? '99+' : notifications.filter(n => !n.read).length}
                 </span>
               )}
             </button>
@@ -773,10 +805,10 @@ export default function CustomerDashboard() {
             {isNotificationOpen && (
               <div 
                 id="popup-notifikasi-pelanggan"
-                className="absolute right-0 sm:right-0 top-12 mt-2 w-80 sm:w-96 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-150"
+                className="absolute right-0 sm:right-0 top-12 mt-2 w-80 sm:w-96 bg-white dark:bg-black text-slate-800 dark:text-slate-200 rounded-2xl shadow-2xl border border-slate-200 dark:border-white/10 z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-150"
               >
                 {/* Header Dropdown */}
-                <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/80 dark:bg-slate-950">
+                <div className="p-4 border-b border-slate-100 dark:border-white/10 flex items-center justify-between bg-slate-50/80 dark:bg-black">
                   <div className="flex items-center gap-2">
                     <Bell size={18} className="text-blue-600 dark:text-blue-400" />
                     <h3 className="font-bold text-sm text-slate-800 dark:text-slate-200">Notifikasi Pesanan</h3>
@@ -809,15 +841,15 @@ export default function CustomerDashboard() {
                 </div>
 
                 {/* List Notifikasi */}
-                <div className="max-h-[360px] overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800">
+                <div className="max-h-[360px] overflow-y-auto divide-y divide-slate-100 dark:divide-white/10">
                   {notifications.length === 0 ? (
                     <div className="py-10 px-4 text-center">
-                      <div className="w-10 h-10 bg-slate-100 dark:bg-slate-900 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-2">
+                      <div className="w-10 h-10 bg-slate-100 dark:bg-black text-slate-400 rounded-full flex items-center justify-center mx-auto mb-2">
                         <Inbox size={20} />
                       </div>
                       <p className="text-xs font-semibold text-slate-600 dark:text-slate-400">Belum Ada Notifikasi Baru</p>
                       <p className="text-[11px] text-slate-400 mt-1 max-w-[220px] mx-auto">
-                        Pembaruan status pesanan Anda oleh Admin akan muncul otomatis di sini secara real-time.
+                        Pembaruan status pesanan Anda akan muncul otomatis di sini secara real-time.
                       </p>
                     </div>
                   ) : (
@@ -825,7 +857,7 @@ export default function CustomerDashboard() {
                       <div 
                         key={notif.id}
                         onClick={() => markSingleNotificationRead(notif.id)}
-                        className={`p-3.5 hover:bg-slate-50 dark:hover:bg-slate-950 transition-colors cursor-pointer flex items-start gap-3 ${
+                        className={`p-3.5 hover:bg-slate-50 dark:hover:bg-black transition-colors cursor-pointer flex items-start gap-3 ${
                           !notif.read ? 'bg-blue-50/50 dark:bg-blue-900/30' : ''
                         }`}
                       >
@@ -855,15 +887,23 @@ export default function CustomerDashboard() {
                             <h4 className={`text-xs font-bold truncate ${!notif.read ? 'text-slate-900 dark:text-slate-100' : 'text-slate-700 dark:text-slate-300'}`}>
                               {notif.title}
                             </h4>
-                            <span className="text-[10px] text-slate-400 whitespace-nowrap">
-                              {formatRelativeTime(notif.timestamp)}
-                            </span>
+                            <div className="text-right whitespace-nowrap flex-shrink-0">
+                              <div
+                                className="text-[10px] font-semibold text-slate-500 dark:text-slate-400"
+                                title={formatNotificationDateTime(notif.timestamp)}
+                              >
+                                {formatNotificationDateTime(notif.timestamp)}
+                              </div>
+                              <div className="text-[9px] text-slate-400 dark:text-slate-500 mt-0.5">
+                                {formatRelativeTime(notif.timestamp)}
+                              </div>
+                            </div>
                           </div>
                           <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5 leading-relaxed line-clamp-2">
                             {notif.message}
                           </p>
                           <div className="mt-1.5 flex items-center justify-between">
-                            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400">
+                            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-black text-slate-600 dark:text-slate-400">
                               {notif.requestCode} • {notif.newStatus}
                             </span>
                             {!notif.read && (
@@ -878,8 +918,8 @@ export default function CustomerDashboard() {
 
                 {/* Footer Dropdown */}
                 {notifications.length > 0 && (
-                  <div className="p-2.5 bg-slate-50 dark:bg-slate-950 border-t border-slate-100 dark:border-slate-800 text-center text-[11px] text-slate-500 dark:text-slate-400">
-                    Status diperbarui otomatis dari server
+                  <div className="p-2.5 bg-slate-50 dark:bg-black border-t border-slate-100 dark:border-white/10 text-center text-[11px] text-slate-500 dark:text-slate-400">
+                    Status diperbarui otomatis
                   </div>
                 )}
               </div>
@@ -889,7 +929,7 @@ export default function CustomerDashboard() {
           <button 
             id="btn-tambah-unit-dashboard"
             onClick={() => setIsUnitModalOpen(true)}
-            className="flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-white dark:bg-slate-900 text-blue-700 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/30 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-sm"
+            className="flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-white dark:bg-black text-blue-700 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/30 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-sm"
           >
             <Plus size={18} />
             Tambah Unit AC
@@ -909,19 +949,19 @@ export default function CustomerDashboard() {
       {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[1, 2, 3].map(item => (
-            <div key={item} className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm animate-pulse flex items-center justify-between">
+            <div key={item} className="bg-white dark:bg-black p-5 rounded-xl border border-slate-100 dark:border-white/10 shadow-sm animate-pulse flex items-center justify-between">
               <div className="space-y-2 flex-1">
-                <div className="h-3 w-24 bg-slate-200 dark:bg-slate-800 rounded"></div>
-                <div className="h-7 w-20 bg-slate-200 dark:bg-slate-800 rounded-md"></div>
-                <div className="h-2.5 w-32 bg-slate-100 dark:bg-slate-900 rounded"></div>
+                <div className="h-3 w-24 bg-slate-200 dark:bg-black rounded"></div>
+                <div className="h-7 w-20 bg-slate-200 dark:bg-black rounded-md"></div>
+                <div className="h-2.5 w-32 bg-slate-100 dark:bg-black rounded"></div>
               </div>
-              <div className="w-12 h-12 bg-slate-100 dark:bg-slate-900 rounded-xl flex-shrink-0"></div>
+              <div className="w-12 h-12 bg-slate-100 dark:bg-black rounded-xl flex-shrink-0"></div>
             </div>
           ))}
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center justify-between">
+          <div className="bg-white dark:bg-black p-5 rounded-xl border border-slate-100 dark:border-white/10 shadow-sm flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Unit AC</p>
               <p className="text-2xl font-bold text-slate-800 dark:text-slate-200 mt-1">{units.length} Unit</p>
@@ -932,7 +972,7 @@ export default function CustomerDashboard() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center justify-between">
+          <div className="bg-white dark:bg-black p-5 rounded-xl border border-slate-100 dark:border-white/10 shadow-sm flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wider">Menunggu Admin</p>
               <p className="text-2xl font-bold text-amber-600 dark:text-amber-400 mt-1">{pendingCount} Pesanan</p>
@@ -943,7 +983,7 @@ export default function CustomerDashboard() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center justify-between">
+          <div className="bg-white dark:bg-black p-5 rounded-xl border border-slate-100 dark:border-white/10 shadow-sm flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Servis Selesai</p>
               <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">{completedCount} Selesai</p>
@@ -960,7 +1000,7 @@ export default function CustomerDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
         {/* Left Card: Unit AC */}
-        <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col h-full">
+        <div className="bg-white dark:bg-black rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-white/10 flex flex-col h-full">
           <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center">
@@ -982,17 +1022,17 @@ export default function CustomerDashboard() {
           {isLoading ? (
             <div className="space-y-3 flex-1">
               {[1, 2].map(i => (
-                <div key={i} className="p-4 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 animate-pulse space-y-2.5">
+                <div key={i} className="p-4 rounded-xl border border-slate-100 dark:border-white/10 bg-slate-50 dark:bg-black animate-pulse space-y-2.5">
                   <div className="flex justify-between items-center">
-                    <div className="h-4 w-32 bg-slate-200 dark:bg-slate-800 rounded"></div>
-                    <div className="h-5 w-20 bg-slate-200 dark:bg-slate-800 rounded-md"></div>
+                    <div className="h-4 w-32 bg-slate-200 dark:bg-black rounded"></div>
+                    <div className="h-5 w-20 bg-slate-200 dark:bg-black rounded-md"></div>
                   </div>
-                  <div className="h-3 w-48 bg-slate-200/70 dark:bg-slate-800 rounded"></div>
+                  <div className="h-3 w-48 bg-slate-200/70 dark:bg-black rounded"></div>
                 </div>
               ))}
             </div>
           ) : units.length === 0 ? (
-            <div className="flex-1 flex flex-col items-center justify-center py-10 px-4 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-slate-950">
+            <div className="flex-1 flex flex-col items-center justify-center py-10 px-4 text-center border-2 border-dashed border-slate-200 dark:border-white/10 rounded-xl bg-slate-50 dark:bg-black">
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center mb-3">
                 <Wrench size={24} />
               </div>
@@ -1012,7 +1052,7 @@ export default function CustomerDashboard() {
               {units.map(unit => (
                 <div 
                   key={unit.id}
-                  className="p-4 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 hover:bg-white dark:hover:bg-slate-900 hover:border-blue-200 dark:hover:border-blue-800 transition-all shadow-xs flex flex-col sm:flex-row justify-between sm:items-center gap-3"
+                  className="p-4 rounded-xl border border-slate-100 dark:border-white/10 bg-slate-50 dark:bg-black hover:bg-white dark:hover:bg-black hover:border-blue-200 dark:hover:border-blue-800 transition-all shadow-xs flex flex-col sm:flex-row justify-between sm:items-center gap-3"
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
@@ -1049,7 +1089,7 @@ export default function CustomerDashboard() {
             </div>
           )}
 
-          <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-xs">
+          <div className="mt-4 pt-3 border-t border-slate-100 dark:border-white/10 flex justify-between items-center text-xs">
             <span className="text-slate-500 dark:text-slate-400">Kebutuhan kustomisasi lebih lanjut?</span>
             <Link to="/pelanggan/unit" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
               Kelola Semua Unit &rarr;
@@ -1058,7 +1098,7 @@ export default function CustomerDashboard() {
         </div>
 
         {/* Right Card: Service Requests & Status */}
-        <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col h-full">
+        <div className="bg-white dark:bg-black rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-white/10 flex flex-col h-full">
           <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-xl flex items-center justify-center">
@@ -1080,18 +1120,18 @@ export default function CustomerDashboard() {
           {isLoading ? (
             <div className="space-y-3 flex-1">
               {[1, 2].map(i => (
-                <div key={i} className="p-4 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 animate-pulse space-y-2.5">
+                <div key={i} className="p-4 rounded-xl border border-slate-100 dark:border-white/10 bg-slate-50 dark:bg-black animate-pulse space-y-2.5">
                   <div className="flex justify-between items-center">
-                    <div className="h-4 w-40 bg-slate-200 dark:bg-slate-800 rounded"></div>
-                    <div className="h-5 w-24 bg-slate-200 dark:bg-slate-800 rounded-md"></div>
+                    <div className="h-4 w-40 bg-slate-200 dark:bg-black rounded"></div>
+                    <div className="h-5 w-24 bg-slate-200 dark:bg-black rounded-md"></div>
                   </div>
-                  <div className="h-3 w-56 bg-slate-200/70 dark:bg-slate-800 rounded"></div>
-                  <div className="h-3 w-32 bg-slate-100 dark:bg-slate-900 rounded"></div>
+                  <div className="h-3 w-56 bg-slate-200/70 dark:bg-black rounded"></div>
+                  <div className="h-3 w-32 bg-slate-100 dark:bg-black rounded"></div>
                 </div>
               ))}
             </div>
           ) : requests.length === 0 ? (
-            <div className="flex-1 flex flex-col items-center justify-center py-10 px-4 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-slate-950">
+            <div className="flex-1 flex flex-col items-center justify-center py-10 px-4 text-center border-2 border-dashed border-slate-200 dark:border-white/10 rounded-xl bg-slate-50 dark:bg-black">
               <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-full flex items-center justify-center mb-3">
                 <Calendar size={24} />
               </div>
@@ -1111,7 +1151,7 @@ export default function CustomerDashboard() {
               {requests.map(req => (
                 <div 
                   key={req.id}
-                  className="p-4 rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-indigo-200 dark:hover:border-indigo-800 transition-all shadow-xs flex flex-col gap-2"
+                  className="p-4 rounded-xl border border-slate-100 dark:border-white/10 bg-white dark:bg-black hover:border-indigo-200 dark:hover:border-indigo-800 transition-all shadow-xs flex flex-col gap-2"
                 >
                   <div className="flex justify-between items-start">
                     <div>
@@ -1139,7 +1179,7 @@ export default function CustomerDashboard() {
                   </div>
 
                   {req.customer_notes && (
-                    <p className="text-xs bg-slate-50 dark:bg-slate-950 text-slate-600 dark:text-slate-400 p-2 rounded-lg italic">
+                    <p className="text-xs bg-slate-50 dark:bg-black text-slate-600 dark:text-slate-400 p-2 rounded-lg italic">
                       "{req.customer_notes}"
                     </p>
                   )}
@@ -1156,7 +1196,7 @@ export default function CustomerDashboard() {
                         <CheckCircle size={13} /> Dokumentasi Pengerjaan Teknisi:
                       </p>
                       {req.technician_notes && (
-                        <p className="text-xs text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900/80 p-2 rounded border border-emerald-100/50 dark:border-emerald-800">
+                        <p className="text-xs text-slate-700 dark:text-slate-300 bg-white dark:bg-black p-2 rounded border border-emerald-100/50 dark:border-emerald-800">
                           {req.technician_notes}
                         </p>
                       )}
@@ -1167,7 +1207,7 @@ export default function CustomerDashboard() {
                             <img 
                               src={req.before_photo_url} 
                               alt="Kondisi Sebelum" 
-                              className="w-full h-24 object-cover rounded-lg border border-slate-200 dark:border-slate-800 mt-0.5" 
+                              className="w-full h-24 object-cover rounded-lg border border-slate-200 dark:border-white/10 mt-0.5" 
                             />
                           </div>
                         )}
@@ -1186,8 +1226,8 @@ export default function CustomerDashboard() {
                   )}
 
                   {req.status === 'Selesai' && (
-                    <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                    <div className="pt-3 border-t border-slate-100 dark:border-white/10 space-y-2">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-white/10">
                         <div>
                           <div className="flex items-center gap-2">
                             <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Status Pembayaran:</span>
@@ -1233,7 +1273,7 @@ export default function CustomerDashboard() {
 
                           <Link 
                             to={`/invoice/${req.request_code || req.id}`}
-                            className="px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors"
+                            className="px-3 py-1.5 bg-white dark:bg-black border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-black rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors"
                           >
                             <FileText size={14} className="text-blue-600 dark:text-blue-400" /> Invoice
                           </Link>
@@ -1252,7 +1292,7 @@ export default function CustomerDashboard() {
             </div>
           )}
 
-          <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-xs">
+          <div className="mt-4 pt-3 border-t border-slate-100 dark:border-white/10 flex justify-between items-center text-xs">
             <span className="text-slate-500 dark:text-slate-400">Status pesanan diperbarui oleh Admin secara real-time.</span>
             <Link to="/pelanggan/pesan" className="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
               Formulir Lengkap &rarr;
@@ -1267,8 +1307,8 @@ export default function CustomerDashboard() {
       {/* ========================================================================= */}
       {isUnitModalOpen && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100 dark:border-slate-800 animate-scaleUp">
-            <div className="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-slate-800">
+          <div className="bg-white dark:bg-black rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100 dark:border-white/10 animate-scaleUp">
+            <div className="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-white/10">
               <div className="flex items-center gap-2 text-slate-800 dark:text-slate-200">
                 <Wrench className="text-blue-600 dark:text-blue-400" size={22} />
                 <h3 className="text-lg font-bold">Tambah Unit AC Baru</h3>
@@ -1294,7 +1334,7 @@ export default function CustomerDashboard() {
                   Merek AC *
                 </label>
                 <select
-                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-slate-900"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-black"
                   value={unitForm.brand}
                   onChange={e => setUnitForm({ ...unitForm, brand: e.target.value })}
                 >
@@ -1314,7 +1354,7 @@ export default function CustomerDashboard() {
                   <input
                     type="text"
                     placeholder="Ketik merek AC Anda..."
-                    className="w-full mt-2 px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full mt-2 px-3 py-2 text-sm border border-slate-200 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                     value={unitForm.customBrand}
                     onChange={e => setUnitForm({ ...unitForm, customBrand: e.target.value })}
                   />
@@ -1326,7 +1366,7 @@ export default function CustomerDashboard() {
                   Tipe & Kapasitas AC *
                 </label>
                 <select
-                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-slate-900"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-black"
                   value={unitForm.type}
                   onChange={e => setUnitForm({ ...unitForm, type: e.target.value })}
                 >
@@ -1350,7 +1390,7 @@ export default function CustomerDashboard() {
                 <input
                   type="text"
                   placeholder="Contoh: Kamar Utama Lt. 2, Ruang Tamu, Kantor"
-                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                   value={unitForm.location}
                   onChange={e => setUnitForm({ ...unitForm, location: e.target.value })}
                 />
@@ -1362,7 +1402,7 @@ export default function CustomerDashboard() {
                     Kondisi Awal
                   </label>
                   <select
-                    className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-slate-900"
+                    className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-black"
                     value={unitForm.status}
                     onChange={e => setUnitForm({ ...unitForm, status: e.target.value })}
                   >
@@ -1378,18 +1418,18 @@ export default function CustomerDashboard() {
                   </label>
                   <input
                     type="date"
-                    className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-slate-900"
+                    className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-black"
                     value={unitForm.last_service_date}
                     onChange={e => setUnitForm({ ...unitForm, last_service_date: e.target.value })}
                   />
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex gap-3">
+              <div className="pt-3 border-t border-slate-100 dark:border-white/10 flex gap-3">
                 <button
                   type="button"
                   onClick={() => setIsUnitModalOpen(false)}
-                  className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 rounded-xl text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-950 transition-colors"
+                  className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 rounded-xl text-sm font-medium hover:bg-slate-50 dark:hover:bg-black transition-colors"
                 >
                   Batal
                 </button>
@@ -1418,8 +1458,8 @@ export default function CustomerDashboard() {
       {/* ========================================================================= */}
       {isRequestModalOpen && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full p-6 shadow-xl border border-slate-100 dark:border-slate-800 animate-scaleUp">
-            <div className="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-slate-800">
+          <div className="bg-white dark:bg-black rounded-2xl max-w-lg w-full p-6 shadow-xl border border-slate-100 dark:border-white/10 animate-scaleUp">
+            <div className="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-white/10">
               <div className="flex items-center gap-2 text-slate-800 dark:text-slate-200">
                 <Calendar className="text-indigo-600 dark:text-indigo-400" size={22} />
                 <div>
@@ -1448,7 +1488,7 @@ export default function CustomerDashboard() {
                   Pilih Unit AC Terdaftar
                 </label>
                 <select
-                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white dark:bg-slate-900"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white dark:bg-black"
                   value={requestForm.ac_unit_id}
                   onChange={e => setRequestForm({ ...requestForm, ac_unit_id: e.target.value })}
                 >
@@ -1504,7 +1544,7 @@ export default function CustomerDashboard() {
                 <input
                   type="date"
                   min={new Date().toISOString().split('T')[0]}
-                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white dark:bg-slate-900"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white dark:bg-black"
                   value={requestForm.date}
                   onChange={e => setRequestForm({ ...requestForm, date: e.target.value })}
                 />
@@ -1517,22 +1557,22 @@ export default function CustomerDashboard() {
                 <textarea
                   rows={3}
                   placeholder="Contoh: AC kurang dingin, netes air dari indoor unit, mohon datang siang..."
-                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none resize-none"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none resize-none"
                   value={requestForm.notes}
                   onChange={e => setRequestForm({ ...requestForm, notes: e.target.value })}
                 />
               </div>
 
-              <div className="bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-100 dark:border-slate-800 flex items-start gap-2 text-xs text-slate-600 dark:text-slate-400">
+              <div className="bg-slate-50 dark:bg-black p-3 rounded-xl border border-slate-100 dark:border-white/10 flex items-start gap-2 text-xs text-slate-600 dark:text-slate-400">
                 <ShieldAlert size={16} className="text-indigo-600 dark:text-indigo-400 flex-shrink-0 mt-0.5" />
                 <span>Permintaan Anda akan langsung tampil di dashboard admin dengan status <strong>Menunggu</strong> untuk kemudian dijadwalkan teknisi.</span>
               </div>
 
-              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex gap-3">
+              <div className="pt-3 border-t border-slate-100 dark:border-white/10 flex gap-3">
                 <button
                   type="button"
                   onClick={() => setIsRequestModalOpen(false)}
-                  className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 rounded-xl text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-950 transition-colors"
+                  className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 rounded-xl text-sm font-medium hover:bg-slate-50 dark:hover:bg-black transition-colors"
                 >
                   Batal
                 </button>
@@ -1561,8 +1601,8 @@ export default function CustomerDashboard() {
       {/* ========================================================================= */}
       {isPaymentModalOpen && selectedPayRequest && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4 animate-fadeIn">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100 dark:border-slate-800 animate-scaleUp">
-            <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-950 sticky top-0 z-10">
+          <div className="bg-white dark:bg-black rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100 dark:border-white/10 animate-scaleUp">
+            <div className="p-5 border-b border-slate-100 dark:border-white/10 flex justify-between items-center bg-slate-50 dark:bg-black sticky top-0 z-10">
               <div className="flex items-center gap-2.5">
                 <div className="p-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-xl">
                   <CreditCard size={20} />
@@ -1576,7 +1616,7 @@ export default function CustomerDashboard() {
               </div>
               <button 
                 onClick={() => setIsPaymentModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-400 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-400 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-black"
               >
                 <X size={18} />
               </button>
@@ -1639,14 +1679,14 @@ export default function CustomerDashboard() {
               </div>
 
               {/* Total Tagihan */}
-              <div className="p-3.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-between">
+              <div className="p-3.5 bg-slate-50 dark:bg-black border border-slate-200 dark:border-white/10 rounded-xl flex items-center justify-between">
                 <div>
                   <span className="text-xs text-slate-500 dark:text-slate-400 block">Total Nominal Yang Harus Ditransfer:</span>
                   <span className="text-lg font-bold text-blue-700 dark:text-blue-300">
                     Rp {(selectedPayRequest.payment_amount || selectedPayRequest.service_price || 75000).toLocaleString('id-ID')}
                   </span>
                 </div>
-                <span className="text-[11px] text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-2.5 py-1 rounded-lg">
+                <span className="text-[11px] text-slate-500 dark:text-slate-400 bg-white dark:bg-black border border-slate-200 dark:border-white/10 px-2.5 py-1 rounded-lg">
                   Bebas Biaya Admin
                 </span>
               </div>
@@ -1660,7 +1700,7 @@ export default function CustomerDashboard() {
                   <select
                     value={paymentBank}
                     onChange={(e) => setPaymentBank(e.target.value)}
-                    className="w-full px-3 py-2 text-xs border border-slate-300 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-900 focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full px-3 py-2 text-xs border border-slate-300 dark:border-white/10 rounded-xl bg-white dark:bg-black focus:ring-2 focus:ring-blue-500 outline-none"
                   >
                     <option value="BCA">BCA (Bank Central Asia)</option>
                     <option value="Mandiri">Bank Mandiri</option>
@@ -1679,7 +1719,7 @@ export default function CustomerDashboard() {
                     value={senderAccountName}
                     onChange={(e) => setSenderAccountName(e.target.value)}
                     placeholder="Contoh: Budi Santoso"
-                    className="w-full px-3 py-2 text-xs border border-slate-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full px-3 py-2 text-xs border border-slate-300 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
                   />
                 </div>
 
@@ -1692,7 +1732,7 @@ export default function CustomerDashboard() {
                     required
                     value={transferDate}
                     onChange={(e) => setTransferDate(e.target.value)}
-                    className="w-full px-3 py-2 text-xs border border-slate-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full px-3 py-2 text-xs border border-slate-300 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
                   />
                 </div>
 
@@ -1706,7 +1746,7 @@ export default function CustomerDashboard() {
                     min={1000}
                     value={transferAmount || ''}
                     onChange={(e) => setTransferAmount(Number(e.target.value))}
-                    className="w-full px-3 py-2 text-xs border border-slate-300 dark:border-slate-700 rounded-xl font-semibold focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full px-3 py-2 text-xs border border-slate-300 dark:border-white/10 rounded-xl font-semibold focus:ring-2 focus:ring-blue-500 outline-none"
                   />
                 </div>
               </div>
@@ -1718,12 +1758,12 @@ export default function CustomerDashboard() {
                 </label>
 
                 {isCompressingProof ? (
-                  <div className="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-6 flex flex-col items-center justify-center text-slate-500 dark:text-slate-400">
+                  <div className="border-2 border-dashed border-slate-300 dark:border-white/10 rounded-xl p-6 flex flex-col items-center justify-center text-slate-500 dark:text-slate-400">
                     <Loader2 size={22} className="mb-1.5 animate-spin" />
                     <span className="text-xs font-semibold">Mengompres gambar...</span>
                   </div>
                 ) : proofImage ? (
-                  <div className="relative rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 p-1">
+                  <div className="relative rounded-xl overflow-hidden border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-black p-1">
                     <img src={proofImage} alt="Bukti Transfer" className="w-full h-44 object-contain rounded-lg" />
                     <button
                       type="button"
@@ -1737,7 +1777,7 @@ export default function CustomerDashboard() {
                 ) : (
                   <div
                     onClick={() => proofFileInputRef.current?.click()}
-                    className="border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-600 rounded-xl p-6 flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-blue-50/30 dark:hover:bg-blue-900/30 transition-all cursor-pointer text-center group"
+                    className="border-2 border-dashed border-slate-300 dark:border-white/10 hover:border-blue-500 dark:hover:border-blue-600 rounded-xl p-6 flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-blue-50/30 dark:hover:bg-blue-900/30 transition-all cursor-pointer text-center group"
                   >
                     <Upload size={24} className="mb-1.5 text-slate-400 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors" />
                     <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Pilih / Foto Struk Bukti Transfer</span>
@@ -1763,15 +1803,15 @@ export default function CustomerDashboard() {
                   value={proofNotes}
                   onChange={(e) => setProofNotes(e.target.value)}
                   placeholder="Contoh: Transfer lewat BCA Mobile jam 10:15 WIB"
-                  className="w-full px-3 py-2 text-xs border border-slate-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-3 py-2 text-xs border border-slate-300 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
                 />
               </div>
 
-              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex gap-3 sticky bottom-0 bg-white dark:bg-slate-900">
+              <div className="pt-3 border-t border-slate-100 dark:border-white/10 flex gap-3 sticky bottom-0 bg-white dark:bg-black">
                 <button
                   type="button"
                   onClick={() => setIsPaymentModalOpen(false)}
-                  className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-950 rounded-xl text-xs font-semibold transition-colors"
+                  className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-black rounded-xl text-xs font-semibold transition-colors"
                 >
                   Batal
                 </button>

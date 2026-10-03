@@ -389,7 +389,7 @@ export default function Services() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 py-12">
+    <div className="min-h-screen bg-slate-50/50 dark:bg-black py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header Section */}
@@ -406,7 +406,7 @@ export default function Services() {
           <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
             <a
               href="#katalog-layanan"
-              className="px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-400 dark:hover:border-blue-700 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 text-xs font-semibold shadow-sm transition-all inline-flex items-center gap-1.5"
+              className="px-4 py-2 rounded-xl bg-white dark:bg-black border border-slate-200 dark:border-white/10 hover:border-blue-400 dark:hover:border-blue-700 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 text-xs font-semibold shadow-sm transition-all inline-flex items-center gap-1.5"
             >
               <Wrench size={14} className="text-blue-600 dark:text-blue-400" />
               <span>Katalog Jenis Layanan</span>
@@ -420,14 +420,14 @@ export default function Services() {
             </a>
             <a
               href="#sop-pengerjaan"
-              className="px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-400 dark:hover:border-blue-700 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 text-xs font-semibold shadow-sm transition-all inline-flex items-center gap-1.5"
+              className="px-4 py-2 rounded-xl bg-white dark:bg-black border border-slate-200 dark:border-white/10 hover:border-blue-400 dark:hover:border-blue-700 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 text-xs font-semibold shadow-sm transition-all inline-flex items-center gap-1.5"
             >
               <ShieldCheck size={14} className="text-emerald-600 dark:text-emerald-400" />
               <span>Standar SOP</span>
             </a>
             <a
               href="#faq-layanan"
-              className="px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-400 dark:hover:border-blue-700 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 text-xs font-semibold shadow-sm transition-all inline-flex items-center gap-1.5"
+              className="px-4 py-2 rounded-xl bg-white dark:bg-black border border-slate-200 dark:border-white/10 hover:border-blue-400 dark:hover:border-blue-700 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 text-xs font-semibold shadow-sm transition-all inline-flex items-center gap-1.5"
             >
               <HelpCircle size={14} className="text-purple-600 dark:text-purple-400" />
               <span>FAQ & Garansi</span>
@@ -436,7 +436,7 @@ export default function Services() {
         </div>
 
         {/* Filter & Search Bar */}
-        <div id="katalog-layanan" className="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/80 dark:border-slate-800 mb-10 space-y-4">
+        <div id="katalog-layanan" className="bg-white dark:bg-black rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/80 dark:border-white/10 mb-10 space-y-4">
           <div className="flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center">
             
             {/* Search Input */}
@@ -447,7 +447,7 @@ export default function Services() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Cari layanan (misal: Cuci, Freon, Perbaikan, Bongkar)..."
-                className="w-full pl-10 pr-9 py-2.5 bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 text-sm rounded-xl border border-slate-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-400"
+                className="w-full pl-10 pr-9 py-2.5 bg-slate-50 dark:bg-black text-slate-800 dark:text-slate-200 text-sm rounded-xl border border-slate-200 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-black transition-all placeholder:text-slate-400"
               />
               {searchQuery && (
                 <button
@@ -479,7 +479,7 @@ export default function Services() {
                   className={`px-4 py-2 rounded-xl font-medium whitespace-nowrap transition-all duration-200 ${
                     isActive
                       ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/20'
-                      : 'bg-slate-100/80 dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-200/70 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100'
+                      : 'bg-slate-100/80 dark:bg-black text-slate-600 dark:text-slate-400 hover:bg-slate-200/70 dark:hover:bg-black hover:text-slate-900 dark:hover:text-slate-100'
                   }`}
                 >
                   {cat}
@@ -494,12 +494,12 @@ export default function Services() {
           {filteredServices.map((svc) => (
             <div
               key={svc.id}
-              className="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200/80 dark:border-slate-800 hover:shadow-xl hover:border-blue-200 dark:hover:border-blue-800 transition-all duration-300 flex flex-col justify-between relative group"
+              className="bg-white dark:bg-black rounded-2xl p-6 shadow-sm border border-slate-200/80 dark:border-white/10 hover:shadow-xl hover:border-blue-200 dark:hover:border-blue-800 transition-all duration-300 flex flex-col justify-between relative group"
             >
               <div>
                 {/* Top Badge & Category */}
                 <div className="flex items-center justify-between gap-2 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-black border border-slate-100 dark:border-white/10 flex items-center justify-center group-hover:scale-110 transition-transform">
                     {getServiceIcon(svc.category)}
                   </div>
                   {svc.badge && (
@@ -521,7 +521,7 @@ export default function Services() {
                 </p>
 
                 {/* Features Checklist */}
-                <div className="space-y-2 mb-6 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <div className="space-y-2 mb-6 pt-4 border-t border-slate-100 dark:border-white/10">
                   <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide block mb-1">
                     Cakupan Pekerjaan:
                   </span>
@@ -535,11 +535,11 @@ export default function Services() {
 
                 {/* Meta info chips */}
                 <div className="flex flex-wrap gap-2 text-[11px] text-slate-500 dark:text-slate-400 font-medium mb-6">
-                  <span className="inline-flex items-center gap-1 bg-slate-50 dark:bg-slate-950 px-2.5 py-1 rounded-lg border border-slate-100 dark:border-slate-800">
+                  <span className="inline-flex items-center gap-1 bg-slate-50 dark:bg-black px-2.5 py-1 rounded-lg border border-slate-100 dark:border-white/10">
                     <Clock size={12} className="text-slate-400" />
                     {svc.duration}
                   </span>
-                  <span className="inline-flex items-center gap-1 bg-slate-50 dark:bg-slate-950 px-2.5 py-1 rounded-lg border border-slate-100 dark:border-slate-800">
+                  <span className="inline-flex items-center gap-1 bg-slate-50 dark:bg-black px-2.5 py-1 rounded-lg border border-slate-100 dark:border-white/10">
                     <ShieldCheck size={12} className="text-emerald-500 dark:text-emerald-400" />
                     {svc.warranty}
                   </span>
@@ -547,7 +547,7 @@ export default function Services() {
               </div>
 
               {/* Price & Action Buttons */}
-              <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-3">
+              <div className="pt-4 border-t border-slate-100 dark:border-white/10 space-y-3">
                 <div className="flex items-baseline justify-between">
                   <span className="text-xs text-slate-400 font-medium">Biaya Mulai:</span>
                   <span className="text-xl font-extrabold text-blue-600 dark:text-blue-400">
@@ -561,7 +561,7 @@ export default function Services() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setSelectedModalService(svc)}
-                    className="flex-1 py-2.5 px-3 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-950 text-xs font-semibold transition-colors inline-flex items-center justify-center gap-1 cursor-pointer"
+                    className="flex-1 py-2.5 px-3 rounded-xl border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-black text-xs font-semibold transition-colors inline-flex items-center justify-center gap-1 cursor-pointer"
                   >
                     <Info size={13} />
                     <span>Rincian SOP</span>
@@ -580,7 +580,7 @@ export default function Services() {
         </div>
 
         {/* SOP Workflow Section */}
-        <div id="sop-pengerjaan" className="bg-white dark:bg-slate-900 rounded-3xl p-8 sm:p-10 border border-slate-200/80 dark:border-slate-800 shadow-sm mb-16">
+        <div id="sop-pengerjaan" className="bg-white dark:bg-black rounded-3xl p-8 sm:p-10 border border-slate-200/80 dark:border-white/10 shadow-sm mb-16">
           <div className="text-center max-w-2xl mx-auto mb-10">
             <span className="text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider block mb-2">
               Standar Operasional Prosedur (SOP)
@@ -594,7 +594,7 @@ export default function Services() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 space-y-2">
+            <div className="p-5 rounded-2xl bg-slate-50 dark:bg-black border border-slate-100 dark:border-white/10 space-y-2">
               <div className="w-8 h-8 rounded-lg bg-blue-600 text-white font-bold text-sm flex items-center justify-center">
                 1
               </div>
@@ -604,7 +604,7 @@ export default function Services() {
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 space-y-2">
+            <div className="p-5 rounded-2xl bg-slate-50 dark:bg-black border border-slate-100 dark:border-white/10 space-y-2">
               <div className="w-8 h-8 rounded-lg bg-blue-600 text-white font-bold text-sm flex items-center justify-center">
                 2
               </div>
@@ -614,7 +614,7 @@ export default function Services() {
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 space-y-2">
+            <div className="p-5 rounded-2xl bg-slate-50 dark:bg-black border border-slate-100 dark:border-white/10 space-y-2">
               <div className="w-8 h-8 rounded-lg bg-blue-600 text-white font-bold text-sm flex items-center justify-center">
                 3
               </div>
@@ -624,7 +624,7 @@ export default function Services() {
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 space-y-2">
+            <div className="p-5 rounded-2xl bg-slate-50 dark:bg-black border border-slate-100 dark:border-white/10 space-y-2">
               <div className="w-8 h-8 rounded-lg bg-emerald-600 text-white font-bold text-sm flex items-center justify-center">
                 4
               </div>
@@ -640,9 +640,9 @@ export default function Services() {
         {/* AREA LAYANAN JABODETABEK (DISATUKAN DALAM HALAMAN LAYANAN) */}
         {/* ======================================================== */}
         <section id="area-jabodetabek" className="scroll-mt-24 mb-16">
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 border border-slate-200/90 dark:border-slate-800 shadow-sm space-y-8">
+          <div className="bg-white dark:bg-black rounded-3xl p-6 sm:p-10 border border-slate-200/90 dark:border-white/10 shadow-sm space-y-8">
             {/* Header Area */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-6">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-100 dark:border-white/10 pb-6">
               <div className="space-y-2">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 text-xs font-semibold uppercase tracking-wider">
                   <MapPin size={13} />
@@ -667,7 +667,7 @@ export default function Services() {
             </div>
 
             {/* Instant Coverage Checker Bar */}
-            <div className="bg-slate-50 dark:bg-slate-950 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 space-y-3">
+            <div className="bg-slate-50 dark:bg-black rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-white/10 space-y-3">
               <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
                 <div className="relative flex-1">
                   <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={17} />
@@ -676,7 +676,7 @@ export default function Services() {
                     value={areaSearch}
                     onChange={(e) => setAreaSearch(e.target.value)}
                     placeholder="Ketik nama kecamatan Anda (misal: Tebet, BSD, Margonda, Cilandak, Menteng, Bintaro)..."
-                    className="w-full pl-10 pr-9 py-2.5 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all placeholder:text-slate-400"
+                    className="w-full pl-10 pr-9 py-2.5 bg-white dark:bg-black text-slate-800 dark:text-slate-200 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all placeholder:text-slate-400"
                   />
                   {areaSearch && (
                     <button
@@ -697,7 +697,7 @@ export default function Services() {
                       className={`px-3 py-2 rounded-xl font-medium whitespace-nowrap transition-colors ${
                         areaRegionFilter === reg
                           ? 'bg-blue-600 text-white shadow-sm'
-                          : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-200/70 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800'
+                          : 'bg-white dark:bg-black text-slate-600 dark:text-slate-400 hover:bg-slate-200/70 dark:hover:bg-black border border-slate-200 dark:border-white/10'
                       }`}
                     >
                       {reg}
@@ -730,7 +730,7 @@ export default function Services() {
               {filteredAreas.map((area) => (
                 <div
                   key={area.id}
-                  className="bg-slate-50/70 dark:bg-slate-950 rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-slate-800 hover:border-blue-300 dark:hover:border-blue-700 hover:bg-white dark:hover:bg-slate-900 hover:shadow-lg transition-all duration-300 flex flex-col justify-between group"
+                  className="bg-slate-50/70 dark:bg-black rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-white/10 hover:border-blue-300 dark:hover:border-blue-700 hover:bg-white dark:hover:bg-black hover:shadow-lg transition-all duration-300 flex flex-col justify-between group"
                 >
                   <div className="space-y-4">
                     {/* Header Card */}
@@ -749,7 +749,7 @@ export default function Services() {
                     </div>
 
                     {/* Stats */}
-                    <div className="flex items-center gap-4 text-xs text-slate-500 dark:text-slate-400 pt-1 border-t border-slate-200/60 dark:border-slate-800">
+                    <div className="flex items-center gap-4 text-xs text-slate-500 dark:text-slate-400 pt-1 border-t border-slate-200/60 dark:border-white/10">
                       <div className="flex items-center gap-1.5">
                         <Navigation size={13} className="text-blue-600 dark:text-blue-400" />
                         <span>{area.coverageTag}</span>
@@ -776,7 +776,7 @@ export default function Services() {
                               className={`text-[11px] px-2 py-0.5 rounded-md font-medium transition-colors ${
                                 isSearched
                                   ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-900 dark:text-yellow-300 border border-yellow-300 dark:border-yellow-700 font-bold'
-                                  : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800'
+                                  : 'bg-white dark:bg-black text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-white/10'
                               }`}
                             >
                               {district}
@@ -787,7 +787,7 @@ export default function Services() {
                     </div>
 
                     {/* Features list */}
-                    <div className="space-y-1.5 pt-2 border-t border-slate-200/60 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400">
+                    <div className="space-y-1.5 pt-2 border-t border-slate-200/60 dark:border-white/10 text-xs text-slate-600 dark:text-slate-400">
                       {area.features.map((feat, fIdx) => (
                         <div key={fIdx} className="flex items-start gap-1.5">
                           <CheckCircle2 size={13} className="text-emerald-500 dark:text-emerald-400 shrink-0 mt-0.5" />
@@ -798,7 +798,7 @@ export default function Services() {
                   </div>
 
                   {/* Card Action */}
-                  <div className="pt-5 mt-4 border-t border-slate-200/70 dark:border-slate-800">
+                  <div className="pt-5 mt-4 border-t border-slate-200/70 dark:border-white/10">
                     <button
                       onClick={() => handleAreaBooking(area.region)}
                       className="w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-sm transition-all inline-flex items-center justify-center gap-2 group-hover:shadow-md cursor-pointer"
@@ -844,7 +844,7 @@ export default function Services() {
               return (
                 <div
                   key={index}
-                  className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm transition-colors"
+                  className="bg-white dark:bg-black rounded-2xl border border-slate-200/80 dark:border-white/10 overflow-hidden shadow-sm transition-colors"
                 >
                   <button
                     onClick={() => setOpenFaqIndex(isOpen ? null : index)}
@@ -854,7 +854,7 @@ export default function Services() {
                     {isOpen ? <ChevronUp size={18} className="shrink-0 text-blue-600 dark:text-blue-400" /> : <ChevronDown size={18} className="shrink-0 text-slate-400" />}
                   </button>
                   {isOpen && (
-                    <div className="px-5 pb-5 pt-1 text-sm text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-800">
+                    <div className="px-5 pb-5 pt-1 text-sm text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-white/10">
                       {faq.a}
                     </div>
                   )}
@@ -867,7 +867,7 @@ export default function Services() {
         {/* Bottom Commercial Consultation CTA */}
         <div className="rounded-3xl bg-gradient-to-r from-blue-700 to-indigo-800 text-white p-8 sm:p-10 shadow-xl relative overflow-hidden">
           <div className="relative z-10 max-w-2xl space-y-4">
-            <span className="px-3 py-1 rounded-full bg-white dark:bg-slate-900/20 text-white text-xs font-bold uppercase tracking-wider backdrop-blur-sm">
+            <span className="px-3 py-1 rounded-full bg-white dark:bg-black text-blue-800 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-xs font-bold uppercase tracking-wider backdrop-blur-sm">
               Layanan Khusus & Korporasi
             </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
@@ -879,7 +879,7 @@ export default function Services() {
             <div className="pt-2 flex flex-wrap gap-3">
               <Link
                 to="/kontak"
-                className="px-6 py-3 rounded-xl bg-white dark:bg-slate-900 text-blue-800 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/30 font-bold text-sm shadow-md transition-colors inline-flex items-center gap-2"
+                className="px-6 py-3 rounded-xl bg-white dark:bg-black text-blue-800 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/30 font-bold text-sm shadow-md transition-colors inline-flex items-center gap-2"
               >
                 <PhoneCall size={16} />
                 <span>Konsultasi Proyek & Survei</span>
@@ -903,10 +903,10 @@ export default function Services() {
           onClick={() => setSelectedModalService(null)}
         >
           <div
-            className="bg-white dark:bg-slate-900 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 animate-scaleUp my-8"
+            className="bg-white dark:bg-black rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-white/10 animate-scaleUp my-8"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-start justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-4 mb-5">
+            <div className="flex items-start justify-between gap-4 border-b border-slate-100 dark:border-white/10 pb-4 mb-5">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-800 flex items-center justify-center">
                   {getServiceIcon(selectedModalService.category)}
@@ -922,7 +922,7 @@ export default function Services() {
               </div>
               <button
                 onClick={() => setSelectedModalService(null)}
-                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 flex items-center justify-center transition-colors"
+                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-black hover:bg-slate-200 dark:hover:bg-black text-slate-600 dark:text-slate-400 flex items-center justify-center transition-colors"
               >
                 <X size={18} />
               </button>
@@ -948,7 +948,7 @@ export default function Services() {
                 </ul>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 rounded-2xl bg-slate-50 dark:bg-black border border-slate-100 dark:border-white/10 text-xs">
                 <div>
                   <span className="text-slate-400 block mb-0.5">Estimasi Waktu Pengerjaan</span>
                   <strong className="text-slate-800 dark:text-slate-200 font-semibold flex items-center gap-1">
@@ -973,7 +973,7 @@ export default function Services() {
               </div>
             </div>
 
-            <div className="pt-6 mt-6 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="pt-6 mt-6 border-t border-slate-100 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
                 <span className="text-xs text-slate-400 block">Tarif Transparan</span>
                 <span className="text-xl font-extrabold text-blue-600 dark:text-blue-400">
@@ -983,7 +983,7 @@ export default function Services() {
               <div className="flex items-center gap-2.5 w-full sm:w-auto">
                 <button
                   onClick={() => setSelectedModalService(null)}
-                  className="flex-1 sm:flex-none px-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-950 font-semibold text-xs transition-colors"
+                  className="flex-1 sm:flex-none px-5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-black font-semibold text-xs transition-colors"
                 >
                   Tutup
                 </button>

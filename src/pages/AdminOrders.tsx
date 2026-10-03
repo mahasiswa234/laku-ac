@@ -335,14 +335,14 @@ export default function AdminOrders() {
       )}
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-black p-6 rounded-2xl border border-slate-100 dark:border-white/10 shadow-sm">
         <div>
           <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-200">Manajemen Pesanan & Pembayaran</h1>
           <p className="text-slate-500 dark:text-slate-400 text-sm mt-0.5">Kelola seluruh permintaan servis, penugasan teknisi, verifikasi transfer bank, dan invoice.</p>
         </div>
         <button
           onClick={fetchOrdersAndTechs}
-          className="flex items-center gap-2 text-xs font-semibold bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900 px-3.5 py-2.5 rounded-xl transition-colors"
+          className="flex items-center gap-2 text-xs font-semibold bg-slate-50 dark:bg-black border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-black px-3.5 py-2.5 rounded-xl transition-colors"
         >
           <RefreshCw size={14} className={isLoading ? 'animate-spin' : ''} />
           Segarkan Data
@@ -350,9 +350,9 @@ export default function AdminOrders() {
       </div>
 
       {/* Table Container */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
+      <div className="bg-white dark:bg-black rounded-2xl shadow-sm border border-slate-100 dark:border-white/10 overflow-hidden">
         {/* Filters */}
-        <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex flex-col md:flex-row justify-between gap-4 bg-slate-50/50 dark:bg-slate-950">
+        <div className="p-4 border-b border-slate-100 dark:border-white/10 flex flex-col md:flex-row justify-between gap-4 bg-slate-50/50 dark:bg-black">
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
             <input 
@@ -360,7 +360,7 @@ export default function AdminOrders() {
               placeholder="Cari kode request, nama pelanggan, layanan..." 
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-slate-900 text-sm"
+              className="w-full pl-10 pr-4 py-2 border border-slate-200 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-black text-sm"
             />
           </div>
 
@@ -375,7 +375,7 @@ export default function AdminOrders() {
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
                   statusFilter === status 
                     ? 'bg-blue-600 text-white font-semibold shadow-xs' 
-                    : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900'
+                    : 'bg-white dark:bg-black border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-black'
                 }`}
               >
                 {status}
@@ -403,7 +403,7 @@ export default function AdminOrders() {
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
                 statusFilter === 'Lunas'
                   ? 'bg-emerald-600 text-white shadow-xs'
-                  : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900'
+                  : 'bg-white dark:bg-black border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-black'
               }`}
             >
               Lunas
@@ -415,7 +415,7 @@ export default function AdminOrders() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-50 dark:bg-slate-950 text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider font-semibold">
+              <tr className="bg-slate-50 dark:bg-black text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider font-semibold">
                 <th className="px-5 py-4">Kode Request</th>
                 <th className="px-5 py-4">Pelanggan</th>
                 <th className="px-5 py-4">Layanan & Unit</th>
@@ -424,7 +424,7 @@ export default function AdminOrders() {
                 <th className="px-5 py-4 text-right">Aksi</th>
               </tr>
             </thead>
-            <tbody className="text-sm divide-y divide-slate-100 dark:divide-slate-800">
+            <tbody className="text-sm divide-y divide-slate-100 dark:divide-white/10">
               {isLoading ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-10 text-center text-slate-400 text-sm">
@@ -439,7 +439,7 @@ export default function AdminOrders() {
                 </tr>
               ) : (
                 filteredRequests.map((req) => (
-                  <tr key={req.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-950 transition-colors">
+                  <tr key={req.id} className="hover:bg-slate-50/60 dark:hover:bg-black transition-colors">
                     <td className="px-5 py-4 font-mono font-bold text-xs text-blue-600 dark:text-blue-400 whitespace-nowrap">
                       {req.request_code || `#REQ-${req.id}`}
                       <p className="text-[10px] text-slate-400 font-sans mt-0.5">{req.date}</p>
@@ -565,7 +565,7 @@ export default function AdminOrders() {
 
                         <Link
                           to={`/invoice/${req.request_code || req.id}`}
-                          className="bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-colors inline-flex items-center gap-1"
+                          className="bg-slate-100 dark:bg-black text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-black px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-colors inline-flex items-center gap-1"
                           title="Buka Invoice"
                         >
                           <FileText size={13} className="text-blue-600 dark:text-blue-400" /> Invoice
@@ -585,8 +585,8 @@ export default function AdminOrders() {
       {/* ========================================================================= */}
       {selectedRequest && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100 dark:border-slate-800 animate-scaleUp">
-            <div className="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-slate-800">
+          <div className="bg-white dark:bg-black rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100 dark:border-white/10 animate-scaleUp">
+            <div className="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-white/10">
               <div>
                 <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200">Update Status Pesanan</h3>
                 <p className="text-xs font-mono text-blue-600 dark:text-blue-400">{selectedRequest.request_code}</p>
@@ -599,7 +599,7 @@ export default function AdminOrders() {
               </button>
             </div>
 
-            <div className="mt-4 p-3 bg-slate-50 dark:bg-slate-950 rounded-xl text-xs space-y-1.5 text-slate-600 dark:text-slate-400">
+            <div className="mt-4 p-3 bg-slate-50 dark:bg-black rounded-xl text-xs space-y-1.5 text-slate-600 dark:text-slate-400">
               <p><span className="font-semibold text-slate-700 dark:text-slate-300">Pelanggan:</span> {selectedRequest.customer} ({selectedRequest.customer_phone || '-'})</p>
               <p><span className="font-semibold text-slate-700 dark:text-slate-300">Layanan:</span> {selectedRequest.service}</p>
               {selectedRequest.ac_brand && (
@@ -617,13 +617,13 @@ export default function AdminOrders() {
                 <p><span className="font-semibold text-emerald-700 dark:text-emerald-300">Catatan Teknisi:</span> {selectedRequest.technician_notes}</p>
               )}
               {(selectedRequest.before_photo_url || selectedRequest.after_photo_url) && (
-                <div className="pt-2 border-t border-slate-200 dark:border-slate-800">
+                <div className="pt-2 border-t border-slate-200 dark:border-white/10">
                   <p className="font-semibold text-slate-700 dark:text-slate-300 mb-1">Dokumentasi Foto Teknisi:</p>
                   <div className="grid grid-cols-2 gap-2">
                     {selectedRequest.before_photo_url && (
                       <div>
                         <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Sebelum:</span>
-                        <img src={selectedRequest.before_photo_url} alt="Sebelum" className="w-full h-20 object-cover rounded-lg border border-slate-200 dark:border-slate-800 mt-0.5" />
+                        <img src={selectedRequest.before_photo_url} alt="Sebelum" className="w-full h-20 object-cover rounded-lg border border-slate-200 dark:border-white/10 mt-0.5" />
                       </div>
                     )}
                     {selectedRequest.after_photo_url && (
@@ -643,7 +643,7 @@ export default function AdminOrders() {
                   Ubah Status Pesanan *
                 </label>
                 <select
-                  className="w-full px-3 py-2.5 text-sm border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-slate-900 font-medium"
+                  className="w-full px-3 py-2.5 text-sm border border-slate-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-black font-medium"
                   value={newStatus}
                   onChange={e => setNewStatus(e.target.value)}
                 >
@@ -660,7 +660,7 @@ export default function AdminOrders() {
                   Pilih / Tugaskan Teknisi
                 </label>
                 <select
-                  className="w-full px-3 py-2.5 text-sm border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-slate-900"
+                  className="w-full px-3 py-2.5 text-sm border border-slate-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-black"
                   value={selectedTechnician}
                   onChange={e => setSelectedTechnician(e.target.value)}
                 >
@@ -673,11 +673,11 @@ export default function AdminOrders() {
                 </select>
               </div>
 
-              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex gap-3">
+              <div className="pt-3 border-t border-slate-100 dark:border-white/10 flex gap-3">
                 <button
                   type="button"
                   onClick={() => setSelectedRequest(null)}
-                  className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 rounded-xl text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-950 transition-colors"
+                  className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 rounded-xl text-sm font-medium hover:bg-slate-50 dark:hover:bg-black transition-colors"
                 >
                   Batal
                 </button>
@@ -699,8 +699,8 @@ export default function AdminOrders() {
       {/* ========================================================================= */}
       {selectedPaymentReq && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4 animate-fadeIn">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100 dark:border-slate-800 animate-scaleUp">
-            <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-950 sticky top-0 z-10">
+          <div className="bg-white dark:bg-black rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100 dark:border-white/10 animate-scaleUp">
+            <div className="p-5 border-b border-slate-100 dark:border-white/10 flex justify-between items-center bg-slate-50 dark:bg-black sticky top-0 z-10">
               <div className="flex items-center gap-2">
                 <div className="p-2 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 rounded-xl">
                   <ShieldCheck size={20} />
@@ -720,7 +720,7 @@ export default function AdminOrders() {
 
             <div className="p-5 space-y-4">
               {/* Rincian Tagihan & Nominal */}
-              <div className="p-3.5 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 text-xs space-y-1.5">
+              <div className="p-3.5 bg-slate-50 dark:bg-black rounded-xl border border-slate-200 dark:border-white/10 text-xs space-y-1.5">
                 <div className="flex justify-between">
                   <span className="text-slate-500 dark:text-slate-400">Layanan Pokok:</span>
                   <span className="font-semibold text-slate-800 dark:text-slate-200">{selectedPaymentReq.service}</span>
@@ -731,7 +731,7 @@ export default function AdminOrders() {
                     <span className="font-semibold">+ Rp {selectedPaymentReq.additional_cost.toLocaleString('id-ID')}</span>
                   </div>
                 ) : null}
-                <div className="flex justify-between text-sm font-bold text-slate-800 dark:text-slate-200 pt-1 border-t border-slate-200 dark:border-slate-800">
+                <div className="flex justify-between text-sm font-bold text-slate-800 dark:text-slate-200 pt-1 border-t border-slate-200 dark:border-white/10">
                   <span>Total Tagihan Invoice:</span>
                   <span className="text-blue-700 dark:text-blue-300">
                     Rp {Number(selectedPaymentReq.payment_amount || selectedPaymentReq.service_price || 75000).toLocaleString('id-ID')}
@@ -753,11 +753,11 @@ export default function AdminOrders() {
                   Foto Bukti Transfer Struk / M-Banking:
                 </label>
                 {isProofLoading ? (
-                  <div className="p-8 text-center text-xs text-slate-500 dark:text-slate-400 border border-dashed border-slate-200 dark:border-slate-800 rounded-xl">
+                  <div className="p-8 text-center text-xs text-slate-500 dark:text-slate-400 border border-dashed border-slate-200 dark:border-white/10 rounded-xl">
                     Memuat gambar bukti transfer...
                   </div>
                 ) : proofImage ? (
-                  <div className="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 p-1">
+                  <div className="rounded-xl overflow-hidden border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-black p-1">
                     <img 
                       src={proofImage} 
                       alt="Struk Bukti Transfer" 
@@ -776,7 +776,7 @@ export default function AdminOrders() {
                     {proofError}
                   </div>
                 ) : (
-                  <div className="p-6 text-center text-xs text-slate-400 border border-dashed border-slate-200 dark:border-slate-800 rounded-xl">
+                  <div className="p-6 text-center text-xs text-slate-400 border border-dashed border-slate-200 dark:border-white/10 rounded-xl">
                     Tidak ada foto bukti transfer yang diunggah.
                   </div>
                 )}
@@ -792,23 +792,23 @@ export default function AdminOrders() {
                   value={verificationNotes}
                   onChange={(e) => setVerificationNotes(e.target.value)}
                   placeholder="Contoh: Dana Rp 150.000 sudah masuk ke mutasi BCA jam 10:20 WIB"
-                  className="w-full px-3 py-2 text-xs border border-slate-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-3 py-2 text-xs border border-slate-300 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
                 />
               </div>
 
               {/* Action Buttons: Terima (Lunas) vs Tolak - hanya saat masih menunggu verifikasi */}
               {selectedPaymentReq.payment_status !== 'Menunggu Verifikasi' ? (
-                <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-end">
+                <div className="pt-3 border-t border-slate-100 dark:border-white/10 flex justify-end">
                   <button
                     type="button"
                     onClick={() => setSelectedPaymentReq(null)}
-                    className="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-bold transition-colors"
+                    className="px-4 py-2.5 bg-slate-100 dark:bg-black hover:bg-slate-200 dark:hover:bg-black text-slate-700 dark:text-slate-300 rounded-xl text-xs font-bold transition-colors"
                   >
                     Tutup
                   </button>
                 </div>
               ) : (
-              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row gap-2.5">
+              <div className="pt-3 border-t border-slate-100 dark:border-white/10 flex flex-col sm:flex-row gap-2.5">
                 <button
                   type="button"
                   disabled={isVerifying}
@@ -836,7 +836,7 @@ export default function AdminOrders() {
       {/* MODAL: KONFIRMASI KUSTOM (pengganti window.confirm bawaan browser) */}
       {confirmDialog && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-sm p-5 border border-slate-200 dark:border-slate-800">
+          <div className="bg-white dark:bg-black rounded-2xl shadow-2xl w-full max-w-sm p-5 border border-slate-200 dark:border-white/10">
             <div className="flex items-start gap-3 mb-4">
               <div className="p-2 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-xl shrink-0">
                 <AlertCircle size={20} />
@@ -847,7 +847,7 @@ export default function AdminOrders() {
               <button
                 type="button"
                 onClick={() => setConfirmDialog(null)}
-                className="flex-1 px-4 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-bold transition-colors"
+                className="flex-1 px-4 py-2.5 bg-slate-100 dark:bg-black hover:bg-slate-200 dark:hover:bg-black text-slate-700 dark:text-slate-300 rounded-xl text-xs font-bold transition-colors"
               >
                 Batal
               </button>

@@ -52,7 +52,7 @@ export default function Home() {
           <p className="text-lg md:text-xl mb-8 text-blue-50 max-w-2xl mx-auto">
             Kami menyediakan jasa cuci, perbaikan, dan perawatan AC untuk hunian maupun perkantoran di Jabodetabek.
           </p>
-          <Link to="/login" className="inline-block bg-white dark:bg-slate-900 text-blue-700 dark:text-blue-300 px-8 py-3 rounded-full font-bold text-lg hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors shadow-lg">
+          <Link to="/login" className="inline-block bg-white dark:bg-black text-blue-700 dark:text-blue-300 px-8 py-3 rounded-full font-bold text-lg hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors shadow-lg">
             Pesan Layanan Sekarang
           </Link>
         </div>
@@ -62,21 +62,21 @@ export default function Home() {
       <section className="py-20 px-4 w-full max-w-7xl mx-auto text-center">
         <h2 className="text-3xl font-bold mb-12 text-slate-800 dark:text-slate-200">Kenapa Memilih Laku AC?</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
+          <div className="bg-white dark:bg-black p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/10">
             <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center mx-auto mb-4">
               <Clock size={24} />
             </div>
             <h3 className="font-semibold text-xl mb-2">Tepat Waktu</h3>
             <p className="text-slate-600 dark:text-slate-400">Teknisi kami datang sesuai jadwal yang telah disepakati bersama.</p>
           </div>
-          <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
+          <div className="bg-white dark:bg-black p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/10">
             <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center mx-auto mb-4">
               <User size={24} />
             </div>
             <h3 className="font-semibold text-xl mb-2">Teknisi Berpengalaman</h3>
             <p className="text-slate-600 dark:text-slate-400">Dikerjakan oleh teknisi ahli yang tersertifikasi di bidang mesin pendingin.</p>
           </div>
-          <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
+          <div className="bg-white dark:bg-black p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/10">
             <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle size={24} />
             </div>
@@ -87,7 +87,7 @@ export default function Home() {
       </section>
 
       {/* Jangkauan Area Layanan Section */}
-      <section className="py-16 px-4 w-full bg-slate-50 dark:bg-slate-950 border-y border-slate-200/70 dark:border-slate-800">
+      <section className="py-16 px-4 w-full bg-slate-50 dark:bg-black border-y border-slate-200/70 dark:border-white/10">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
@@ -112,7 +112,7 @@ export default function Home() {
             {primaryAreas.map((area, idx) => (
               <div
                 key={idx}
-                className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-md transition-all group"
+                className="bg-white dark:bg-black p-5 rounded-2xl border border-slate-200/80 dark:border-white/10 shadow-sm hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-md transition-all group"
               >
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
@@ -152,14 +152,14 @@ export default function Home() {
       </section>
 
       {/* Testimoni Section (Baru) */}
-      <section className="py-20 px-4 w-full bg-slate-100 dark:bg-slate-900 text-center">
+      <section className="py-20 px-4 w-full bg-slate-100 dark:bg-black text-center">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-bold mb-4 text-slate-800 dark:text-slate-200">Apa Kata Pelanggan Kami?</h2>
           <p className="text-slate-600 dark:text-slate-400 mb-12">Ulasan dan kepuasan pelanggan terhadap layanan Laku AC.</p>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
             {testimonials.map((item, index) => (
-              <div key={index} className="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-sm relative">
+              <div key={index} className="bg-white dark:bg-black p-6 rounded-xl shadow-sm relative">
                 <Quote className="absolute top-6 right-6 text-slate-200" size={32} />
                 <div className="flex text-yellow-400 mb-4">
                   <Star fill="currentColor" size={16} />
@@ -171,8 +171,8 @@ export default function Home() {
                 <p className="text-slate-600 dark:text-slate-400 italic mb-6">
                   "{item.comment}"
                 </p>
-                <div className="flex items-center gap-3 border-t border-slate-100 dark:border-slate-800 pt-4">
-                  <div className="w-10 h-10 bg-slate-200 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-500 dark:text-slate-400 font-bold">
+                <div className="flex items-center gap-3 border-t border-slate-100 dark:border-white/10 pt-4">
+                  <div className="w-10 h-10 bg-slate-200 dark:bg-black rounded-full flex items-center justify-center text-slate-500 dark:text-slate-400 font-bold">
                     {item.initial}
                   </div>
                   <div>

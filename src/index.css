@@ -10,7 +10,7 @@
   }
 
   .dark body {
-    background-color: #020617; /* slate-950 */
+    background-color: #000000; /* black */
     color: #f1f5f9; /* slate-100 */
   }
 
@@ -19,9 +19,9 @@
   .dark input:not([class*="bg-"]),
   .dark select:not([class*="bg-"]),
   .dark textarea:not([class*="bg-"]) {
-    background-color: #0f172a; /* slate-900 */
+    background-color: #000000; /* black */
     color: #f1f5f9; /* slate-100 */
-    border-color: #334155; /* slate-700 */
+    border-color: rgba(255,255,255,0.12);
   }
 
   .dark input::placeholder,
@@ -30,16 +30,16 @@
   }
 
   .dark select option {
-    background-color: #0f172a;
+    background-color: #000000;
     color: #f1f5f9;
   }
 
   /* Scrollbar gelap agar konsisten di halaman panjang (dashboard, tabel, dsb.) */
   .dark ::-webkit-scrollbar-track {
-    background-color: #0f172a;
+    background-color: #000000;
   }
   .dark ::-webkit-scrollbar-thumb {
-    background-color: #334155;
+    background-color: #333333;
     border-radius: 9999px;
   }
 }
@@ -90,4 +90,67 @@
 .toast-in { animation: toastIn 0.28s cubic-bezier(0.22, 1, 0.36, 1); }
 @media (prefers-reduced-motion: reduce) {
   .toast-in { animation: none; }
+}
+
+/* ===== Global Dark Mode Fallback =====
+   Menjaga halaman lama yang masih memakai warna netral Tailwind tetap terbaca
+   tanpa mengubah logika TypeScript/JSX. Warna aksen (biru, hijau, merah, dll.)
+   sengaja tidak diubah. */
+@layer base {
+  .dark [class~="bg-white"],
+  .dark [class~="bg-slate-50"],
+  .dark [class~="bg-slate-100"],
+  .dark [class~="bg-slate-200"],
+  .dark [class~="bg-slate-800"],
+  .dark [class~="bg-slate-900"],
+  .dark [class~="bg-slate-950"],
+  .dark [class~="bg-gray-50"],
+  .dark [class~="bg-gray-100"],
+  .dark [class~="bg-gray-800"],
+  .dark [class~="bg-gray-900"] {
+    background-color: #000 !important;
+  }
+
+  .dark [class~="text-slate-950"],
+  .dark [class~="text-slate-900"],
+  .dark [class~="text-slate-800"],
+  .dark [class~="text-slate-700"],
+  .dark [class~="text-gray-950"],
+  .dark [class~="text-gray-900"],
+  .dark [class~="text-gray-800"],
+  .dark [class~="text-gray-700"] {
+    color: #fff !important;
+  }
+
+  .dark [class~="text-slate-600"],
+  .dark [class~="text-slate-500"],
+  .dark [class~="text-slate-400"],
+  .dark [class~="text-gray-600"],
+  .dark [class~="text-gray-500"],
+  .dark [class~="text-gray-400"] {
+    color: #cbd5e1 !important;
+  }
+
+  .dark [class~="border-slate-50"],
+  .dark [class~="border-slate-100"],
+  .dark [class~="border-slate-200"],
+  .dark [class~="border-slate-300"],
+  .dark [class~="border-slate-700"],
+  .dark [class~="border-slate-800"],
+  .dark [class~="border-gray-100"],
+  .dark [class~="border-gray-200"],
+  .dark [class~="border-gray-300"],
+  .dark [class~="border-gray-700"],
+  .dark [class~="border-gray-800"] {
+    border-color: rgba(255,255,255,.10) !important;
+  }
+
+  .dark [class~="divide-slate-100"],
+  .dark [class~="divide-slate-200"],
+  .dark [class~="divide-slate-800"],
+  .dark [class~="divide-gray-100"],
+  .dark [class~="divide-gray-200"],
+  .dark [class~="divide-gray-800"] {
+    --tw-divide-opacity: 0.1;
+  }
 }

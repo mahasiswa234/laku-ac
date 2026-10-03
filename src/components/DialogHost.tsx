@@ -82,7 +82,7 @@ export default function DialogHost() {
         aria-modal="true"
         aria-labelledby={`dialog-title-${current.id}`}
         aria-describedby={`dialog-msg-${current.id}`}
-        className="relative w-full max-w-sm overflow-hidden rounded-3xl bg-white dark:bg-slate-900 shadow-2xl ring-1 ring-slate-200/70 dark:ring-slate-700/70 dialog-pop"
+        className="relative w-full max-w-sm overflow-hidden rounded-3xl bg-white dark:bg-black shadow-2xl ring-1 ring-slate-200/70 dark:ring-slate-700/70 dialog-pop"
       >
         <div className={`h-1.5 w-full bg-gradient-to-r ${style.bar}`} />
 
@@ -90,7 +90,7 @@ export default function DialogHost() {
           type="button"
           onClick={() => closeDialog(current.id, false)}
           aria-label="Tutup"
-          className="absolute right-3 top-4 rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-300 transition-colors"
+          className="absolute right-3 top-4 rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black dark:hover:text-slate-300 transition-colors"
         >
           <X size={16} />
         </button>
@@ -115,7 +115,7 @@ export default function DialogHost() {
               <button
                 type="button"
                 onClick={() => closeDialog(current.id, false)}
-                className="flex-1 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
+                className="flex-1 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-black px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-black transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
               >
                 {current.cancelText}
               </button>

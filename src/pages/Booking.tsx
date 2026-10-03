@@ -185,7 +185,7 @@ export default function Booking() {
   if (successCode) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-16">
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 text-center space-y-6 animate-scaleUp">
+        <div className="bg-white dark:bg-black p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-white/10 text-center space-y-6 animate-scaleUp">
           <div className="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center mx-auto shadow-inner">
             <CheckCircle size={44} />
           </div>
@@ -201,7 +201,7 @@ export default function Booking() {
             </p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 text-left text-xs space-y-2 max-w-md mx-auto">
+          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-black border border-slate-100 dark:border-white/10 text-left text-xs space-y-2 max-w-md mx-auto">
             <div className="flex justify-between text-slate-600 dark:text-slate-400">
               <span>Layanan:</span>
               <span className="font-bold text-slate-800 dark:text-slate-200">{formData.serviceType}</span>
@@ -228,7 +228,7 @@ export default function Booking() {
                 setSuccessCode(null);
                 setFormData(prev => ({ ...prev, complaint: '', ac_unit_id: '' }));
               }}
-              className="px-6 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-950 text-slate-700 dark:text-slate-300 font-semibold rounded-xl text-sm transition-all"
+              className="px-6 py-3 bg-white dark:bg-black border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-black text-slate-700 dark:text-slate-300 font-semibold rounded-xl text-sm transition-all"
             >
               Buat Pesanan Lainnya
             </button>
@@ -240,14 +240,14 @@ export default function Booking() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
-      <div className="bg-white dark:bg-slate-900 p-6 sm:p-10 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800">
+      <div className="bg-white dark:bg-black p-6 sm:p-10 rounded-3xl shadow-sm border border-slate-100 dark:border-white/10">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-10 h-10 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center">
             <Calendar size={22} />
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">Form Pemesanan Servis AC</h1>
         </div>
-        <p className="text-slate-500 dark:text-slate-400 text-sm mb-8 pb-6 border-b border-slate-100 dark:border-slate-800">
+        <p className="text-slate-500 dark:text-slate-400 text-sm mb-8 pb-6 border-b border-slate-100 dark:border-white/10">
           Silakan lengkapi formulir di bawah ini. Permintaan Anda langsung diteruskan ke sistem Admin untuk penjadwalan teknisi.
         </p>
 
@@ -295,7 +295,7 @@ export default function Booking() {
               <select
                 value={formData.area}
                 onChange={(e) => setFormData({...formData, area: e.target.value})}
-                className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-white dark:bg-slate-900"
+                className="w-full px-4 py-2.5 border border-slate-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-white dark:bg-black"
               >
                 <option value="Jakarta Selatan">Jakarta Selatan</option>
                 <option value="Jakarta Pusat & Barat">Jakarta Pusat & Barat</option>
@@ -332,7 +332,7 @@ export default function Booking() {
                 Pilih Unit AC Terdaftar (Opsional)
               </label>
               <select
-                className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-white dark:bg-slate-900"
+                className="w-full px-4 py-2.5 border border-slate-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-white dark:bg-black"
                 value={formData.ac_unit_id}
                 onChange={(e) => setFormData({...formData, ac_unit_id: e.target.value})}
               >
@@ -394,7 +394,7 @@ export default function Booking() {
             <input 
               type="date" 
               min={new Date().toISOString().split('T')[0]}
-              className={`w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-white dark:bg-slate-900 ${
+              className={`w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-white dark:bg-black ${
                 errors.date ? 'border-rose-500' : 'border-slate-200'
               }`}
               value={formData.date}
@@ -410,14 +410,14 @@ export default function Booking() {
             </label>
             <textarea 
               rows={4}
-              className="w-full px-4 py-3 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm resize-none"
+              className="w-full px-4 py-3 border border-slate-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm resize-none"
               placeholder="Jelaskan kendala AC Anda (misal: AC bocor air, bau apek, tidak dingin sama sekali, dll.)"
               value={formData.complaint}
               onChange={(e) => setFormData({...formData, complaint: e.target.value})}
             />
           </div>
 
-          <div className="bg-slate-50 dark:bg-slate-950 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 flex items-start gap-3 text-xs text-slate-600 dark:text-slate-400">
+          <div className="bg-slate-50 dark:bg-black p-4 rounded-2xl border border-slate-100 dark:border-white/10 flex items-start gap-3 text-xs text-slate-600 dark:text-slate-400">
             <ShieldCheck size={18} className="text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
             <div>
               <span className="font-semibold text-slate-800 dark:text-slate-200">Transparansi dan Kualitas Terjamin:</span>

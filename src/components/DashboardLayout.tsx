@@ -230,9 +230,9 @@ export default function DashboardLayout({
   // ===============================
   if (isAuthorized === null || !isAuthorized) {
     return (
-      <div className="min-h-screen bg-slate-100 dark:bg-slate-900 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-slate-100 dark:bg-black flex items-center justify-center p-4 transition-colors duration-300">
 
-        <div className="bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-800 max-w-sm w-full text-center space-y-4">
+        <div className="bg-white dark:bg-black p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200/80 dark:border-white/10 max-w-sm w-full text-center space-y-4 transition-colors duration-300">
 
           <div className="relative w-12 h-12 mx-auto">
 
@@ -246,7 +246,7 @@ export default function DashboardLayout({
 
           <div>
             <h3 className="text-sm font-bold text-slate-800 dark:text-slate-200">
-              Verifikasi Keamanan Sesi
+              Verifikasi Keamanan...
             </h3>
 
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
@@ -263,16 +263,30 @@ export default function DashboardLayout({
   const menuItems = getMenu();
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex transition-colors">
+    <div className="min-h-screen bg-slate-50 dark:bg-black flex transition-colors duration-300">
 
       {/* =======================================
           SIDEBAR DESKTOP
       ======================================== */}
-      <aside className="w-64 bg-slate-900 text-white hidden md:flex flex-col">
+      <aside
+        className="
+          w-64
+          bg-white text-slate-700
+          dark:bg-black dark:text-white
+          border-r border-slate-200 dark:border-white/10
+          hidden md:flex flex-col
+          transition-colors duration-300
+        "
+      >
 
         {/* LOGO SIDEBAR */}
-        <div className="h-16 flex items-center px-6 border-b border-slate-800">
-
+        <div
+          className="
+            h-16 flex items-center px-6
+            border-b border-slate-200 dark:border-white/10
+            transition-colors duration-300
+          "
+        >
           <Link
             to="/"
             className="flex items-center"
@@ -283,27 +297,41 @@ export default function DashboardLayout({
               className="h-11 w-auto object-contain"
             />
           </Link>
-
         </div>
 
         {/* USER INFORMATION */}
-        <div className="p-4 border-b border-slate-800">
+        <div
+          className="
+            p-4
+            border-b border-slate-200 dark:border-white/10
+            transition-colors duration-300
+          "
+        >
 
           <div className="flex items-center gap-3">
 
-            <div className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center">
+            <div
+              className="
+                w-10 h-10
+                bg-slate-100 text-slate-600
+                dark:bg-black dark:text-white
+                rounded-full
+                flex items-center justify-center
+                transition-colors duration-300
+              "
+            >
               <User size={20} />
             </div>
 
             <div className="min-w-0">
 
-              <p className="text-sm font-medium truncate">
+              <p className="text-sm font-medium truncate text-slate-800 dark:text-white">
                 {userData
                   ? userData.email.split('@')[0]
                   : 'Pengguna'}
               </p>
 
-              <p className="text-xs text-slate-400 capitalize">
+              <p className="text-xs text-slate-500 dark:text-slate-400 capitalize">
                 {role}
               </p>
 
@@ -325,11 +353,24 @@ export default function DashboardLayout({
               <Link
                 key={idx}
                 to={item.path}
-                className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                  isActive
-                    ? 'bg-blue-600 text-white'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
-                }`}
+                className={`
+                  flex items-center gap-3
+                  px-3 py-2
+                  rounded-lg
+                  transition-colors duration-300
+                  ${
+                    isActive
+                      ? 'bg-blue-600 text-white shadow-sm'
+                      : `
+                        text-slate-600
+                        hover:text-blue-600
+                        hover:bg-blue-50
+                        dark:text-slate-300
+                        dark:hover:text-white
+                        dark:hover:bg-black
+                      `
+                  }
+                `}
               >
 
                 <item.icon size={18} />
@@ -345,11 +386,18 @@ export default function DashboardLayout({
         </nav>
 
         {/* SIDEBAR BOTTOM */}
-        <div className="p-4 border-t border-slate-800 space-y-2">
+        <div
+          className="
+            p-4
+            border-t border-slate-200 dark:border-white/10
+            space-y-2
+            transition-colors duration-300
+          "
+        >
 
           <div className="flex items-center justify-between px-1">
 
-            <span className="text-xs font-medium text-slate-400">
+            <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
               Tampilan
             </span>
 
@@ -359,7 +407,19 @@ export default function DashboardLayout({
 
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 px-3 py-2 w-full text-slate-300 hover:text-red-400 hover:bg-slate-800 rounded-lg transition-colors"
+            className="
+              flex items-center gap-3
+              px-3 py-2
+              w-full
+              text-slate-600
+              hover:text-red-500
+              hover:bg-red-50
+              dark:text-slate-300
+              dark:hover:text-red-400
+              dark:hover:bg-black
+              rounded-lg
+              transition-colors duration-300
+            "
           >
 
             <LogOut size={18} />
@@ -382,7 +442,18 @@ export default function DashboardLayout({
         {/* =====================================
             MOBILE HEADER
         ====================================== */}
-        <header className="h-16 bg-white dark:bg-slate-900 dark:border-slate-800 shadow-xs border-b border-slate-200 flex items-center justify-between px-4 md:hidden">
+        <header
+          className="
+            h-16
+            bg-white dark:bg-black
+            dark:border-white/10
+            shadow-xs
+            border-b border-slate-200
+            flex items-center justify-between
+            px-4 md:hidden
+            transition-colors duration-300
+          "
+        >
 
           <div className="flex items-center gap-2.5">
 
@@ -417,7 +488,17 @@ export default function DashboardLayout({
             <button
               type="button"
               onClick={() => setMobileMenuOpen(true)}
-              className="p-2 text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+              className="
+                p-2
+                text-slate-600
+                dark:text-slate-300
+                hover:text-blue-600
+                dark:hover:text-blue-400
+                hover:bg-slate-100
+                dark:hover:bg-black
+                rounded-lg
+                transition-colors duration-300
+              "
               aria-label="Buka Menu"
             >
               <Menu size={22} />
@@ -435,15 +516,42 @@ export default function DashboardLayout({
 
             {/* Overlay */}
             <div
-              className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"
+              className="
+                fixed inset-0
+                bg-slate-900/60
+                dark:bg-black/70
+                backdrop-blur-xs
+                transition-opacity
+              "
               onClick={() => setMobileMenuOpen(false)}
             />
 
             {/* Drawer */}
-            <div className="relative w-4/5 max-w-xs bg-slate-900 text-white h-full flex flex-col z-10 shadow-2xl">
+            <div
+              className="
+                relative
+                w-4/5 max-w-xs
+                bg-white text-slate-700
+                dark:bg-black dark:text-white
+                h-full
+                flex flex-col
+                z-10
+                shadow-2xl
+                transition-colors duration-300
+              "
+            >
 
               {/* Drawer Header */}
-              <div className="h-16 flex items-center justify-between px-6 border-b border-slate-800">
+              <div
+                className="
+                  h-16
+                  flex items-center justify-between
+                  px-6
+                  border-b border-slate-200
+                  dark:border-white/10
+                  transition-colors duration-300
+                "
+              >
 
                 <Link
                   to="/"
@@ -459,7 +567,17 @@ export default function DashboardLayout({
 
                 <button
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-slate-400 hover:text-white p-1 rounded-lg"
+                  className="
+                    text-slate-500
+                    dark:text-slate-400
+                    hover:text-slate-800
+                    dark:hover:text-white
+                    hover:bg-slate-100
+                    dark:hover:bg-black
+                    p-1
+                    rounded-lg
+                    transition-colors duration-300
+                  "
                   aria-label="Tutup Menu"
                 >
                   <X size={20} />
@@ -468,23 +586,47 @@ export default function DashboardLayout({
               </div>
 
               {/* Mobile User */}
-              <div className="p-4 border-b border-slate-800 bg-slate-800/40">
+              <div
+                className="
+                  p-4
+                  border-b border-slate-200
+                  bg-slate-50
+                  dark:border-white/10
+                  dark:bg-black
+                  transition-colors duration-300
+                "
+              >
 
                 <div className="flex items-center gap-3">
 
-                  <div className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center text-slate-200">
+                  <div
+                    className="
+                      w-10 h-10
+                      bg-slate-100 text-slate-600
+                      dark:bg-black dark:text-slate-200
+                      rounded-full
+                      flex items-center justify-center
+                      transition-colors duration-300
+                    "
+                  >
                     <User size={20} />
                   </div>
 
                   <div className="min-w-0">
 
-                    <p className="text-sm font-semibold truncate text-white">
+                    <p
+                      className="
+                        text-sm font-semibold truncate
+                        text-slate-800
+                        dark:text-white
+                      "
+                    >
                       {userData
                         ? userData.email.split('@')[0]
                         : 'Pengguna'}
                     </p>
 
-                    <p className="text-xs text-blue-400 capitalize font-medium">
+                    <p className="text-xs text-blue-600 dark:text-blue-400 capitalize font-medium">
                       {role}
                     </p>
 
@@ -507,11 +649,24 @@ export default function DashboardLayout({
                       key={idx}
                       to={item.path}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors ${
-                        isActive
-                          ? 'bg-blue-600 text-white font-bold'
-                          : 'text-slate-300 hover:text-white hover:bg-slate-800'
-                      }`}
+                      className={`
+                        flex items-center gap-3
+                        px-3 py-2.5
+                        rounded-xl
+                        transition-colors duration-300
+                        ${
+                          isActive
+                            ? 'bg-blue-600 text-white font-bold shadow-sm'
+                            : `
+                              text-slate-600
+                              hover:text-blue-600
+                              hover:bg-blue-50
+                              dark:text-slate-300
+                              dark:hover:text-white
+                              dark:hover:bg-black
+                            `
+                        }
+                      `}
                     >
 
                       <item.icon size={18} />
@@ -527,20 +682,40 @@ export default function DashboardLayout({
               </nav>
 
               {/* Mobile Logout */}
-              <div className="p-4 border-t border-slate-800">
+              <div
+                className="
+                  p-4
+                  border-t border-slate-200
+                  dark:border-white/10
+                  transition-colors duration-300
+                "
+              >
 
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false);
                     handleLogout();
                   }}
-                  className="flex items-center gap-3 px-3 py-2.5 w-full text-rose-400 hover:text-rose-300 hover:bg-rose-950/40 rounded-xl transition-colors text-sm font-semibold"
+                  className="
+                    flex items-center gap-3
+                    px-3 py-2.5
+                    w-full
+                    text-rose-500
+                    hover:text-rose-600
+                    hover:bg-rose-50
+                    dark:text-rose-400
+                    dark:hover:text-rose-300
+                    dark:hover:bg-rose-950/40
+                    rounded-xl
+                    transition-colors duration-300
+                    text-sm font-semibold
+                  "
                 >
 
                   <LogOut size={18} />
 
                   <span>
-                    Keluar dari Akun
+                    Keluar
                   </span>
 
                 </button>
@@ -548,17 +723,30 @@ export default function DashboardLayout({
               </div>
 
             </div>
+
           </div>
         )}
 
         {/* =====================================
             PAGE CONTENT
         ====================================== */}
-        <main className="flex-1 p-4 sm:p-6 overflow-auto dark:bg-slate-950 dark:text-slate-100">
+        <main
+          className="
+            flex-1
+            p-4 sm:p-6
+            overflow-auto
+            bg-slate-50
+            dark:bg-black
+            text-slate-800
+            dark:text-slate-100
+            transition-colors duration-300
+          "
+        >
           <Outlet />
         </main>
 
       </div>
+
     </div>
   );
 }

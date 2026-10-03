@@ -111,10 +111,10 @@ export default function Pricing() {
         {services.map((service, index) => (
           <div
             key={index}
-            className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200/80 dark:border-slate-800 overflow-hidden flex flex-col justify-between hover:shadow-xl hover:border-blue-200 dark:hover:border-blue-800 transition-all duration-300 relative group"
+            className="bg-white dark:bg-black rounded-3xl shadow-sm border border-slate-200/80 dark:border-white/10 overflow-hidden flex flex-col justify-between hover:shadow-xl hover:border-blue-200 dark:hover:border-blue-800 transition-all duration-300 relative group"
           >
             <div>
-              <div className="p-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950">
+              <div className="p-6 border-b border-slate-100 dark:border-white/10 bg-slate-50/70 dark:bg-black">
                 <div className="flex items-center justify-between gap-2 mb-2">
                   <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
                     {service.badge}
@@ -164,22 +164,37 @@ export default function Pricing() {
         ))}
       </div>
 
-      <div className="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 sm:p-8 text-center border border-blue-100/80 dark:border-blue-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="text-left space-y-1">
-          <h4 className="font-bold text-slate-800 dark:text-slate-200 text-base">
-            Butuh penawaran untuk gedung kantor atau unit dalam jumlah banyak?
-          </h4>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-            Dapatkan tarif khusus korporat dan survei teknisi gratis ke lokasi Anda.
-          </p>
-        </div>
-        <Link
-          to="/kontak"
-          className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-sm whitespace-nowrap transition-colors"
-        >
-          Hubungi Tim Kami
-        </Link>
-      </div>
+<div className="mt-12 rounded-2xl p-6 sm:p-8 text-center 
+  bg-gradient-to-r from-blue-50 to-indigo-50 
+  dark:from-slate-800 dark:via-slate-800 dark:to-indigo-950
+  border border-blue-100/80 dark:border-white/10 
+  flex flex-col sm:flex-row items-center justify-between gap-4
+  transition-colors duration-300"
+>
+  <div className="text-left space-y-1">
+    <h4 className="font-bold text-slate-800 dark:text-white text-base">
+      Butuh penawaran untuk gedung kantor atau unit dalam jumlah banyak?
+    </h4>
+
+    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+      Dapatkan tarif khusus korporat dan survei teknisi gratis ke lokasi Anda.
+    </p>
+  </div>
+
+  <Link
+    to="/kontak"
+    className="px-6 py-2.5 rounded-xl 
+      bg-blue-600 hover:bg-blue-700 
+      dark:bg-blue-500 dark:hover:bg-blue-600
+      text-white font-semibold text-xs 
+      shadow-sm whitespace-nowrap 
+      transition-colors duration-300"
+  >
+    Hubungi Tim Kami
+  </Link>
+</div>
+
+
     </div>
   );
 }

@@ -47,14 +47,14 @@ export default function TechnicianHistory() {
         </div>
         <button
           onClick={fetchHistory}
-          className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-950 text-sm font-medium transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-black border border-slate-200 dark:border-white/10 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-black text-sm font-medium transition-colors"
         >
           <RefreshCw size={16} className={isLoading ? 'animate-spin' : ''} />
           Refresh
         </button>
       </div>
 
-      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
+      <div className="bg-white dark:bg-black rounded-2xl shadow-sm border border-slate-100 dark:border-white/10 overflow-hidden">
         {isLoading ? (
           <div className="p-12 text-center text-slate-400">
             <RefreshCw size={24} className="animate-spin mx-auto mb-2 text-blue-500 dark:text-blue-400" />
@@ -70,7 +70,7 @@ export default function TechnicianHistory() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-slate-50 dark:bg-slate-950 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                <tr className="bg-slate-50 dark:bg-black text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
                   <th className="px-6 py-4">ID Pesanan</th>
                   <th className="px-6 py-4">Tanggal</th>
                   <th className="px-6 py-4">Pelanggan</th>
@@ -80,9 +80,9 @@ export default function TechnicianHistory() {
                   <th className="px-6 py-4">Rating</th>
                 </tr>
               </thead>
-              <tbody className="text-sm divide-y divide-slate-100 dark:divide-slate-800">
+              <tbody className="text-sm divide-y divide-slate-100 dark:divide-white/10">
                 {history.map((item, i) => (
-                  <tr key={i} className="hover:bg-slate-50/60 dark:hover:bg-slate-950 transition-colors">
+                  <tr key={i} className="hover:bg-slate-50/60 dark:hover:bg-black transition-colors">
                     <td className="px-6 py-4 font-mono font-bold text-blue-600 dark:text-blue-400">{item.id}</td>
                     <td className="px-6 py-4 text-slate-600 dark:text-slate-400">
                       <div className="flex items-center gap-2">
@@ -134,8 +134,8 @@ export default function TechnicianHistory() {
       {/* Modal Detail Dokumentasi Foto */}
       {selectedPhotoModal && (
         <div className="fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full p-6 shadow-2xl animate-scaleUp">
-            <div className="flex justify-between items-center pb-3 border-b border-slate-100 dark:border-slate-800">
+          <div className="bg-white dark:bg-black rounded-2xl max-w-2xl w-full p-6 shadow-2xl animate-scaleUp">
+            <div className="flex justify-between items-center pb-3 border-b border-slate-100 dark:border-white/10">
               <div>
                 <h3 className="font-bold text-slate-800 dark:text-slate-200 text-lg">Dokumentasi Hasil Kerja Teknisi</h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400">{selectedPhotoModal.id} - {selectedPhotoModal.customer}</p>
@@ -150,7 +150,7 @@ export default function TechnicianHistory() {
 
             <div className="py-4 space-y-4">
               {selectedPhotoModal.notes && (
-                <div className="p-3 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-100 dark:border-slate-800">
+                <div className="p-3 bg-slate-50 dark:bg-black rounded-xl border border-slate-100 dark:border-white/10">
                   <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Catatan Tindakan Teknisi:</p>
                   <p className="text-sm text-slate-800 dark:text-slate-200">{selectedPhotoModal.notes}</p>
                 </div>
@@ -163,10 +163,10 @@ export default function TechnicianHistory() {
                     <img 
                       src={selectedPhotoModal.before_photo} 
                       alt="Sebelum" 
-                      className="w-full h-52 object-cover rounded-xl border border-slate-200 dark:border-slate-800" 
+                      className="w-full h-52 object-cover rounded-xl border border-slate-200 dark:border-white/10" 
                     />
                   ) : (
-                    <div className="w-full h-52 bg-slate-100 dark:bg-slate-900 rounded-xl border border-dashed border-slate-200 dark:border-slate-800 flex items-center justify-center text-xs text-slate-400">
+                    <div className="w-full h-52 bg-slate-100 dark:bg-black rounded-xl border border-dashed border-slate-200 dark:border-white/10 flex items-center justify-center text-xs text-slate-400">
                       Tidak ada foto awal
                     </div>
                   )}
@@ -181,7 +181,7 @@ export default function TechnicianHistory() {
                       className="w-full h-52 object-cover rounded-xl border border-emerald-200 dark:border-emerald-800" 
                     />
                   ) : (
-                    <div className="w-full h-52 bg-slate-100 dark:bg-slate-900 rounded-xl border border-dashed border-slate-200 dark:border-slate-800 flex items-center justify-center text-xs text-slate-400">
+                    <div className="w-full h-52 bg-slate-100 dark:bg-black rounded-xl border border-dashed border-slate-200 dark:border-white/10 flex items-center justify-center text-xs text-slate-400">
                       Tidak ada foto akhir
                     </div>
                   )}
@@ -189,7 +189,7 @@ export default function TechnicianHistory() {
               </div>
             </div>
 
-            <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-end">
+            <div className="pt-3 border-t border-slate-100 dark:border-white/10 flex justify-end">
               <button 
                 onClick={() => setSelectedPhotoModal(null)}
                 className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-sm font-medium rounded-xl transition-colors"

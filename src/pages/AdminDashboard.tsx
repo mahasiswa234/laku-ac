@@ -104,7 +104,7 @@ export default function AdminDashboard() {
         </div>
         <button
           onClick={fetchDashboardData}
-          className="flex items-center gap-2 text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-950 px-3.5 py-2 rounded-xl transition-colors shadow-2xs"
+          className="flex items-center gap-2 text-xs font-semibold bg-white dark:bg-black border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-black px-3.5 py-2 rounded-xl transition-colors shadow-2xs"
         >
           <RefreshCw size={14} className={isLoading ? 'animate-spin' : ''} />
           Segarkan Data
@@ -114,7 +114,7 @@ export default function AdminDashboard() {
       {/* Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, i) => (
-          <div key={i} className="bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex items-center justify-between">
+          <div key={i} className="bg-white dark:bg-black p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-white/10 flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{stat.label}</p>
               <p className="text-2xl font-bold text-slate-800 dark:text-slate-200 mt-1">{stat.value}</p>
@@ -147,8 +147,8 @@ export default function AdminDashboard() {
       )}
 
       {/* Pesanan Terbaru Masuk */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
-        <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+      <div className="bg-white dark:bg-black rounded-2xl shadow-sm border border-slate-100 dark:border-white/10 overflow-hidden">
+        <div className="px-6 py-4 border-b border-slate-100 dark:border-white/10 flex justify-between items-center">
           <div>
             <h2 className="text-base font-bold text-slate-800 dark:text-slate-200">Permintaan Servis Terbaru</h2>
             <p className="text-xs text-slate-500 dark:text-slate-400">Daftar pesanan yang diajukan langsung oleh pelanggan</p>
@@ -161,7 +161,7 @@ export default function AdminDashboard() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-50 dark:bg-slate-950 text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider font-semibold">
+              <tr className="bg-slate-50 dark:bg-black text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider font-semibold">
                 <th className="px-6 py-3.5">Kode / ID</th>
                 <th className="px-6 py-3.5">Pelanggan</th>
                 <th className="px-6 py-3.5">Layanan & Unit</th>
@@ -170,7 +170,7 @@ export default function AdminDashboard() {
                 <th className="px-6 py-3.5 text-right">Aksi</th>
               </tr>
             </thead>
-            <tbody className="text-sm divide-y divide-slate-100 dark:divide-slate-800">
+            <tbody className="text-sm divide-y divide-slate-100 dark:divide-white/10">
               {isLoading ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-8 text-center text-slate-400 text-sm">
@@ -185,7 +185,7 @@ export default function AdminDashboard() {
                 </tr>
               ) : (
                 requests.slice(0, 6).map((req) => (
-                  <tr key={req.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-950 transition-colors">
+                  <tr key={req.id} className="hover:bg-slate-50/60 dark:hover:bg-black transition-colors">
                     <td className="px-6 py-4 font-mono font-bold text-xs text-blue-600 dark:text-blue-400">
                       {req.request_code || `#REQ-${req.id}`}
                     </td>

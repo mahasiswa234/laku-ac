@@ -144,7 +144,7 @@ export default function AccountSettings() {
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       {/* Header */}
-      <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-4">
+      <div className="bg-white dark:bg-black p-6 rounded-2xl border border-slate-100 dark:border-white/10 shadow-sm flex items-center gap-4">
         <div className="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
           <UserCog size={28} />
         </div>
@@ -157,7 +157,7 @@ export default function AccountSettings() {
       </div>
 
       {/* Profile Form */}
-      <form onSubmit={handleProfileSubmit} className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm space-y-5">
+      <form onSubmit={handleProfileSubmit} className="bg-white dark:bg-black p-6 rounded-2xl border border-slate-100 dark:border-white/10 shadow-sm space-y-5">
         <h2 className="text-base font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
           <UserCog size={18} className="text-blue-600 dark:text-blue-400" />
           Informasi Profil
@@ -183,7 +183,7 @@ export default function AccountSettings() {
               required
               value={profileForm.email}
               onChange={(e) => setProfileForm({ ...profileForm, email: e.target.value })}
-              className="w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-white/10 rounded-lg bg-white dark:bg-black text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
         </div>
@@ -198,7 +198,7 @@ export default function AccountSettings() {
                   required
                   value={profileForm.full_name}
                   onChange={(e) => setProfileForm({ ...profileForm, full_name: e.target.value })}
-                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border border-slate-300 dark:border-white/10 rounded-lg bg-white dark:bg-black text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 outline-none"
                 />
               </div>
               <div>
@@ -210,7 +210,7 @@ export default function AccountSettings() {
                     required
                     value={profileForm.phone}
                     onChange={(e) => setProfileForm({ ...profileForm, phone: e.target.value })}
-                    className="w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-white/10 rounded-lg bg-white dark:bg-black text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 outline-none"
                   />
                 </div>
               </div>
@@ -225,7 +225,7 @@ export default function AccountSettings() {
                     rows={3}
                     value={profileForm.address}
                     onChange={(e) => setProfileForm({ ...profileForm, address: e.target.value })}
-                    className="w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-white/10 rounded-lg bg-white dark:bg-black text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 outline-none"
                   />
                 </div>
               </div>
@@ -241,7 +241,7 @@ export default function AccountSettings() {
                     placeholder="Cth: AC Split, AC Inverter"
                     value={profileForm.skills}
                     onChange={(e) => setProfileForm({ ...profileForm, skills: e.target.value })}
-                    className="w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-white/10 rounded-lg bg-white dark:bg-black text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 outline-none"
                   />
                 </div>
               </div>
@@ -250,7 +250,7 @@ export default function AccountSettings() {
         )}
 
         {role === 'admin' && (
-          <p className="text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3.5 py-2.5">
+          <p className="text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-black border border-slate-200 dark:border-white/10 rounded-lg px-3.5 py-2.5">
             Akun administrator hanya mengelola alamat email login. Data operasional lain dikelola melalui menu masing-masing.
           </p>
         )}
@@ -266,7 +266,7 @@ export default function AccountSettings() {
       </form>
 
       {/* Password Form */}
-      <form onSubmit={handlePasswordSubmit} className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm space-y-5">
+      <form onSubmit={handlePasswordSubmit} className="bg-white dark:bg-black p-6 rounded-2xl border border-slate-100 dark:border-white/10 shadow-sm space-y-5">
         <h2 className="text-base font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
           <Lock size={18} className="text-blue-600 dark:text-blue-400" />
           Ubah Password
@@ -290,7 +290,7 @@ export default function AccountSettings() {
             required
             value={passwordForm.currentPassword}
             onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
-            className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full px-4 py-2 border border-slate-300 dark:border-white/10 rounded-lg bg-white dark:bg-black text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 outline-none"
           />
         </div>
 
@@ -303,7 +303,7 @@ export default function AccountSettings() {
               minLength={6}
               value={passwordForm.newPassword}
               onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
-              className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-2 border border-slate-300 dark:border-white/10 rounded-lg bg-white dark:bg-black text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
           <div>
@@ -314,7 +314,7 @@ export default function AccountSettings() {
               minLength={6}
               value={passwordForm.confirmPassword}
               onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
-              className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-2 border border-slate-300 dark:border-white/10 rounded-lg bg-white dark:bg-black text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
         </div>

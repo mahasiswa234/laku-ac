@@ -11,7 +11,7 @@ export default function About() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-20">
-        <div className="aspect-video bg-slate-200 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-500 dark:text-slate-400 overflow-hidden shadow-sm">
+        <div className="aspect-video bg-slate-200 dark:bg-black rounded-2xl flex items-center justify-center text-slate-500 dark:text-slate-400 overflow-hidden shadow-sm">
           <img 
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqY-pJD1yOMtFCSt8FRzm0JIR-PZ1duMIy8UJdyPOzxQ&s=10" 
             alt="Foto Bersama Kru Laku AC" 
@@ -30,21 +30,21 @@ export default function About() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 text-center">
+        <div className="bg-white dark:bg-black p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-white/10 text-center">
           <div className="w-14 h-14 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center mx-auto mb-6">
             <Target size={28} />
           </div>
           <h3 className="text-xl font-bold mb-3 text-slate-800 dark:text-slate-200">Visi</h3>
           <p className="text-slate-600 dark:text-slate-400">Menjadi perusahaan penyedia jasa pemeliharaan AC nomor satu di Jabodetabek yang paling dipercaya oleh masyarakat dan instansi.</p>
         </div>
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 text-center">
+        <div className="bg-white dark:bg-black p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-white/10 text-center">
           <div className="w-14 h-14 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center mx-auto mb-6">
             <Users size={28} />
           </div>
           <h3 className="text-xl font-bold mb-3 text-slate-800 dark:text-slate-200">Misi</h3>
           <p className="text-slate-600 dark:text-slate-400">Memberikan layanan tepat waktu, teknisi tersertifikasi, penggunaan suku cadang asli, dan edukasi perawatan berkala kepada pelanggan.</p>
         </div>
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 text-center">
+        <div className="bg-white dark:bg-black p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-white/10 text-center">
           <div className="w-14 h-14 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center mx-auto mb-6">
             <ShieldCheck size={28} />
           </div>

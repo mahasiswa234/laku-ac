@@ -16,7 +16,7 @@ export default function Contact() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Contact Info */}
         <div className="space-y-8">
-          <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex items-start gap-4">
+          <div className="bg-white dark:bg-black p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/10 flex items-start gap-4">
             <div className="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center flex-shrink-0">
               <Phone size={24} />
             </div>
@@ -27,7 +27,7 @@ export default function Contact() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex items-start gap-4">
+          <div className="bg-white dark:bg-black p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/10 flex items-start gap-4">
             <div className="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center flex-shrink-0">
               <Mail size={24} />
             </div>
@@ -38,7 +38,7 @@ export default function Contact() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex items-start gap-4">
+          <div className="bg-white dark:bg-black p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/10 flex items-start gap-4">
             <div className="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center flex-shrink-0">
               <MapPin size={24} />
             </div>
@@ -50,7 +50,7 @@ export default function Contact() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex items-start gap-4">
+          <div className="bg-white dark:bg-black p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/10 flex items-start gap-4">
             <div className="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center flex-shrink-0">
               <Clock size={24} />
             </div>
@@ -65,20 +65,20 @@ export default function Contact() {
         </div>
 
         {/* Contact Form */}
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800">
+        <div className="bg-white dark:bg-black p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-white/10">
           <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-200 mb-6">Kirim Pesan</h2>
           <form className="space-y-4">
             <div>
               <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama Lengkap</label>
-              <input type="text" className="w-full px-4 py-2 border border-slate-200 dark:border-slate-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan nama Anda" />
+              <input type="text" className="w-full px-4 py-2 border border-slate-200 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan nama Anda" />
             </div>
             <div>
               <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">No. Handphone / WhatsApp</label>
-              <input type="tel" className="w-full px-4 py-2 border border-slate-200 dark:border-slate-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Contoh: 08123..." />
+              <input type="tel" className="w-full px-4 py-2 border border-slate-200 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Contoh: 08123..." />
             </div>
             <div>
               <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Subjek</label>
-              <select className="w-full px-4 py-2 border border-slate-200 dark:border-slate-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-slate-900">
+              <select className="w-full px-4 py-2 border border-slate-200 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-black">
                 <option>Pertanyaan Umum</option>
                 <option>Komplain Layanan</option>
                 <option>Kerja Sama (B2B)</option>
@@ -87,7 +87,7 @@ export default function Contact() {
             </div>
             <div>
               <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Pesan Anda</label>
-              <textarea rows={4} className="w-full px-4 py-2 border border-slate-200 dark:border-slate-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Tuliskan detail pesan Anda di sini..."></textarea>
+              <textarea rows={4} className="w-full px-4 py-2 border border-slate-200 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Tuliskan detail pesan Anda di sini..."></textarea>
             </div>
             <button type="button" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-colors mt-4">
               Kirim Pesan Sekarang

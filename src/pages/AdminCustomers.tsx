@@ -124,8 +124,8 @@ export default function AdminCustomers() {
         </button>
       </div>
 
-      <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
-        <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+      <div className="bg-white dark:bg-black rounded-xl shadow-sm border border-slate-100 dark:border-white/10 overflow-hidden">
+        <div className="p-4 border-b border-slate-100 dark:border-white/10 flex items-center justify-between">
           <div className="relative w-full max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
             <input 
@@ -133,7 +133,7 @@ export default function AdminCustomers() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Cari nama, email, atau no handphone..." 
-              className="w-full pl-10 pr-4 py-2 border border-slate-200 dark:border-slate-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-10 pr-4 py-2 border border-slate-200 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
@@ -141,7 +141,7 @@ export default function AdminCustomers() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-50 dark:bg-slate-950 text-slate-500 dark:text-slate-400 text-sm">
+              <tr className="bg-slate-50 dark:bg-black text-slate-500 dark:text-slate-400 text-sm">
                 <th className="px-6 py-4 font-medium">ID Pelanggan</th>
                 <th className="px-6 py-4 font-medium">Nama Pelanggan</th>
                 <th className="px-6 py-4 font-medium">Kontak</th>
@@ -150,14 +150,14 @@ export default function AdminCustomers() {
                 <th className="px-6 py-4 font-medium text-right">Aksi</th>
               </tr>
             </thead>
-            <tbody className="text-sm divide-y divide-slate-100 dark:divide-slate-800">
+            <tbody className="text-sm divide-y divide-slate-100 dark:divide-white/10">
               {isLoading ? (
                 <tr><td colSpan={6} className="text-center py-8 text-slate-500 dark:text-slate-400">Memuat data...</td></tr>
               ) : filteredCustomers.length === 0 ? (
                 <tr><td colSpan={6} className="text-center py-8 text-slate-500 dark:text-slate-400">Data tidak ditemukan</td></tr>
               ) : (
                 filteredCustomers.map((cust, i) => (
-                  <tr key={cust.id || i} className="hover:bg-slate-50 dark:hover:bg-slate-950">
+                  <tr key={cust.id || i} className="hover:bg-slate-50 dark:hover:bg-black">
                     <td className="px-6 py-4 font-medium text-slate-700 dark:text-slate-300">{cust.id}</td>
                     <td className="px-6 py-4 font-bold text-slate-800 dark:text-slate-200">{cust.full_name}</td>
                     <td className="px-6 py-4">
@@ -195,7 +195,7 @@ export default function AdminCustomers() {
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl w-full max-w-md overflow-hidden">
+          <div className="bg-white dark:bg-black rounded-xl shadow-xl w-full max-w-md overflow-hidden">
             <div className="flex justify-between items-center p-4 border-b">
               <h2 className="font-bold text-lg">{isEdit ? 'Edit Pelanggan' : 'Tambah Pelanggan'}</h2>
               <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-400">
@@ -220,7 +220,7 @@ export default function AdminCustomers() {
                 <textarea required value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} className="w-full border rounded-lg px-3 py-2" rows={3}></textarea>
               </div>
               <div className="flex justify-end gap-2 pt-4">
-                <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg">Batal</button>
+                <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-black rounded-lg">Batal</button>
                 <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Simpan</button>
               </div>
             </form>
@@ -230,8 +230,8 @@ export default function AdminCustomers() {
       {/* Modal Daftar Unit AC Pelanggan */}
       {selectedCustomerForUnits && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full p-6 shadow-2xl animate-scaleUp">
-            <div className="flex justify-between items-center pb-3 border-b border-slate-100 dark:border-slate-800">
+          <div className="bg-white dark:bg-black rounded-2xl max-w-2xl w-full p-6 shadow-2xl animate-scaleUp">
+            <div className="flex justify-between items-center pb-3 border-b border-slate-100 dark:border-white/10">
               <div className="flex items-center gap-2.5">
                 <div className="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center">
                   <Wind size={20} />
@@ -267,7 +267,7 @@ export default function AdminCustomers() {
                   {customerUnits.map((u, idx) => (
                     <div 
                       key={u.id || idx}
-                      className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-950 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3"
+                      className="p-4 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-black hover:bg-slate-50 dark:hover:bg-black flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3"
                     >
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
@@ -307,7 +307,7 @@ export default function AdminCustomers() {
               )}
             </div>
 
-            <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
+            <div className="pt-3 border-t border-slate-100 dark:border-white/10 flex justify-between items-center">
               <span className="text-xs text-slate-500 dark:text-slate-400">
                 Total: <span className="font-semibold text-slate-800 dark:text-slate-200">{customerUnits.length}</span> unit AC
               </span>

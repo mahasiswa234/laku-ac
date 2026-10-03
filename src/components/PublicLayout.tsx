@@ -36,6 +36,7 @@ export default function PublicLayout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     setCurrentUser(null);
+    setIsOpen(false);
     navigate('/login');
   };
 
@@ -63,15 +64,37 @@ export default function PublicLayout() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 font-sans text-slate-800 dark:text-slate-100 transition-colors">
+    <div
+      className="
+        min-h-screen
+        flex flex-col
+        bg-slate-50 dark:bg-black
+        font-sans
+        text-slate-800 dark:text-white
+        transition-colors duration-300
+      "
+    >
 
-      {/* ================= HEADER ================= */}
-      <header className="bg-white dark:bg-slate-900 dark:border-b dark:border-slate-800 shadow-sm sticky top-0 z-50">
+      {/* =====================================================
+          HEADER
+      ====================================================== */}
+      <header
+        className="
+          sticky top-0 z-50
+          bg-white/50 dark:bg-black/50
+          backdrop-blur-md
+          border-b border-slate-200/70 dark:border-white/10
+          shadow-sm
+          transition-colors duration-300
+        "
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           <div className="flex justify-between h-16 items-center">
 
-            {/* LOGO */}
+            {/* =================================================
+                LOGO
+            ================================================== */}
             <Link
               to="/"
               className="flex-shrink-0 flex items-center"
@@ -83,26 +106,48 @@ export default function PublicLayout() {
               />
             </Link>
 
-            {/* ================= DESKTOP NAVIGATION ================= */}
-            <nav className="hidden md:flex space-x-6 lg:space-x-8">
+            {/* =================================================
+                DESKTOP NAVIGATION
+            ================================================== */}
+            <nav className="hidden md:flex items-center space-x-6 lg:space-x-8">
+
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   to={link.path}
-                  className={`${
-                    location.pathname === link.path
-                      ? 'text-blue-600 font-semibold'
-                      : 'text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400'
-                  } px-2 py-2 text-sm font-medium transition-colors`}
+                  className={`
+                    px-2 py-2
+                    text-sm
+                    font-medium
+                    transition-colors
+                    ${
+                      location.pathname === link.path
+                        ? `
+                          text-blue-600
+                          dark:text-blue-400
+                          font-semibold
+                        `
+                        : `
+                          text-slate-600
+                          dark:text-slate-300
+                          hover:text-blue-600
+                          dark:hover:text-blue-400
+                        `
+                    }
+                  `}
                 >
                   {link.name}
                 </Link>
               ))}
+
             </nav>
 
-            {/* ================= DESKTOP ACTIONS ================= */}
+            {/* =================================================
+                DESKTOP ACTIONS
+            ================================================== */}
             <div className="hidden md:flex items-center gap-3">
 
+              {/* Theme Toggle */}
               <ThemeToggle />
 
               {currentUser ? (
@@ -110,10 +155,18 @@ export default function PublicLayout() {
                   {/* Dashboard */}
                   <Link
                     to={getDashboardUrl()}
-                    className="flex items-center gap-1.5 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/30 px-3.5 py-2 rounded-lg text-sm font-bold transition-colors"
+                    className="
+                      flex items-center gap-1.5
+                      bg-blue-50 dark:bg-white/10
+                      text-blue-700 dark:text-blue-300
+                      hover:bg-blue-100 dark:hover:bg-white/15
+                      px-3.5 py-2
+                      rounded-lg
+                      text-sm font-bold
+                      transition-colors
+                    "
                   >
                     <User size={16} />
-
                     <span>
                       Dashboard ({currentUser.role})
                     </span>
@@ -122,14 +175,20 @@ export default function PublicLayout() {
                   {/* Logout */}
                   <button
                     onClick={handleLogout}
-                    className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 px-3 py-2 rounded-lg text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors"
+                    className="
+                      flex items-center gap-1.5
+                      text-slate-500 dark:text-slate-400
+                      hover:text-rose-600 dark:hover:text-rose-400
+                      px-3 py-2
+                      rounded-lg
+                      text-sm font-semibold
+                      hover:bg-slate-100 dark:hover:bg-white/10
+                      transition-colors
+                    "
                     title="Keluar"
                   >
                     <LogOut size={16} />
-
-                    <span>
-                      Keluar
-                    </span>
+                    <span>Keluar</span>
                   </button>
                 </>
               ) : (
@@ -137,7 +196,15 @@ export default function PublicLayout() {
                   {/* Pesan Servis */}
                   <Link
                     to="/layanan"
-                    className="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/30 px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
+                    className="
+                      bg-blue-50 dark:bg-white/10
+                      text-blue-700 dark:text-blue-300
+                      hover:bg-blue-100 dark:hover:bg-white/15
+                      px-4 py-2
+                      rounded-lg
+                      text-sm font-semibold
+                      transition-colors
+                    "
                   >
                     Pesan Servis
                   </Link>
@@ -145,24 +212,44 @@ export default function PublicLayout() {
                   {/* Login */}
                   <Link
                     to="/login"
-                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-xs"
+                    className="
+                      flex items-center gap-2
+                      bg-blue-600
+                      hover:bg-blue-700
+                      dark:bg-blue-500
+                      dark:hover:bg-blue-600
+                      text-white
+                      px-4 py-2
+                      rounded-lg
+                      text-sm font-medium
+                      transition-colors
+                      shadow-sm
+                    "
                   >
                     <LogIn size={16} />
-
                     Login
                   </Link>
                 </>
               )}
+
             </div>
 
-            {/* ================= MOBILE MENU BUTTON ================= */}
+            {/* =================================================
+                MOBILE HEADER ACTIONS
+            ================================================== */}
             <div className="md:hidden flex items-center gap-2">
 
               <ThemeToggle />
 
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 focus:outline-none p-1"
+                className="
+                  text-slate-600 dark:text-slate-300
+                  hover:text-blue-600 dark:hover:text-blue-400
+                  focus:outline-none
+                  p-1
+                  transition-colors
+                "
                 aria-label="Buka menu"
               >
                 {isOpen ? (
@@ -177,30 +264,66 @@ export default function PublicLayout() {
           </div>
         </div>
 
-        {/* ================= MOBILE NAVIGATION ================= */}
+        {/* =====================================================
+            MOBILE NAVIGATION
+        ====================================================== */}
         {isOpen && (
-          <div className="md:hidden bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 shadow-lg">
-
+          <div
+            className="
+              md:hidden
+              bg-white/95 dark:bg-black/95
+              backdrop-blur-md
+              border-t border-slate-200 dark:border-white/10
+              shadow-lg
+              transition-colors duration-300
+            "
+          >
             <div className="px-3 pt-2 pb-4 space-y-1 sm:px-3">
 
-              {/* Navigation Links */}
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   to={link.path}
                   onClick={() => setIsOpen(false)}
-                  className={`block px-3 py-2 rounded-md text-base font-medium ${
-                    location.pathname === link.path
-                      ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
-                      : 'text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-950'
-                  }`}
+                  className={`
+                    block
+                    px-3 py-2
+                    rounded-md
+                    text-base
+                    font-medium
+                    transition-colors
+                    ${
+                      location.pathname === link.path
+                        ? `
+                          text-blue-600
+                          dark:text-blue-400
+                          bg-blue-50
+                          dark:bg-white/10
+                        `
+                        : `
+                          text-slate-700
+                          dark:text-slate-300
+                          hover:text-blue-600
+                          dark:hover:text-blue-400
+                          hover:bg-slate-50
+                          dark:hover:bg-white/5
+                        `
+                    }
+                  `}
                 >
                   {link.name}
                 </Link>
               ))}
 
-              {/* Mobile Actions */}
-              <div className="pt-3 flex flex-col gap-2 border-t border-slate-100 dark:border-slate-800 mt-2">
+              {/* Mobile User Actions */}
+              <div
+                className="
+                  pt-3
+                  flex flex-col gap-2
+                  border-t border-slate-200 dark:border-white/10
+                  mt-2
+                "
+              >
 
                 {currentUser ? (
                   <>
@@ -208,23 +331,43 @@ export default function PublicLayout() {
                     <Link
                       to={getDashboardUrl()}
                       onClick={() => setIsOpen(false)}
-                      className="w-full text-center bg-blue-600 text-white font-bold py-2.5 rounded-lg shadow-xs flex items-center justify-center gap-2 text-sm"
+                      className="
+                        w-full
+                        text-center
+                        bg-blue-600 dark:bg-blue-500
+                        hover:bg-blue-700 dark:hover:bg-blue-600
+                        text-white
+                        font-bold
+                        py-2.5
+                        rounded-lg
+                        shadow-sm
+                        flex items-center justify-center gap-2
+                        text-sm
+                        transition-colors
+                      "
                     >
                       <User size={16} />
-
                       Masuk ke Dashboard ({currentUser.role})
                     </Link>
 
                     {/* Logout */}
                     <button
-                      onClick={() => {
-                        setIsOpen(false);
-                        handleLogout();
-                      }}
-                      className="w-full text-center text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-900/30 hover:bg-rose-100 dark:hover:bg-rose-900/30 font-semibold py-2 rounded-lg text-sm flex items-center justify-center gap-2"
+                      onClick={handleLogout}
+                      className="
+                        w-full
+                        text-center
+                        text-rose-600 dark:text-rose-400
+                        bg-rose-50 dark:bg-rose-950/40
+                        hover:bg-rose-100 dark:hover:bg-rose-950/60
+                        font-semibold
+                        py-2
+                        rounded-lg
+                        text-sm
+                        flex items-center justify-center gap-2
+                        transition-colors
+                      "
                     >
                       <LogOut size={16} />
-
                       Keluar
                     </button>
                   </>
@@ -234,7 +377,18 @@ export default function PublicLayout() {
                     <Link
                       to="/layanan"
                       onClick={() => setIsOpen(false)}
-                      className="w-full text-center bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-semibold py-2 rounded-lg text-sm"
+                      className="
+                        w-full
+                        text-center
+                        bg-blue-50 dark:bg-white/10
+                        text-blue-700 dark:text-blue-300
+                        hover:bg-blue-100 dark:hover:bg-white/15
+                        font-semibold
+                        py-2
+                        rounded-lg
+                        text-sm
+                        transition-colors
+                      "
                     >
                       Pesan Servis
                     </Link>
@@ -243,10 +397,20 @@ export default function PublicLayout() {
                     <Link
                       to="/login"
                       onClick={() => setIsOpen(false)}
-                      className="w-full flex justify-center items-center gap-2 bg-blue-600 text-white font-medium py-2 rounded-lg text-sm"
+                      className="
+                        w-full
+                        flex justify-center items-center gap-2
+                        bg-blue-600 dark:bg-blue-500
+                        hover:bg-blue-700 dark:hover:bg-blue-600
+                        text-white
+                        font-medium
+                        py-2
+                        rounded-lg
+                        text-sm
+                        transition-colors
+                      "
                     >
                       <LogIn size={18} />
-
                       Login
                     </Link>
                   </>
@@ -258,45 +422,95 @@ export default function PublicLayout() {
         )}
       </header>
 
-      {/* ================= MAIN CONTENT ================= */}
-      <main className="flex-grow">
+      {/* =====================================================
+          MAIN CONTENT
+      ====================================================== */}
+      <main
+        className="
+          flex-grow
+          bg-slate-50 dark:bg-black
+          transition-colors duration-300
+        "
+      >
         <Outlet />
       </main>
 
-      {/* ================= FOOTER ================= */}
-      <footer className="bg-slate-900 text-white py-12 mt-auto">
+      {/* =====================================================
+          FOOTER
+      ====================================================== */}
+      <footer
+        className="
+          bg-white dark:bg-black
+          text-slate-800 dark:text-white
+          py-12
+          mt-auto
+          border-t border-slate-200 dark:border-white/10
+          transition-colors duration-300
+        "
+      >
+        <div
+          className="
+            max-w-7xl mx-auto
+            px-4 sm:px-6 lg:px-8
+            grid grid-cols-1 md:grid-cols-3
+            gap-8
+          "
+        >
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
-
-          {/* Footer Logo & Description */}
+          {/* =================================================
+              FOOTER LOGO & DESCRIPTION
+          ================================================== */}
           <div>
 
             <div className="flex items-center gap-2 mb-4">
-
               <img
                 src="/logo.png"
                 alt="LAKU AC"
                 className="h-12 w-auto object-contain"
               />
-
             </div>
 
-            <p className="text-slate-400 text-sm leading-relaxed">
-              Sistem Informasi Manajemen Servis dan Pemeliharaan Air Conditioner (AC).
-              Melayani pembersihan, perbaikan, dan pemasangan AC dengan teknisi tersertifikasi.
+            <p
+              className="
+                text-slate-600
+                dark:text-slate-400
+                text-sm
+                leading-relaxed
+              "
+            >
+              Sistem Informasi Manajemen Servis dan
+              Pemeliharaan Air Conditioner (AC).
+              Melayani pembersihan, perbaikan, dan
+              pemasangan AC dengan teknisi tersertifikasi.
             </p>
 
           </div>
 
-          {/* Kontak */}
+          {/* =================================================
+              KONTAK
+          ================================================== */}
           <div>
 
-            <h3 className="font-semibold text-lg mb-4 text-slate-200">
+            <h3
+              className="
+                font-semibold
+                text-lg
+                mb-4
+                text-slate-800
+                dark:text-slate-200
+              "
+            >
               Kontak Informasi
             </h3>
 
-            <ul className="space-y-2 text-sm text-slate-400">
-
+            <ul
+              className="
+                space-y-2
+                text-sm
+                text-slate-600
+                dark:text-slate-400
+              "
+            >
               <li>
                 📞 {COMPANY_INFO.phone}
               </li>
@@ -312,34 +526,69 @@ export default function PublicLayout() {
               <li>
                 📍 Alamat: {COMPANY_INFO.address}
               </li>
-
             </ul>
 
           </div>
 
-          {/* Area & Jam Operasional */}
+          {/* =================================================
+              AREA & JAM OPERASIONAL
+          ================================================== */}
           <div>
 
-            <h3 className="font-semibold text-lg mb-4 text-slate-200">
+            <h3
+              className="
+                font-semibold
+                text-lg
+                mb-4
+                text-slate-800
+                dark:text-slate-200
+              "
+            >
               Area & Jam Operasional
             </h3>
 
-            <p className="text-sm text-slate-400 mb-2">
+            <p
+              className="
+                text-sm
+                text-slate-600
+                dark:text-slate-400
+                mb-2
+              "
+            >
               Jam Operasional:
               <br />
 
-              <span className="text-slate-300">
+              <span
+                className="
+                  text-slate-700
+                  dark:text-slate-300
+                "
+              >
                 08.00 - 20.00
               </span>
             </p>
 
-            <p className="text-sm text-slate-400">
+            <p
+              className="
+                text-sm
+                text-slate-600
+                dark:text-slate-400
+              "
+            >
               Area Layanan:
               <br />
 
               <Link
                 to="/layanan#area-jabodetabek"
-                className="text-blue-400 hover:text-blue-300 underline font-medium"
+                className="
+                  text-blue-600
+                  dark:text-blue-400
+                  hover:text-blue-700
+                  dark:hover:text-blue-300
+                  underline
+                  font-medium
+                  transition-colors
+                "
               >
                 Jabodetabek
               </Link>
@@ -349,30 +598,80 @@ export default function PublicLayout() {
 
         </div>
 
-        {/* Copyright */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-slate-800 text-center text-slate-500 dark:text-slate-400 text-sm">
-
-          <p>
-            &copy; {new Date().getFullYear()} {COMPANY_INFO.name}.
-            Seluruh hak cipta dilindungi.
-          </p>
-
-        </div>
+      {/* =====================================================
+    COPYRIGHT
+====================================================== */}
+<div
+  className="
+    max-w-7xl mx-auto
+    px-4 sm:px-6 lg:px-8
+    mt-8 pt-6
+    border-t border-slate-200 dark:border-white/10
+    flex items-center justify-center
+    text-sm
+  "
+>
+  <p
+    className="
+      text-slate-500
+      dark:text-slate-400
+      text-center
+    "
+  >
+    &copy; {new Date().getFullYear()} {COMPANY_INFO.name}.
+    All Rights Reserved.
+  </p>
+</div>
       </footer>
 
-      {/* ================= FLOATING WHATSAPP ================= */}
+      {/* =====================================================
+          FLOATING WHATSAPP
+      ====================================================== */}
       <a
-        href="https://wa.me/"
+        href="https://wa.me/6281314022911"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 bg-[#25D366] text-white p-4 rounded-full shadow-xl hover:bg-[#1EBE5A] hover:scale-110 transition-all z-50 flex items-center justify-center group"
+        className="
+          fixed
+          bottom-6
+          right-6
+          bg-[#25D366]
+          text-white
+          p-4
+          rounded-full
+          shadow-xl
+          hover:bg-[#1EBE5A]
+          hover:scale-110
+          transition-all
+          z-50
+          flex
+          items-center
+          justify-center
+          group
+        "
         aria-label="Chat via WhatsApp"
       >
+
         <MessageCircle size={28} />
 
-        <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap opacity-0 group-hover:opacity-100 font-medium group-hover:ml-2">
+        <span
+          className="
+            max-w-0
+            overflow-hidden
+            group-hover:max-w-xs
+            transition-all
+            duration-300
+            ease-in-out
+            whitespace-nowrap
+            opacity-0
+            group-hover:opacity-100
+            font-medium
+            group-hover:ml-2
+          "
+        >
           Chat WhatsApp
         </span>
+
       </a>
 
     </div>

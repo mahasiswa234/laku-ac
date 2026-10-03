@@ -109,7 +109,7 @@ export default function Login() {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
-      <div className="bg-white dark:bg-slate-900 p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 w-full max-w-md">
+      <div className="bg-white dark:bg-black p-8 rounded-2xl shadow-[0_8px_30px_rgba(37,99,235,0.18)] dark:shadow-[0_8px_30px_rgba(59,130,246,0.28)] border border-slate-100 dark:border-white/10 w-full max-w-md transition-colors duration-300">
 
         {/* LOGO LAKU AC */}
         <div className="flex justify-center mb-6">
@@ -119,10 +119,6 @@ export default function Login() {
             className="h-20 w-auto object-contain"
           />
         </div>
-
-        <h1 className="text-2xl font-bold text-center text-slate-800 dark:text-slate-200 mb-2">
-          Masuk ke Sistem
-        </h1>
 
         <p className="text-center text-slate-500 dark:text-slate-400 mb-8">
           Silakan masuk menggunakan akun Anda
@@ -168,7 +164,7 @@ export default function Login() {
 
             <input
               type="email"
-              className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-2 border border-slate-300 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
               placeholder="email@contoh.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -184,7 +180,7 @@ export default function Login() {
             <div className="relative">
               <input
                 type={showPassword ? 'text' : 'password'}
-                className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none pr-10"
+                className="w-full px-4 py-2 border border-slate-300 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none pr-10"
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

@@ -139,7 +139,7 @@ export default function Invoice() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-slate-50 dark:bg-black flex items-center justify-center p-4">
         <div className="text-center space-y-3">
           <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
 
@@ -153,8 +153,8 @@ export default function Invoice() {
 
   if (errorMessage || !invoice) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center p-4">
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 max-w-md w-full text-center space-y-4">
+      <div className="min-h-screen bg-slate-50 dark:bg-black flex items-center justify-center p-4">
+        <div className="bg-white dark:bg-black p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-white/10 max-w-md w-full text-center space-y-4">
 
           <div className="w-14 h-14 bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 rounded-full flex items-center justify-center mx-auto">
             <AlertCircle size={32} />
@@ -173,7 +173,7 @@ export default function Invoice() {
 
             <button
               onClick={() => navigate(-1)}
-              className="px-4 py-2 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 rounded-xl text-xs font-semibold hover:bg-slate-50 dark:hover:bg-slate-950 transition-colors"
+              className="px-4 py-2 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 rounded-xl text-xs font-semibold hover:bg-slate-50 dark:hover:bg-black transition-colors"
             >
               Kembali
             </button>
@@ -212,7 +212,7 @@ export default function Invoice() {
     invoice.payment_status === 'Menunggu Verifikasi';
 
   return (
-    <div className="min-h-screen bg-slate-100/70 dark:bg-slate-900 py-8 px-4 font-sans text-slate-800 dark:text-slate-200 print:bg-white dark:print:bg-slate-900 print:min-h-0 print:px-[14mm] print:py-[12mm]">
+    <div className="min-h-screen bg-slate-100/70 dark:bg-black py-8 px-4 font-sans text-slate-800 dark:text-slate-200 print:bg-white dark:print:bg-slate-900 print:min-h-0 print:px-[14mm] print:py-[12mm]">
 
       <div className="max-w-3xl mx-auto space-y-6">
 
@@ -221,7 +221,7 @@ export default function Invoice() {
 
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 bg-white dark:bg-slate-900 px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs transition-colors"
+            className="flex items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 bg-white dark:bg-black px-3.5 py-2 rounded-xl border border-slate-200 dark:border-white/10 shadow-2xs transition-colors"
           >
             <ArrowLeft size={16} />
             Kembali
@@ -241,7 +241,7 @@ export default function Invoice() {
         </div>
 
         {/* Paper Invoice Container */}
-        <div className="bg-white dark:bg-slate-900 p-8 sm:p-12 rounded-3xl shadow-sm border border-slate-200/80 dark:border-slate-800 relative print:shadow-none print:border-none print:p-0 print:rounded-none">
+        <div className="bg-white dark:bg-black p-8 sm:p-12 rounded-3xl shadow-sm border border-slate-200/80 dark:border-white/10 relative print:shadow-none print:border-none print:p-0 print:rounded-none">
 
           {/* Watermark Status LUNAS */}
           {isPaid && (
@@ -251,7 +251,7 @@ export default function Invoice() {
           )}
 
           {/* Header Tagihan */}
-          <div className="flex flex-col sm:flex-row justify-between items-start border-b-2 border-slate-100 dark:border-slate-800 pb-8 gap-6">
+          <div className="flex flex-col sm:flex-row justify-between items-start border-b-2 border-slate-100 dark:border-white/10 pb-8 gap-6">
 
             <div className="flex items-start gap-3.5">
 
@@ -285,7 +285,7 @@ export default function Invoice() {
               </div>
             </div>
 
-            <div className="text-left sm:text-right w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 dark:border-slate-800">
+            <div className="text-left sm:text-right w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 dark:border-white/10">
 
               <h2 className="text-2xl sm:text-3xl font-black text-slate-300 uppercase tracking-widest leading-none mb-2">
                 INVOICE
@@ -306,7 +306,7 @@ export default function Invoice() {
           {/* Informasi Pelanggan & Status Servis */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 my-8 py-2">
 
-            <div className="bg-slate-50/70 dark:bg-slate-950 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
+            <div className="bg-slate-50/70 dark:bg-black p-4 rounded-2xl border border-slate-100 dark:border-white/10">
 
               <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
                 <User size={13} />
@@ -335,14 +335,14 @@ export default function Invoice() {
               )}
 
               {invoice.customer_notes && (
-                <p className="text-[11px] italic text-slate-500 dark:text-slate-400 mt-2 bg-white dark:bg-slate-900 p-2 rounded-lg border border-slate-200 dark:border-slate-800">
+                <p className="text-[11px] italic text-slate-500 dark:text-slate-400 mt-2 bg-white dark:bg-black p-2 rounded-lg border border-slate-200 dark:border-white/10">
                   Catatan: "{invoice.customer_notes}"
                 </p>
               )}
 
             </div>
 
-            <div className="bg-slate-50/70 dark:bg-slate-950 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
+            <div className="bg-slate-50/70 dark:bg-black p-4 rounded-2xl border border-slate-100 dark:border-white/10">
 
               <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
                 <FileCheck2 size={13} />
@@ -351,7 +351,7 @@ export default function Invoice() {
 
               <table className="text-xs w-full">
 
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                <tbody className="divide-y divide-slate-100 dark:divide-white/10">
 
                   <tr>
                     <td className="py-1 text-slate-500 dark:text-slate-400">
@@ -429,13 +429,13 @@ export default function Invoice() {
               Rincian Layanan & Sparepart
             </h3>
 
-            <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+            <div className="border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden">
 
               <table className="w-full text-left border-collapse">
 
                 <thead>
 
-                  <tr className="bg-slate-50 dark:bg-slate-950 text-slate-600 dark:text-slate-400 text-xs font-bold border-b border-slate-200 dark:border-slate-800">
+                  <tr className="bg-slate-50 dark:bg-black text-slate-600 dark:text-slate-400 text-xs font-bold border-b border-slate-200 dark:border-white/10">
 
                     <th className="py-3 px-4">
                       Deskripsi Layanan / Suku Cadang
@@ -457,7 +457,7 @@ export default function Invoice() {
 
                 </thead>
 
-                <tbody className="text-xs divide-y divide-slate-100 dark:divide-slate-800">
+                <tbody className="text-xs divide-y divide-slate-100 dark:divide-white/10">
 
                   {/* Item 1: Jasa Pokok */}
                   <tr>
@@ -523,7 +523,7 @@ export default function Invoice() {
                 </tbody>
 
                 {/* Subtotal & Total */}
-                <tfoot className="bg-slate-50/50 dark:bg-slate-950 text-xs border-t-2 border-slate-200 dark:border-slate-800">
+                <tfoot className="bg-slate-50/50 dark:bg-black text-xs border-t-2 border-slate-200 dark:border-white/10">
 
                   <tr>
 
@@ -555,7 +555,7 @@ export default function Invoice() {
 
                   </tr>
 
-                  <tr className="border-t border-slate-300 dark:border-slate-700 bg-blue-50/40 dark:bg-blue-900/30">
+                  <tr className="border-t border-slate-300 dark:border-white/10 bg-blue-50/40 dark:bg-blue-900/30">
 
                     <td
                       colSpan={3}
@@ -577,7 +577,7 @@ export default function Invoice() {
           </div>
 
           {/* Kotak Status Pembayaran & Validasi */}
-          <div className="border border-slate-200 dark:border-slate-800 rounded-2xl p-5 mb-8 bg-slate-50/60 dark:bg-slate-950">
+          <div className="border border-slate-200 dark:border-white/10 rounded-2xl p-5 mb-8 bg-slate-50/60 dark:bg-black">
 
             <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
               <CreditCard size={15} />
@@ -721,14 +721,14 @@ export default function Invoice() {
             invoice.after_photo_url ||
             invoice.technician_notes) && (
 
-            <div className="border-t border-slate-200 dark:border-slate-800 pt-6 mb-8 print:break-inside-avoid">
+            <div className="border-t border-slate-200 dark:border-white/10 pt-6 mb-8 print:break-inside-avoid">
 
               <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-3">
                 Dokumentasi Hasil Pengerjaan Teknisi
               </h4>
 
               {invoice.technician_notes && (
-                <p className="text-xs text-slate-600 dark:text-slate-400 mb-3 bg-slate-50 dark:bg-slate-950 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800">
+                <p className="text-xs text-slate-600 dark:text-slate-400 mb-3 bg-slate-50 dark:bg-black p-2.5 rounded-xl border border-slate-200 dark:border-white/10">
                   <strong>Catatan Teknisi:</strong>{' '}
                   {invoice.technician_notes}
                 </p>
@@ -746,7 +746,7 @@ export default function Invoice() {
                     <img
                       src={invoice.before_photo_url}
                       alt="Sebelum Servis"
-                      className="h-32 w-full object-cover rounded-xl border border-slate-200 dark:border-slate-800"
+                      className="h-32 w-full object-cover rounded-xl border border-slate-200 dark:border-white/10"
                     />
 
                   </div>
@@ -762,7 +762,7 @@ export default function Invoice() {
                     <img
                       src={invoice.after_photo_url}
                       alt="Setelah Servis"
-                      className="h-32 w-full object-cover rounded-xl border border-slate-200 dark:border-slate-800"
+                      className="h-32 w-full object-cover rounded-xl border border-slate-200 dark:border-white/10"
                     />
 
                   </div>
@@ -773,7 +773,7 @@ export default function Invoice() {
           )}
 
           {/* Kolom Tanda Tangan / Cap Validasi */}
-          <div className="grid grid-cols-2 gap-8 border-t border-slate-200 dark:border-slate-800 pt-8 mt-10 text-center text-xs text-slate-600 dark:text-slate-400 print:break-inside-avoid">
+          <div className="grid grid-cols-2 gap-8 border-t border-slate-200 dark:border-white/10 pt-8 mt-10 text-center text-xs text-slate-600 dark:text-slate-400 print:break-inside-avoid">
 
             <div>
 
@@ -781,7 +781,7 @@ export default function Invoice() {
                 Penerima Jasa (Pelanggan)
               </p>
 
-              <div className="w-36 border-b border-slate-400 dark:border-slate-600 mx-auto"></div>
+              <div className="w-36 border-b border-slate-400 dark:border-white/10 mx-auto"></div>
 
               <p className="font-bold text-slate-800 dark:text-slate-200 mt-1">
                 {invoice.customer}
@@ -795,7 +795,7 @@ export default function Invoice() {
                 Teknisi / Petugas Servis
               </p>
 
-              <div className="w-36 border-b border-slate-400 dark:border-slate-600 mx-auto"></div>
+              <div className="w-36 border-b border-slate-400 dark:border-white/10 mx-auto"></div>
 
               <p className="font-bold text-slate-800 dark:text-slate-200 mt-1">
                 {invoice.technician_name || 'Teknisi AC'}
@@ -806,7 +806,7 @@ export default function Invoice() {
           </div>
 
           {/* Footer Invoice */}
-          <div className="text-center text-slate-400 text-[11px] border-t border-slate-100 dark:border-slate-800 pt-8 mt-12 space-y-1">
+          <div className="text-center text-slate-400 text-[11px] border-t border-slate-100 dark:border-white/10 pt-8 mt-12 space-y-1">
 
             <p>
               Terima kasih atas kepercayaan Anda menggunakan layanan jasa kami.
