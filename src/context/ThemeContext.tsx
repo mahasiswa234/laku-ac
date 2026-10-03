@@ -11,10 +11,17 @@ const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
 function getInitialTheme(): Theme {
   if (typeof window === 'undefined') return 'light';
+
   const stored = localStorage.getItem('theme');
-  if (stored === 'dark' || stored === 'light') return stored;
-  // Fallback ke preferensi sistem jika belum pernah diatur
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+
+  // Jika sebelumnya user sudah memilih tema,
+  // gunakan pilihan tersebut.
+  if (stored === 'dark' || stored === 'light') {
+    return stored;
+  }
+
+  // Default pertama kali selalu Light Mode.
+  return 'light';
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
@@ -22,11 +29,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const root = document.documentElement;
+
     if (theme === 'dark') {
       root.classList.add('dark');
     } else {
       root.classList.remove('dark');
     }
+
     localStorage.setItem('theme', theme);
   }, [theme]);
 
@@ -43,8 +52,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
 export function useTheme(): ThemeContextValue {
   const ctx = useContext(ThemeContext);
+
   if (!ctx) {
     throw new Error('useTheme harus digunakan di dalam <ThemeProvider>');
   }
+
   return ctx;
 }
