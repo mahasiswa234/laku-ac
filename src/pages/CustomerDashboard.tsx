@@ -801,44 +801,54 @@ export default function CustomerDashboard() {
               )}
             </button>
 
-            {/* Notification Popover Dropdown */}
-            {isNotificationOpen && (
-              <div 
-                id="popup-notifikasi-pelanggan"
-               className="fixed sm:absolute top-20 sm:top-12 right-3 sm:right-0 mt-0 sm:mt-2 w-[calc(100vw-1.5rem)] max-w-sm sm:w-96 bg-white dark:bg-black text-slate-800 dark:text-slate-200 rounded-2xl shadow-2xl border border-slate-200 dark:border-white/10 z-[100] overflow-hidden animate-in fade-in zoom-in-95 duration-150"
-                {/* Header Dropdown */}
-                <div className="p-4 border-b border-slate-100 dark:border-white/10 flex items-center justify-between bg-slate-50/80 dark:bg-black">
-                  <div className="flex items-center gap-2">
-                    <Bell size={18} className="text-blue-600 dark:text-blue-400" />
-                    <h3 className="font-bold text-sm text-slate-800 dark:text-slate-200">Notifikasi Pesanan</h3>
-                    {notifications.filter(n => !n.read).length > 0 && (
-                      <span className="text-[11px] bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-bold px-2 py-0.5 rounded-full">
-                        {notifications.filter(n => !n.read).length} baru
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    {notifications.some(n => !n.read) && (
-                      <button
-                        onClick={markAllNotificationsRead}
-                        className="text-[11px] font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 flex items-center gap-1 hover:bg-blue-50 dark:hover:bg-blue-900/30 px-2 py-1 rounded-lg transition-colors"
-                        title="Tandai semua telah dibaca"
-                      >
-                        <CheckCheck size={14} /> Tandai Dibaca
-                      </button>
-                    )}
-                    {notifications.length > 0 && (
-                      <button
-                        onClick={clearAllNotifications}
-                        className="text-[11px] text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/30 p-1.5 rounded-lg transition-colors"
-                        title="Bersihkan riwayat notifikasi"
-                      >
-                        <Trash2 size={14} />
-                      </button>
-                    )}
-                  </div>
-                </div>
+           {/* Notification Popover Dropdown */}
+{isNotificationOpen && (
+  <div
+    id="popup-notifikasi-pelanggan"
+    className="fixed sm:absolute top-20 sm:top-12 right-3 sm:right-0 mt-0 sm:mt-2 w-[calc(100vw-1.5rem)] max-w-sm sm:w-96 bg-white dark:bg-black text-slate-800 dark:text-slate-200 rounded-2xl shadow-2xl border border-slate-200 dark:border-white/10 z-[100] overflow-hidden animate-in fade-in zoom-in-95 duration-150"
+  >
+    {/* Header Dropdown */}
+    <div className="p-4 border-b border-slate-100 dark:border-white/10 flex items-center justify-between bg-slate-50/80 dark:bg-black">
+      <div className="flex items-center gap-2">
+        <Bell
+          size={18}
+          className="text-blue-600 dark:text-blue-400"
+        />
 
+        <h3 className="font-bold text-sm text-slate-800 dark:text-slate-200">
+          Notifikasi Pesanan
+        </h3>
+
+        {notifications.filter(n => !n.read).length > 0 && (
+          <span className="text-[11px] bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-bold px-2 py-0.5 rounded-full">
+            {notifications.filter(n => !n.read).length} baru
+          </span>
+        )}
+      </div>
+
+      <div className="flex items-center gap-1.5">
+        {notifications.some(n => !n.read) && (
+          <button
+            onClick={markAllNotificationsRead}
+            className="text-[11px] font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 flex items-center gap-1 hover:bg-blue-50 dark:hover:bg-blue-900/30 px-2 py-1 rounded-lg transition-colors"
+            title="Tandai semua telah dibaca"
+          >
+            <CheckCheck size={14} />
+            Tandai Dibaca
+          </button>
+        )}
+
+        {notifications.length > 0 && (
+          <button
+            onClick={clearAllNotifications}
+            className="text-[11px] text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/30 p-1.5 rounded-lg transition-colors"
+            title="Bersihkan riwayat notifikasi"
+          >
+            <Trash2 size={14} />
+          </button>
+        )}
+      </div>
+    </div>
                 {/* List Notifikasi */}
                 <div className="max-h-[360px] overflow-y-auto divide-y divide-slate-100 dark:divide-white/10">
                   {notifications.length === 0 ? (
