@@ -21,8 +21,9 @@ export default function Booking() {
     phone: '',
     area: 'Jakarta Selatan',
     address: '',
-    serviceType: 'Cuci AC',
-    service_id: '1',
+    serviceType: '',
+    service_id: '',
+    service_ids: [] as string[],
     ac_unit_id: '',
     complaint: '',
     date: new Date(Date.now() + 86400000).toISOString().split('T')[0]
@@ -64,8 +65,9 @@ export default function Booking() {
       
       // Check for preferred service from navigation state (e.g. from gallery)
       const navState = location.state as any;
-      let initialService = 'Cuci AC';
-      let initialServiceId = '1';
+      let initialService = '';
+      let initialServiceId = '';
+      let initialServiceIds: string[] = [];
       let initialNotes = '';
 
       if (navState?.preferredService) {
@@ -73,6 +75,7 @@ export default function Booking() {
         if (found) {
           initialService = found.name;
           initialServiceId = String(found.id);
+          initialServiceIds = [String(found.id)];
         }
       }
       if (navState?.preferredNotes) {
@@ -99,6 +102,7 @@ export default function Booking() {
         address: user.customer?.address || prev.address || '',
         serviceType: initialService,
         service_id: initialServiceId,
+        service_ids: initialServiceIds,
         complaint: initialNotes || prev.complaint
       }));
 
@@ -125,7 +129,8 @@ export default function Booking() {
     if (!formData.name.trim()) newErrors.name = 'Nama lengkap wajib diisi';
     if (!formData.phone.trim()) newErrors.phone = 'Nomor WhatsApp wajib diisi';
     if (!formData.address.trim()) newErrors.address = 'Alamat atau patokan lokasi wajib diisi';
-    if (!formData.serviceType) newErrors.serviceType = 'Pilih jenis layanan';
+    if (!formData.service_ids.length) newErrors.serviceType = 'Pilih minimal satu layanan';
+    if (!formData.ac_unit_id) newErrors.ac_unit_id = 'Pilih unit AC yang akan diservis';
     if (!formData.date) newErrors.date = 'Pilih tanggal kunjungan';
     return newErrors;
   };
@@ -141,7 +146,12 @@ export default function Booking() {
     setIsSubmitting(true);
 
     try {
-      const selectedService = services.find(s => s.name === formData.serviceType) || services[0];
+      const selectedServices = services.filter(s => formData.service_ids.includes(String(s.id)));
+      if (selectedServices.length === 0) {
+        setErrors({ serviceType: 'Pilih minimal satu layanan' });
+        return;
+      }
+      const selectedService = selectedServices[0];
       const fullAddress = formData.address ? `${formData.address} (${formData.area})` : formData.area;
       const combinedNotes = formData.complaint 
         ? `[Area: ${formData.area}] ${formData.complaint}`
@@ -154,7 +164,8 @@ export default function Booking() {
         customer_id: userData?.customer?.id,
         user_id: userData?.id,
         service_id: selectedService.id,
-        serviceType: selectedService.name,
+        service_ids: selectedServices.map(s => s.id),
+        serviceType: selectedServices.map(s => s.name).join(', '),
         ac_unit_id: formData.ac_unit_id ? parseInt(formData.ac_unit_id, 10) : null,
         date: formData.date,
         complaint: combinedNotes,
@@ -332,6 +343,7 @@ export default function Booking() {
                 Pilih Unit AC Terdaftar (Opsional)
               </label>
               <select
+                required
                 className="w-full px-4 py-2.5 border border-slate-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-white dark:bg-black"
                 value={formData.ac_unit_id}
                 onChange={(e) => setFormData({...formData, ac_unit_id: e.target.value})}
@@ -343,6 +355,7 @@ export default function Booking() {
                   </option>
                 ))}
               </select>
+              {errors.ac_unit_id && <p className="text-rose-500 text-xs mt-1">{errors.ac_unit_id}</p>}
             </div>
           )}
 
@@ -356,7 +369,7 @@ export default function Booking() {
                 <label 
                   key={service.id}
                   className={`p-4 rounded-2xl border text-xs cursor-pointer transition-all flex flex-col justify-between ${
-                    formData.serviceType === service.name
+                    formData.service_ids.includes(String(service.id))
                       ? 'border-blue-600 bg-blue-50/50 ring-1 ring-blue-600 text-blue-900 font-medium'
                       : 'border-slate-200 hover:border-slate-300 text-slate-700'
                   }`}
@@ -364,11 +377,16 @@ export default function Booking() {
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-2">
                       <input 
-                        type="radio" 
+                        type="checkbox" 
                         name="serviceType" 
-                        value={service.name}
-                        checked={formData.serviceType === service.name}
-                        onChange={() => setFormData({...formData, serviceType: service.name, service_id: String(service.id)})}
+                        value={service.id}
+                        checked={formData.service_ids.includes(String(service.id))}
+                        onChange={() => {
+                          const next = formData.service_ids.includes(String(service.id))
+                            ? formData.service_ids.filter(id => id !== String(service.id))
+                            : [...formData.service_ids, String(service.id)];
+                          setFormData({...formData, service_ids: next, serviceType: next.map(id => services.find(s => String(s.id) === id)?.name).filter(Boolean).join(', '), service_id: next[0] || ''});
+                        }}
                         className="text-blue-600 dark:text-blue-400"
                       />
                       <span className="font-bold text-sm text-slate-800 dark:text-slate-200">{service.name}</span>

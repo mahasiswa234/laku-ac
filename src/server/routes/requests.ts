@@ -67,8 +67,8 @@ const LIST_SELECT = `
     c.phone as customer_phone,
     c.address as customer_address,
     sr.service_id,
-    s.name as service,
-    s.base_price as service_price,
+    COALESCE((SELECT GROUP_CONCAT(CONCAT(s2.name, ' (Rp ', FORMAT(rs2.price, 0), ')') ORDER BY rs2.id SEPARATOR ', ') FROM request_services rs2 JOIN services s2 ON s2.id = rs2.service_id WHERE rs2.request_id = sr.id), s.name) as service,
+    COALESCE((SELECT SUM(rs2.price) FROM request_services rs2 WHERE rs2.request_id = sr.id), s.base_price) as service_price,
     sr.ac_unit_id,
     u.brand as ac_brand,
     u.type as ac_type,
@@ -224,8 +224,8 @@ router.get('/:id', authenticateJWT, async (req: AuthRequest, res) => {
         c.phone as customer_phone,
         c.address as customer_address,
         sr.service_id,
-        s.name as service,
-        s.base_price as service_price,
+        COALESCE((SELECT GROUP_CONCAT(CONCAT(s2.name, ' (Rp ', FORMAT(rs2.price, 0), ')') ORDER BY rs2.id SEPARATOR ', ') FROM request_services rs2 JOIN services s2 ON s2.id = rs2.service_id WHERE rs2.request_id = sr.id), s.name) as service,
+        COALESCE((SELECT SUM(rs2.price) FROM request_services rs2 WHERE rs2.request_id = sr.id), s.base_price) as service_price,
         sr.ac_unit_id,
         u.brand as ac_brand,
         u.type as ac_type,
@@ -272,6 +272,22 @@ router.get('/:id', authenticateJWT, async (req: AuthRequest, res) => {
     }
     const row = rows[0];
 
+    // Ambil rincian layanan satu per satu agar invoice tidak menggabungkan
+    // beberapa layanan berbeda menjadi satu baris dengan total gabungan.
+    const [serviceItems]: any = await db.query(
+      `SELECT rs.service_id, s.name, rs.price
+       FROM request_services rs
+       JOIN services s ON s.id = rs.service_id
+       WHERE rs.request_id = ?
+       ORDER BY rs.id ASC`,
+      [row.id]
+    );
+    row.service_items = serviceItems.map((item: any) => ({
+      service_id: Number(item.service_id),
+      name: item.name,
+      price: Number(item.price || 0)
+    }));
+
     // Otorisasi: admin semua; pelanggan hanya miliknya; teknisi hanya yang ditugaskan padanya
     const role = req.user?.role;
     if (role === 'customer') {
@@ -301,6 +317,7 @@ router.post('/', authenticateJWT, async (req: AuthRequest, res) => {
     phone,
     customer_id,
     service_id,
+    service_ids,
     serviceType,
     ac_unit_id,
     date,
@@ -335,19 +352,31 @@ router.post('/', authenticateJWT, async (req: AuthRequest, res) => {
       return res.status(403).json({ message: 'Hanya pelanggan atau admin yang dapat membuat permintaan servis.' });
     }
 
-    // 2. Tentukan layanan
-    let resolvedServiceId: number | null = service_id ? Number(service_id) : null;
-    if (resolvedServiceId) {
-      const [svcExists]: any = await db.query('SELECT id FROM services WHERE id = ? LIMIT 1', [resolvedServiceId]);
-      if (svcExists.length === 0) resolvedServiceId = null;
+    // 2. Tentukan satu atau beberapa layanan
+    let requestedServiceIds: number[] = Array.isArray(service_ids)
+      ? service_ids.map((id: any) => Number(id)).filter((id: number) => Number.isInteger(id) && id > 0)
+      : [];
+    if (requestedServiceIds.length === 0 && service_id) {
+      const legacyId = Number(service_id);
+      if (Number.isInteger(legacyId) && legacyId > 0) requestedServiceIds = [legacyId];
     }
-    if (!resolvedServiceId && serviceType) {
-      const [svcRows]: any = await db.query('SELECT id FROM services WHERE name LIKE ? LIMIT 1', [`%${serviceType}%`]);
-      if (svcRows.length > 0) resolvedServiceId = svcRows[0].id;
+    requestedServiceIds = [...new Set(requestedServiceIds)];
+    if (requestedServiceIds.length === 0 && serviceType) {
+      const names = String(serviceType).split(',').map((x: string) => x.trim()).filter(Boolean);
+      for (const name of names) {
+        const [svcRows]: any = await db.query('SELECT id FROM services WHERE name = ? LIMIT 1', [name]);
+        if (svcRows.length > 0) requestedServiceIds.push(Number(svcRows[0].id));
+      }
     }
-    if (!resolvedServiceId) {
-      return res.status(400).json({ message: 'Layanan yang dipilih tidak valid.' });
+    if (requestedServiceIds.length === 0) {
+      return res.status(400).json({ message: 'Pilih minimal satu layanan yang valid.' });
     }
+    const placeholders = requestedServiceIds.map(() => '?').join(',');
+    const [serviceRows]: any = await db.query(`SELECT id, base_price FROM services WHERE id IN (${placeholders})`, requestedServiceIds);
+    if (serviceRows.length !== requestedServiceIds.length) {
+      return res.status(400).json({ message: 'Salah satu layanan yang dipilih tidak ditemukan.' });
+    }
+    const resolvedServiceId = requestedServiceIds[0];
 
     // 3. Validasi unit AC (harus milik pelanggan yang sama)
     const parsedAcUnitId = ac_unit_id ? parseInt(ac_unit_id, 10) : null;
@@ -363,15 +392,33 @@ router.post('/', authenticateJWT, async (req: AuthRequest, res) => {
 
     // 4. Simpan
     const requestCode = generateRequestCode();
-    const [insertResult]: any = await db.query(
-      `INSERT INTO service_requests (request_code, customer_id, service_id, ac_unit_id, request_date, status, customer_notes)
-       VALUES (?, ?, ?, ?, ?, 'Menunggu', ?)`,
-      [requestCode, resolvedCustomerId, resolvedServiceId, parsedAcUnitId, requestDate, notes]
-    );
-
-    if (parsedAcUnitId) {
-      await db.query('UPDATE ac_units SET status = ? WHERE id = ?', ['Perlu Servis', parsedAcUnitId]);
+    const connection = await db.getConnection();
+    let insertResult: any;
+    try {
+      await connection.beginTransaction();
+      const [result]: any = await connection.query(
+        `INSERT INTO service_requests (request_code, customer_id, service_id, ac_unit_id, request_date, status, customer_notes)
+         VALUES (?, ?, ?, ?, ?, 'Menunggu', ?)`,
+        [requestCode, resolvedCustomerId, resolvedServiceId, parsedAcUnitId, requestDate, notes]
+      );
+      insertResult = result;
+      for (const svc of serviceRows) {
+        await connection.query(
+          'INSERT INTO request_services (request_id, service_id, price) VALUES (?, ?, ?)',
+          [insertResult.insertId, svc.id, svc.base_price]
+        );
+      }
+      if (parsedAcUnitId) {
+        await connection.query('UPDATE ac_units SET status = ? WHERE id = ?', ['Perlu Servis', parsedAcUnitId]);
+      }
+      await connection.commit();
+    } catch (txError) {
+      await connection.rollback();
+      throw txError;
+    } finally {
+      connection.release();
     }
+
 
     const [createdRows]: any = await db.query(`${LIST_SELECT} WHERE sr.id = ?`, [insertResult.insertId]);
 
@@ -653,12 +700,9 @@ router.post('/:id/upload-payment', authenticateJWT, async (req: AuthRequest, res
       return res.status(404).json({ message: 'Permintaan servis tidak ditemukan' });
     }
 
-    // Hanya pelanggan pemilik pesanan (atau admin) yang boleh mengunggah bukti
-    if (req.user?.role !== 'admin') {
-      const owned = req.user?.role === 'customer' && (await isRequestOwnedByUser(realId, req.user.userId));
-      if (!owned) {
-        return res.status(403).json({ message: 'Anda tidak berhak mengunggah bukti untuk pesanan ini.' });
-      }
+    // Hanya pelanggan pemilik pesanan yang boleh mengunggah bukti. Admin hanya memverifikasi.
+    if (req.user?.role !== 'customer' || !(await isRequestOwnedByUser(realId, req.user.userId))) {
+      return res.status(403).json({ message: 'Hanya pelanggan pemilik pesanan yang dapat mengunggah bukti pembayaran. Admin melakukan verifikasi pembayaran.' });
     }
 
     const paymentMethodVal =

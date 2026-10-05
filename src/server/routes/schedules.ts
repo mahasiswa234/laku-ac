@@ -27,7 +27,7 @@ router.get('/', async (req: AuthRequest, res) => {
         r.request_code, 
         r.status as request_status, 
         r.customer_notes, 
-        svc.name as service_type, 
+        COALESCE((SELECT GROUP_CONCAT(s2.name ORDER BY rs2.id SEPARATOR ', ') FROM request_services rs2 JOIN services s2 ON s2.id = rs2.service_id WHERE rs2.request_id = r.id), svc.name) as service_type, 
         c.full_name as customer_name, 
         c.phone as customer_phone, 
         c.address as customer_address, 
@@ -43,7 +43,7 @@ router.get('/', async (req: AuthRequest, res) => {
         sh.completed_at
       FROM service_schedules s
       JOIN service_requests r ON s.request_id = r.id
-      LEFT JOIN services svc ON r.service_id = svc.id
+      LEFT JOIN services svc ON svc.id = r.service_id
       JOIN customers c ON r.customer_id = c.id
       LEFT JOIN technicians t ON s.technician_id = t.id
       LEFT JOIN ac_units u ON r.ac_unit_id = u.id

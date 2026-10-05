@@ -221,8 +221,9 @@ export default function CustomerDashboard() {
   // Form states for Service Request
   const [requestForm, setRequestForm] = useState({
     ac_unit_id: '',
-    serviceType: 'Cuci AC',
-    service_id: '1',
+    serviceType: '',
+    service_id: '',
+    service_ids: [] as string[],
     date: new Date(Date.now() + 86400000).toISOString().split('T')[0], // Tomorrow
     notes: ''
   });
@@ -322,7 +323,10 @@ export default function CustomerDashboard() {
     }
 
     try {
-      const custId = user?.customer?.id || 1;
+      const custId = user?.customer?.id;
+      if (!custId) {
+        throw new Error('Profil pelanggan tidak ditemukan. Silakan lengkapi profil akun Anda.');
+      }
 
       // 1. Fetch units
       const unitUrl = `/api/ac-units?customer_id=${custId}`;
@@ -542,17 +546,27 @@ export default function CustomerDashboard() {
       setRequestError('Tanggal kunjungan servis wajib dipilih');
       return;
     }
+    if (!requestForm.ac_unit_id) {
+      setRequestError('Unit AC wajib dipilih');
+      return;
+    }
+    if (!requestForm.service_ids.length) {
+      setRequestError('Pilih minimal satu layanan');
+      return;
+    }
 
     setRequestSubmitting(true);
     try {
-      const selectedService = servicesList.find(s => s.name === requestForm.serviceType) || servicesList[0];
+      const selectedServices = servicesList.filter(s => requestForm.service_ids.includes(String(s.id)));
+      const selectedService = selectedServices[0];
       const payload = {
         user_id: userData?.id,
         customer_id: userData?.customer?.id,
         name: userData?.customer?.full_name || userData?.email?.split('@')[0] || 'Pelanggan',
         phone: userData?.customer?.phone || '08123456789',
         service_id: selectedService.id,
-        serviceType: selectedService.name,
+        service_ids: selectedServices.map(s => s.id),
+        serviceType: selectedServices.map(s => s.name).join(', '),
         ac_unit_id: requestForm.ac_unit_id ? parseInt(requestForm.ac_unit_id, 10) : null,
         date: requestForm.date,
         complaint: requestForm.notes,
@@ -570,8 +584,9 @@ export default function CustomerDashboard() {
         setIsRequestModalOpen(false);
         setRequestForm({
           ac_unit_id: '',
-          serviceType: 'Cuci AC',
-          service_id: '1',
+          serviceType: '',
+          service_id: '',
+          service_ids: [],
           date: new Date(Date.now() + 86400000).toISOString().split('T')[0],
           notes: ''
         });
@@ -1524,18 +1539,23 @@ export default function CustomerDashboard() {
                     <label 
                       key={s.id}
                       className={`flex items-center justify-between p-3 rounded-xl border text-xs cursor-pointer transition-all ${
-                        requestForm.serviceType === s.name 
+                        requestForm.service_ids.includes(String(s.id)) 
                           ? 'border-indigo-600 bg-indigo-50/60 font-semibold text-indigo-900 ring-1 ring-indigo-600' 
                           : 'border-slate-200 hover:border-slate-300 text-slate-700'
                       }`}
                     >
                       <div className="flex items-center gap-2">
                         <input
-                          type="radio"
+                          type="checkbox"
                           name="serviceType"
-                          value={s.name}
-                          checked={requestForm.serviceType === s.name}
-                          onChange={() => setRequestForm({ ...requestForm, serviceType: s.name, service_id: String(s.id) })}
+                          value={s.id}
+                          checked={requestForm.service_ids.includes(String(s.id))}
+                          onChange={() => {
+                            const next = requestForm.service_ids.includes(String(s.id))
+                              ? requestForm.service_ids.filter(id => id !== String(s.id))
+                              : [...requestForm.service_ids, String(s.id)];
+                            setRequestForm({ ...requestForm, service_ids: next, serviceType: next.map(id => servicesList.find(s => String(s.id) === id)?.name).filter(Boolean).join(', '), service_id: next[0] || '' });
+                          }}
                           className="text-indigo-600 dark:text-indigo-400"
                         />
                         <span>{s.name}</span>
