@@ -235,94 +235,128 @@ if (isAuthorized === null) {
       
       <div className="bg-white dark:bg-black p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200/80 dark:border-white/10 max-w-sm w-full text-center transition-colors duration-300">
 
-        {/* KIPAS AC */}
+ {/* KIPAS AC - BALING-BALING */}
 <div className="relative w-24 h-24 mx-auto">
-
   <svg
     viewBox="0 0 200 200"
     className="w-full h-full animate-spin"
-    style={{ animationDuration: "0.8s" }}
+    style={{ animationDuration: "1s" }}
   >
-    {/* Bilah kipas */}
-    <g fill="currentColor" className="text-blue-500 dark:text-blue-400">
+    <defs>
+      <linearGradient id="bladeGrad" x1="0" y1="1" x2="1" y2="0">
+        <stop offset="0%" stopColor="#1d4ed8" />
+        <stop offset="50%" stopColor="#2563eb" />
+        <stop offset="100%" stopColor="#3b82f6" />
+      </linearGradient>
 
-      {/* Bilah atas */}
+      <radialGradient id="hubGrad" cx="35%" cy="30%" r="80%">
+        <stop offset="0%" stopColor="#93c5fd" />
+        <stop offset="60%" stopColor="#2563eb" />
+        <stop offset="100%" stopColor="#1e40af" />
+      </radialGradient>
+
+      <radialGradient id="capGrad" cx="35%" cy="30%" r="80%">
+        <stop offset="0%" stopColor="#f5f5f4" />
+        <stop offset="50%" stopColor="#a8a29e" />
+        <stop offset="100%" stopColor="#57534e" />
+      </radialGradient>
+
+      {/* Bentuk bilah lebih gemuk: sisi kiri sangat cembung,
+          sisi kanan cekung menyapu ke hub, ujung membulat */}
       <path
+        id="bladeShape"
         d="
-          M100 100
-          C78 88, 55 73, 55 48
-          C55 22, 78 8, 105 12
-          C132 16, 153 35, 150 55
-          C147 72, 130 77, 117 82
-          C108 86, 103 94, 100 100
+          M90 90
+          C77 68 75 40 90 20
+          C104 4 138 2 158 13
+          C170 21 168 37 156 49
+          C142 63 122 68 116 82
+          C113 89 109 93 104 96
           Z
         "
       />
 
-      {/* Bilah kanan bawah */}
-      <path
-        d="
-          M100 100
-          C112 105, 130 110, 151 103
-          C174 95, 192 108, 194 134
-          C196 160, 178 180, 153 183
-          C128 186, 113 169, 113 151
-          C113 136, 118 123, 113 113
-          C109 106, 104 102, 100 100
-          Z
-        "
-        transform="rotate(120 100 100)"
-      />
+      <clipPath id="bladeClip">
+        <use href="#bladeShape" />
+      </clipPath>
 
-      {/* Bilah kiri bawah */}
-      <path
-        d="
-          M100 100
-          C88 105, 70 110, 49 103
-          C26 95, 8 108, 6 134
-          C4 160, 22 180, 47 183
-          C72 186, 87 169, 87 151
-          C87 136, 82 123, 87 113
-          C91 106, 96 102, 100 100
-          Z
-        "
-        transform="rotate(240 100 100)"
-      />
+      <g id="blade">
+        <use href="#bladeShape" fill="url(#bladeGrad)" />
 
-    </g>
+        <g clipPath="url(#bladeClip)">
+          {/* Area gelap di sisi cekung */}
+          <path
+            d="
+              M116 84
+              C124 66 146 58 158 42
+              C168 30 166 18 156 12
+              C158 34 136 54 110 74
+              Z
+            "
+            fill="#1e3a8a"
+            opacity="0.4"
+          />
 
-    {/* Rumah / bagian tengah kipas */}
+          {/* Area gelap dekat pangkal */}
+          <path
+            d="M90 92 C86 76 94 66 108 62 C106 74 110 86 104 98 Z"
+            fill="#1e3a8a"
+            opacity="0.35"
+          />
+
+          {/* Kilau panjang di sisi cembung */}
+          <path
+            d="
+              M93 82
+              C86 62 88 42 98 28
+              C107 15 124 9 142 12
+              C120 20 108 36 104 56
+              C102 68 99 76 93 82
+              Z
+            "
+            fill="white"
+            opacity="0.4"
+          />
+
+          {/* Kilau kecil dekat ujung */}
+          <ellipse
+            cx="124"
+            cy="22"
+            rx="10"
+            ry="4.5"
+            transform="rotate(-18 124 22)"
+            fill="white"
+            opacity="0.35"
+          />
+        </g>
+      </g>
+    </defs>
+
+    {/* 4 BILAH */}
+    <use href="#blade" />
+    <use href="#blade" transform="rotate(90 100 100)" />
+    <use href="#blade" transform="rotate(180 100 100)" />
+    <use href="#blade" transform="rotate(270 100 100)" />
+
+    {/* HUB TENGAH */}
+    <circle cx="100" cy="100" r="25" fill="url(#hubGrad)" />
     <circle
       cx="100"
       cy="100"
-      r="28"
-      fill="white"
-      className="dark:fill-black"
-    />
-
-    {/* Ring tengah */}
-    <circle
-      cx="100"
-      cy="100"
-      r="28"
+      r="25"
       fill="none"
-      stroke="currentColor"
-      strokeWidth="3"
-      className="text-blue-600 dark:text-blue-400"
+      stroke="#1e3a8a"
+      strokeWidth="1.5"
+      opacity="0.5"
     />
+    <ellipse cx="91" cy="89" rx="10" ry="6" fill="white" opacity="0.3" />
 
-    {/* Poros */}
-    <circle
-      cx="100"
-      cy="100"
-      r="5"
-      fill="currentColor"
-      className="text-slate-400 dark:text-slate-500"
-    />
+    {/* Cincin dan baut logam */}
+    <circle cx="100" cy="100" r="13" fill="#1e40af" />
+    <circle cx="100" cy="100" r="10" fill="url(#capGrad)" />
+    <circle cx="97" cy="97" r="3" fill="white" opacity="0.6" />
   </svg>
-
 </div>
-
         <div className="mt-5">
           <h3 className="text-sm font-bold text-slate-800 dark:text-slate-200">
             Verifikasi Keamanan...
