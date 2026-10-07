@@ -1,200 +1,658 @@
-import React from 'react';
-import { Check, ArrowRight, ShieldCheck, Clock, Sparkles } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useMemo, useState } from 'react';
+import {
+  ArrowRight,
+  Package,
+  Snowflake,
+  Wind,
+  Fan
+} from 'lucide-react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+
+type Product = {
+  id: number;
+  product_code: string;
+  name: string;
+  category: 'indoor' | 'outdoor' | 'freon';
+  brand: string;
+  description?: string;
+  price: number;
+  image_url?: string | null;
+};
+
+const labels = {
+  indoor: 'Unit Indoor',
+  outdoor: 'Unit Outdoor',
+  freon: 'Freon'
+};
+
+const getProductImage = (product: Product) => {
+  return product.image_url || '';
+};
 
 export default function Pricing() {
   const navigate = useNavigate();
+  const [params] = useSearchParams();
 
-  const services = [
-    {
-      name: 'Cuci AC Standard & Steam',
-      price: '75.000',
-      unit: '/ unit',
-      badge: 'Terpopuler',
-      description: 'Pembersihan rutin untuk menjaga performa AC agar tetap dingin, higienis, dan awet.',
-      features: [
-        'Cuci filter udara & cover indoor',
-        'Steam evaporator indoor bertekanan',
-        'Cuci kondensor outdoor',
-        'Pembersihan talang air anti bocor',
-        'Cek tekanan freon & ampere listrik',
-        'Garansi servis 14 hari'
-      ]
-    },
-    {
-      name: 'Service AC / Perbaikan',
-      price: '150.000',
-      unit: '/ tindakan',
-      badge: 'Solusi Tuntas',
-      description: 'Penanganan kerusakan komponen seperti AC bocor air, berisik, atau mati total.',
-      features: [
-        'Diagnosa menyeluruh kerusakan',
-        'Perbaikan pipa bocor / kondensasi',
-        'Penggantian kapasitor / modul PCB',
-        'Pengecekan kelistrikan & kompresor',
-        'Uji suhu dingin maksimal',
-        'Garansi pengerjaan 30 hari'
-      ]
-    },
-    {
-      name: 'Isi Freon (R32 / R410A / R22)',
-      price: '150.000',
-      unit: '/ unit',
-      badge: 'Freon Murni',
-      description: 'Penambahan atau isi ulang freon murni berstandar pabrik agar ruangan kembali dingin beku.',
-      features: [
-        'Cek kebocoran nepel & sambungan',
-        'Pengukuran manifold gauge presisi',
-        'Isi / tambah freon murni berkualitas',
-        'Pengecekan ampere beban kompresor',
-        'Garansi tekanan freon 30 hari'
-      ]
-    },
-    {
-      name: 'Bongkar Pasang AC',
-      price: '300.000',
-      unit: '/ unit',
-      badge: 'Instalasi Presisi',
-      description: 'Jasa pemindahan unit AC lama ke lokasi baru atau instalasi AC baru bergaransi.',
-      features: [
-        'Pump down simpan freon aman',
-        'Bongkar unit indoor & outdoor rapi',
-        'Pasang braket kokoh dengan waterpass',
-        'Vakum instalasi pipa tembaga',
-        'Testing operasional dingin',
-        'Garansi instalasi 30 hari'
-      ]
-    }
-  ];
+  const initial =
+    params.get('kategori') as keyof typeof labels | null;
 
-  const handleBooking = (serviceName: string) => {
-    const userStr = localStorage.getItem('user');
-    let user = null;
-    if (userStr) {
-      try {
-        user = JSON.parse(userStr);
-      } catch (e) {
-        user = null;
-      }
-    }
+  const [category, setCategory] = useState<
+    'semua' | 'indoor' | 'outdoor' | 'freon'
+  >(
+    initial && labels[initial]
+      ? initial
+      : 'semua'
+  );
 
-    if (user && user.role === 'customer') {
-      navigate('/pelanggan/pesan', {
-        state: {
-          preferredService: serviceName,
-          preferredNotes: `Pemesanan dari halaman Harga: ${serviceName}`
-        }
-      });
+  const [products, setProducts] = useState<Product[]>([]);
+
+  /* =====================================================
+     LOAD PRODUCTS
+  ===================================================== */
+  useEffect(() => {
+    fetch('/api/products')
+      .then((r) => r.json())
+      .then((data) =>
+        setProducts(Array.isArray(data) ? data : [])
+      )
+      .catch(() => setProducts([]));
+  }, []);
+
+  /* =====================================================
+     SYNC CATEGORY WITH URL
+  ===================================================== */
+  useEffect(() => {
+    const c = params.get('kategori') as any;
+
+    if (['indoor', 'outdoor', 'freon'].includes(c)) {
+      setCategory(c);
     } else {
-      navigate('/login', {
-        state: {
-          message: `Silakan masuk atau daftar terlebih dahulu untuk memesan paket ${serviceName}.`,
-          redirectTo: '/pelanggan/pesan'
-        }
-      });
+      setCategory('semua');
     }
+  }, [params]);
+
+  /* =====================================================
+     FILTER PRODUCTS
+  ===================================================== */
+  const filtered = useMemo(
+    () =>
+      category === 'semua'
+        ? products
+        : products.filter(
+            (p) => p.category === category
+          ),
+    [products, category]
+  );
+
+  /* =====================================================
+     SELECT CATEGORY
+  ===================================================== */
+  const selectCategory = (c: any) => {
+    setCategory(c);
+
+    navigate(
+      c === 'semua'
+        ? '/produk'
+        : `/produk?kategori=${c}`,
+      {
+        replace: true
+      }
+    );
   };
 
   return (
-    <div className="py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      <div className="text-center mb-12 max-w-3xl mx-auto space-y-3">
-        
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
-          Daftar Harga & Paket Layanan AC
+    <div className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+
+      {/* =====================================================
+          HEADER
+      ===================================================== */}
+      <div
+        className="
+          text-center
+          max-w-3xl
+          mx-auto
+          mb-10
+          animate-[fadeInUp_0.7s_ease-out]
+        "
+      >
+        <div
+          className="
+            inline-flex
+            items-center
+            gap-2
+            px-3
+            py-1
+            rounded-full
+            bg-blue-50
+            dark:bg-blue-950/40
+            text-blue-700
+            dark:text-blue-300
+            text-xs
+            font-bold
+            mb-3
+            transition-all
+            duration-300
+            hover:scale-105
+            hover:shadow-md
+          "
+        >
+          <Package
+            size={14}
+            className="transition-transform duration-500 hover:rotate-12"
+          />
+
+          Katalog Produk
+        </div>
+
+        <h1
+          className="
+            text-3xl
+            sm:text-4xl
+            font-extrabold
+            text-slate-900
+            dark:text-slate-100
+          "
+        >
+          Produk Laku AC
         </h1>
-        <p className="text-slate-600 dark:text-slate-400 text-base leading-relaxed">
-          Semua harga transparan tanpa biaya tersembunyi. Dikerjakan oleh teknisi bersertifikat menggunakan peralatan standar pabrikan dan bergaransi resmi.
+
+        <p
+          className="
+            text-slate-600
+            dark:text-slate-400
+            mt-3
+          "
+        >
+          Pilih unit indoor, unit outdoor, atau freon
+          berdasarkan merk dan harga yang tersedia.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {services.map((service, index) => (
-          <div
-            key={index}
-            className="bg-white dark:bg-black rounded-3xl shadow-sm border border-slate-200/80 dark:border-white/10 overflow-hidden flex flex-col justify-between hover:shadow-xl hover:border-blue-200 dark:hover:border-blue-800 transition-all duration-300 relative group"
+      {/* =====================================================
+          CATEGORY FILTER
+      ===================================================== */}
+      <div
+        className="
+          flex
+          flex-wrap
+          justify-center
+          gap-2
+          mb-8
+        "
+      >
+        {(
+          ['semua', 'indoor', 'outdoor', 'freon'] as const
+        ).map((c, index) => (
+          <button
+            key={c}
+            onClick={() => selectCategory(c)}
+            style={{
+              animationDelay: `${index * 80}ms`
+            }}
+            className={`
+              px-4
+              py-2
+              rounded-xl
+              text-sm
+              font-semibold
+              transition-all
+              duration-300
+              hover:-translate-y-1
+              hover:shadow-md
+              active:scale-95
+              animate-[fadeInUp_0.5s_ease-out_both]
+
+              ${
+                category === c
+                  ? `
+                    bg-blue-600
+                    text-white
+                    shadow-md
+                    shadow-blue-500/30
+                    scale-105
+                  `
+                  : `
+                    bg-white
+                    dark:bg-black
+                    border
+                    border-slate-200
+                    dark:border-white/10
+                    text-slate-600
+                    dark:text-slate-300
+                    hover:border-blue-400
+                    hover:text-blue-600
+                    dark:hover:text-blue-400
+                  `
+              }
+            `}
           >
-            <div>
-              <div className="p-6 border-b border-slate-100 dark:border-white/10 bg-slate-50/70 dark:bg-black">
-                <div className="flex items-center justify-between gap-2 mb-2">
-                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
-                    {service.badge}
-                  </span>
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                  {service.name}
-                </h3>
-                <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed min-h-[36px]">
-                  {service.description}
-                </p>
-                <div className="mt-4 flex items-baseline text-blue-600 dark:text-blue-400">
-                  <span className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-                    Rp {service.price}
-                  </span>
-                  <span className="ml-1 text-xs font-medium text-slate-400">
-                    {service.unit}
-                  </span>
-                </div>
-              </div>
-
-              <div className="p-6">
-                <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide block mb-3">
-                  Fitur & Jaminan Layanan:
-                </span>
-                <ul className="space-y-2.5">
-                  {service.features.map((feature, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-xs text-slate-600 dark:text-slate-400">
-                      <Check className="h-4 w-4 text-emerald-500 dark:text-emerald-400 shrink-0 mt-0.5" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            <div className="p-6 pt-0">
-              <button
-                onClick={() => handleBooking(service.name)}
-                className="w-full py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-sm shadow-blue-500/20 transition-all inline-flex items-center justify-center gap-2 cursor-pointer active:scale-95"
-              >
-                <span>Pesan Paket Ini</span>
-                <ArrowRight size={14} />
-              </button>
-            </div>
-          </div>
+            {c === 'semua'
+              ? 'Semua Produk'
+              : labels[c]}
+          </button>
         ))}
       </div>
 
-<div className="mt-12 rounded-2xl p-6 sm:p-8 text-center 
-  bg-gradient-to-r from-blue-50 to-indigo-50 
-  dark:from-slate-800 dark:via-slate-800 dark:to-indigo-950
-  border border-blue-100/80 dark:border-white/10 
-  flex flex-col sm:flex-row items-center justify-between gap-4
-  transition-colors duration-300"
->
-  <div className="text-left space-y-1">
-    <h4 className="font-bold text-slate-800 dark:text-white text-base">
-      Butuh penawaran untuk gedung kantor atau unit dalam jumlah banyak?
-    </h4>
+      {/* =====================================================
+          PRODUCT LIST
+      ===================================================== */}
+      {filtered.length === 0 ? (
+        <div
+          className="
+            py-16
+            text-center
+            text-slate-500
+            animate-[fadeInUp_0.5s_ease-out]
+          "
+        >
+          Produk belum tersedia.
+        </div>
+      ) : (
+        <div
+          className="
+            grid
+            grid-cols-1
+            sm:grid-cols-2
+            lg:grid-cols-3
+            gap-6
+          "
+        >
+          {filtered.map((p, index) => (
+            <article
+              key={p.id}
+              style={{
+                animationDelay: `${index * 100}ms`
+              }}
+              className="
+                group
+                bg-white
+                dark:bg-black
+                rounded-3xl
+                border
+                border-slate-200/80
+                dark:border-white/10
+                overflow-hidden
+                shadow-sm
+                hover:shadow-xl
+                hover:-translate-y-2
+                transition-all
+                duration-500
+                ease-out
+                animate-[fadeInUp_0.6s_ease-out_both]
+              "
+            >
 
-    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300">
-      Dapatkan tarif khusus korporat dan survei teknisi gratis ke lokasi Anda.
-    </p>
-  </div>
+              {/* =====================================================
+                  PRODUCT IMAGE
+              ===================================================== */}
+              <div
+                className="
+                  h-56
+                  bg-slate-50
+                  dark:bg-black
+                  flex
+                  items-center
+                  justify-center
+                  p-5
+                  overflow-hidden
+                "
+              >
+                <img
+                  src={
+                    p.image_url ||
+                    fallbackImages[p.category]
+                  }
+                  alt={`${p.brand} ${p.name}`}
+                  className="
+                    h-full
+                    w-full
+                    object-contain
+                    transform
+                    transition-all
+                    duration-700
+                    ease-out
+                    group-hover:scale-110
+                  "
+                />
+              </div>
 
-  <Link
-    to="/kontak"
-    className="px-6 py-2.5 rounded-xl 
-      bg-blue-600 hover:bg-blue-700 
-      dark:bg-blue-500 dark:hover:bg-blue-600
-      text-white font-semibold text-xs 
-      shadow-sm whitespace-nowrap 
-      transition-colors duration-300"
-  >
-    Hubungi Tim Kami
-  </Link>
-</div>
+              {/* =====================================================
+                  PRODUCT INFORMATION
+              ===================================================== */}
+              <div className="p-6">
 
+                <div
+                  className="
+                    flex
+                    items-center
+                    justify-between
+                    gap-2
+                    mb-2
+                  "
+                >
+                  <span
+                    className="
+                      text-[11px]
+                      uppercase
+                      font-bold
+                      px-2.5
+                      py-1
+                      rounded-full
+                      bg-blue-50
+                      dark:bg-blue-900/30
+                      text-blue-700
+                      dark:text-blue-300
+                      transition-all
+                      duration-300
+                      group-hover:bg-blue-100
+                      dark:group-hover:bg-blue-900/50
+                    "
+                  >
+                    {labels[p.category]}
+                  </span>
 
+                  <span
+                    className="
+                      text-[11px]
+                      text-slate-400
+                    "
+                  >
+                    {p.product_code}
+                  </span>
+                </div>
+
+                <h2
+                  className="
+                    text-xl
+                    font-bold
+                    text-slate-900
+                    dark:text-slate-100
+                    transition-colors
+                    duration-300
+                    group-hover:text-blue-600
+                    dark:group-hover:text-blue-400
+                  "
+                >
+                  {p.brand}
+                </h2>
+
+                <h3
+                  className="
+                    font-semibold
+                    text-slate-700
+                    dark:text-slate-300
+                    mt-1
+                  "
+                >
+                  {p.name}
+                </h3>
+
+                <p
+                  className="
+                    text-xs
+                    text-slate-500
+                    dark:text-slate-400
+                    mt-2
+                    min-h-8
+                  "
+                >
+                  {p.description}
+                </p>
+
+                {/* =====================================================
+                    PRICE + BUTTON
+                ===================================================== */}
+                <div
+                  className="
+                    mt-5
+                    flex
+                    items-end
+                    justify-between
+                    gap-3
+                  "
+                >
+                  <div>
+                    <p
+                      className="
+                        text-[11px]
+                        text-slate-400
+                      "
+                    >
+                      Harga
+                    </p>
+
+                    <p
+                      className="
+                        text-2xl
+                        font-extrabold
+                        text-blue-600
+                        dark:text-blue-400
+                        transition-transform
+                        duration-300
+                        group-hover:scale-105
+                        origin-left
+                      "
+                    >
+                      Rp{' '}
+                      {Number(
+                        p.price
+                      ).toLocaleString('id-ID')}
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() =>
+                      navigate(
+                        '/pelanggan/pesan',
+                        {
+                          state: {
+                            preferredProductCategory:
+                              p.category,
+
+                            preferredProductId:
+                              String(p.id),
+
+                            preferredNotes:
+                              `Produk ${p.brand} ${p.name}`
+                          }
+                        }
+                      )
+                    }
+                    className="
+                      px-4
+                      py-2.5
+                      rounded-xl
+                      bg-blue-600
+                      hover:bg-blue-700
+                      text-white
+                      text-xs
+                      font-bold
+                      inline-flex
+                      items-center
+                      gap-2
+                      transition-all
+                      duration-300
+                      hover:scale-105
+                      hover:shadow-lg
+                      hover:shadow-blue-500/30
+                      active:scale-95
+                      group/btn
+                    "
+                  >
+                    Pilih
+
+                    <ArrowRight
+                      size={14}
+                      className="
+                        transition-transform
+                        duration-300
+                        group-hover/btn:translate-x-1
+                      "
+                    />
+                  </button>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+
+      {/* =====================================================
+          CATEGORY INFORMATION
+      ===================================================== */}
+      <div
+        className="
+          mt-12
+          grid
+          grid-cols-1
+          md:grid-cols-3
+          gap-4
+        "
+      >
+
+        {/* UNIT INDOOR */}
+        <div
+          className="
+            group
+            p-5
+            rounded-2xl
+            bg-blue-50
+            dark:bg-blue-950/30
+            transition-all
+            duration-300
+            hover:-translate-y-2
+            hover:shadow-lg
+            animate-[fadeInUp_0.6s_ease-out]
+          "
+        >
+          <Wind
+            className="
+              text-blue-600
+              mb-2
+              transition-transform
+              duration-500
+              group-hover:scale-110
+              group-hover:rotate-6
+            "
+          />
+
+          <b
+            className="
+              text-slate-900
+              dark:text-slate-100
+            "
+          >
+            Unit Indoor
+          </b>
+
+          <p
+            className="
+              text-xs
+              text-slate-500
+              dark:text-slate-400
+              mt-1
+            "
+          >
+            Pilihan unit indoor berdasarkan merk.
+          </p>
+        </div>
+
+        {/* UNIT OUTDOOR */}
+        <div
+          className="
+            group
+            p-5
+            rounded-2xl
+            bg-slate-100
+            dark:bg-slate-900
+            transition-all
+            duration-300
+            hover:-translate-y-2
+            hover:shadow-lg
+            animate-[fadeInUp_0.7s_ease-out]
+          "
+        >
+          <Fan
+            className="
+              text-slate-600
+              dark:text-slate-300
+              mb-2
+              transition-transform
+              duration-500
+              group-hover:scale-110
+              group-hover:rotate-12
+            "
+          />
+
+          <b
+            className="
+              text-slate-900
+              dark:text-slate-100
+            "
+          >
+            Unit Outdoor
+          </b>
+
+          <p
+            className="
+              text-xs
+              text-slate-500
+              dark:text-slate-400
+              mt-1
+            "
+          >
+            Pilihan unit outdoor berdasarkan merk.
+          </p>
+        </div>
+
+        {/* FREON */}
+        <div
+          className="
+            group
+            p-5
+            rounded-2xl
+            bg-cyan-50
+            dark:bg-cyan-950/30
+            transition-all
+            duration-300
+            hover:-translate-y-2
+            hover:shadow-lg
+            animate-[fadeInUp_0.8s_ease-out]
+          "
+        >
+          <Snowflake
+            className="
+              text-cyan-600
+              mb-2
+              transition-transform
+              duration-500
+              group-hover:scale-110
+              group-hover:rotate-12
+            "
+          />
+
+          <b
+            className="
+              text-slate-900
+              dark:text-slate-100
+            "
+          >
+            Freon
+          </b>
+
+          <p
+            className="
+              text-xs
+              text-slate-500
+              dark:text-slate-400
+              mt-1
+            "
+          >
+            Jenis freon sesuai kebutuhan unit AC.
+          </p>
+        </div>
+
+      </div>
     </div>
   );
 }

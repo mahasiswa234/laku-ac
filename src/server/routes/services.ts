@@ -4,9 +4,18 @@ import { authenticateJWT, authorizeRoles } from '../middleware/authMiddleware.js
 
 const router = Router();
 
+async function ensureReplacementServices() {
+  await db.query(`
+    INSERT IGNORE INTO services (service_code, name, category, base_price, status) VALUES
+    ('SVC-006', 'Ganti Unit Indoor', 'Instalasi', 500000, 'Aktif'),
+    ('SVC-007', 'Ganti Unit Outdoor', 'Instalasi', 500000, 'Aktif')
+  `);
+}
+
 // GET all services (Publik)
 router.get('/', async (req, res) => {
   try {
+    await ensureReplacementServices();
     const [rows] = await db.query('SELECT * FROM services ORDER BY created_at DESC');
     res.json(rows);
   } catch (error) {

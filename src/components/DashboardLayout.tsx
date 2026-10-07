@@ -19,6 +19,7 @@ import {
 } from '../utils/auth';
 import { COMPANY_INFO } from '../config/companyInfo.js';
 import ThemeToggle from './ThemeToggle';
+import ACLoading from "./ACLoading";
 
 export default function DashboardLayout({
   role = 'customer'
@@ -226,44 +227,122 @@ export default function DashboardLayout({
   };
 
   // ===============================
-  // LOADING / AUTHENTICATION CHECK
-  // ===============================
-  if (isAuthorized === null || !isAuthorized) {
-    return (
-      <div className="min-h-screen bg-slate-100 dark:bg-black flex items-center justify-center p-4 transition-colors duration-300">
+// LOADING / AUTHENTICATION CHECK
+// ===============================
+if (isAuthorized === null) {
+  return (
+    <div className="min-h-screen bg-slate-100 dark:bg-black flex items-center justify-center p-4 transition-colors duration-300">
+      
+      <div className="bg-white dark:bg-black p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200/80 dark:border-white/10 max-w-sm w-full text-center transition-colors duration-300">
 
-        <div className="bg-white dark:bg-black p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200/80 dark:border-white/10 max-w-sm w-full text-center space-y-4 transition-colors duration-300">
+        {/* KIPAS AC */}
+<div className="relative w-24 h-24 mx-auto">
 
-          <div className="relative w-12 h-12 mx-auto">
+  <svg
+    viewBox="0 0 200 200"
+    className="w-full h-full animate-spin"
+    style={{ animationDuration: "0.8s" }}
+  >
+    {/* Bilah kipas */}
+    <g fill="currentColor" className="text-blue-500 dark:text-blue-400">
 
-            <div className="w-12 h-12 border-3 border-blue-600/20 border-t-blue-600 rounded-full animate-spin"></div>
+      {/* Bilah atas */}
+      <path
+        d="
+          M100 100
+          C78 88, 55 73, 55 48
+          C55 22, 78 8, 105 12
+          C132 16, 153 35, 150 55
+          C147 72, 130 77, 117 82
+          C108 86, 103 94, 100 100
+          Z
+        "
+      />
 
-            <div className="absolute inset-0 flex items-center justify-center text-blue-600 dark:text-blue-400">
-              <Wrench size={18} />
-            </div>
+      {/* Bilah kanan bawah */}
+      <path
+        d="
+          M100 100
+          C112 105, 130 110, 151 103
+          C174 95, 192 108, 194 134
+          C196 160, 178 180, 153 183
+          C128 186, 113 169, 113 151
+          C113 136, 118 123, 113 113
+          C109 106, 104 102, 100 100
+          Z
+        "
+        transform="rotate(120 100 100)"
+      />
 
-          </div>
+      {/* Bilah kiri bawah */}
+      <path
+        d="
+          M100 100
+          C88 105, 70 110, 49 103
+          C26 95, 8 108, 6 134
+          C4 160, 22 180, 47 183
+          C72 186, 87 169, 87 151
+          C87 136, 82 123, 87 113
+          C91 106, 96 102, 100 100
+          Z
+        "
+        transform="rotate(240 100 100)"
+      />
 
-          <div>
-            <h3 className="text-sm font-bold text-slate-800 dark:text-slate-200">
-              Verifikasi Keamanan...
-            </h3>
+    </g>
 
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              Memvalidasi token otentikasi JWT dan hak akses dashboard...
-            </p>
-          </div>
+    {/* Rumah / bagian tengah kipas */}
+    <circle
+      cx="100"
+      cy="100"
+      r="28"
+      fill="white"
+      className="dark:fill-black"
+    />
 
+    {/* Ring tengah */}
+    <circle
+      cx="100"
+      cy="100"
+      r="28"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="3"
+      className="text-blue-600 dark:text-blue-400"
+    />
+
+    {/* Poros */}
+    <circle
+      cx="100"
+      cy="100"
+      r="5"
+      fill="currentColor"
+      className="text-slate-400 dark:text-slate-500"
+    />
+  </svg>
+
+</div>
+
+        <div className="mt-5">
+          <h3 className="text-sm font-bold text-slate-800 dark:text-slate-200">
+            Verifikasi Keamanan...
+          </h3>
+
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+            Memvalidasi hak akses dashboard...
+          </p>
         </div>
 
       </div>
-    );
-  }
 
-  const menuItems = getMenu();
+    </div>
+  );
+}
 
-  return (
-    <div className="min-h-screen bg-slate-50 dark:bg-black flex transition-colors duration-300">
+const menuItems = getMenu();
+
+return (
+  <div className="min-h-screen bg-slate-50 dark:bg-black flex transition-colors duration-300">
 
       {/* =======================================
           SIDEBAR DESKTOP

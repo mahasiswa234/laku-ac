@@ -27,6 +27,7 @@ interface ServiceRequest {
   customer_address?: string;
   service: string;
   service_price?: number;
+  product_summary?: string;
   date: string;
   status: string;
   ac_brand?: string;
@@ -459,6 +460,9 @@ export default function AdminOrders() {
                       <p className="font-semibold text-slate-700 dark:text-slate-300 text-sm">{req.service}</p>
                       {req.ac_brand && (
                         <p className="text-xs text-slate-500 dark:text-slate-400">Unit: {req.ac_brand} ({req.ac_location || 'AC'})</p>
+                      )}
+                      {req.product_summary && (
+                        <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-1">Produk: {req.product_summary}</p>
                       )}
                       <p className="text-[11px] text-blue-600 dark:text-blue-400 font-medium">
                         Tarif: Rp {Number(req.service_price || 75000).toLocaleString('id-ID')}

@@ -47,6 +47,7 @@ interface ServiceRequest {
   customer: string;
   service: string;
   service_price?: number;
+  product_summary?: string;
   ac_unit_id?: number;
   ac_brand?: string;
   ac_type?: string;
@@ -230,13 +231,9 @@ export default function CustomerDashboard() {
   const [requestSubmitting, setRequestSubmitting] = useState(false);
   const [requestError, setRequestError] = useState('');
 
-  const servicesList = [
-    { id: 1, name: 'Cuci AC', price: 75000, category: 'Perawatan' },
-    { id: 2, name: 'Service AC / Perbaikan', price: 150000, category: 'Perbaikan' },
-    { id: 3, name: 'Tambah / Isi Refrigerant', price: 150000, category: 'Perawatan' },
-    { id: 4, name: 'Bongkar Pasang AC', price: 300000, category: 'Instalasi' },
-    { id: 5, name: 'Pengecekan AC', price: 50000, category: 'Pemeriksaan' }
-  ];
+  const [servicesList, setServicesList] = useState<any[]>([]);
+  const [products, setProducts] = useState<any[]>([]);
+  const [selectedProductId, setSelectedProductId] = useState('');
 
   // Auto-close notification dropdown when clicking outside
   useEffect(() => {
@@ -312,6 +309,11 @@ export default function CustomerDashboard() {
     }
 
     setUserData(currentUser);
+    try {
+      const [sr, pr] = await Promise.all([fetch('/api/services'), fetch('/api/products')]);
+      if (sr.ok) { const data = await sr.json(); setServicesList((Array.isArray(data)?data:[]).filter((x:any)=>x.status==='Aktif').map((x:any)=>({...x,price:Number(x.base_price)}))); }
+      if (pr.ok) { const data = await pr.json(); setProducts((Array.isArray(data)?data:[]).map((x:any)=>({...x,price:Number(x.price)}))); }
+    } catch (e) { console.error('Gagal memuat katalog:', e); }
     await loadCustomerData(currentUser, false);
   };
 
@@ -570,7 +572,8 @@ export default function CustomerDashboard() {
         ac_unit_id: requestForm.ac_unit_id ? parseInt(requestForm.ac_unit_id, 10) : null,
         date: requestForm.date,
         complaint: requestForm.notes,
-        customer_notes: requestForm.notes
+        customer_notes: requestForm.notes,
+        product_ids: selectedProductId ? [Number(selectedProductId)] : []
       };
 
       const res = await fetch('/api/requests', {
@@ -590,6 +593,7 @@ export default function CustomerDashboard() {
           date: new Date(Date.now() + 86400000).toISOString().split('T')[0],
           notes: ''
         });
+        setSelectedProductId('');
         setSuccessBanner(`Permintaan servis ${data.data?.request_code || ''} berhasil dikirim dan tersampaikan langsung ke Admin!`);
         setTimeout(() => setSuccessBanner(null), 6000);
         loadCustomerData(userData);
@@ -1180,7 +1184,7 @@ export default function CustomerDashboard() {
                   <div className="flex justify-between items-start">
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-slate-800 dark:text-slate-200 text-sm">{req.service}</span>
+                        <span className="font-bold text-slate-800 dark:text-slate-200 text-sm">{req.service}</span>{req.product_summary && <span className="block text-xs text-emerald-600 dark:text-emerald-400 mt-1">Produk: {req.product_summary}</span>}
                         <span className="text-xs font-mono text-slate-400 font-semibold">{req.request_code}</span>
                       </div>
                       <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -1565,6 +1569,19 @@ export default function CustomerDashboard() {
                   ))}
                 </div>
               </div>
+
+              {(() => {
+                const names = servicesList.filter(s => requestForm.service_ids.includes(String(s.id))).map(s=>String(s.name).toLowerCase()).join(' ');
+                const category = names.includes('ganti indoor') ? 'indoor' : names.includes('ganti outdoor') ? 'outdoor' : '';
+                if (!category) return null;
+                const choices = products.filter(p=>p.category===category);
+                return <div>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Pilih Merk {category === 'indoor' ? 'Unit Indoor' : 'Unit Outdoor'} *</label>
+                  <select required value={selectedProductId} onChange={e=>setSelectedProductId(e.target.value)} className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-white/10 rounded-lg bg-white dark:bg-black">
+                    <option value="">-- Pilih merk --</option>{choices.map(p=><option key={p.id} value={p.id}>{p.brand} — {p.name} — Rp {Number(p.price).toLocaleString('id-ID')}</option>)}
+                  </select>
+                </div>;
+              })()}
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">

@@ -3,6 +3,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Calendar, CheckCircle, AlertCircle, Wrench, Clock, ShieldCheck } from 'lucide-react';
 import { showAlert } from '../utils/dialog';
 
+interface ServiceItem { id:number; name:string; base_price:number|string; category?:string; description?:string }
+interface ProductItem { id:number; name:string; category:'indoor'|'outdoor'|'freon'; brand:string; price:number; image_url?:string|null }
+
 interface ACUnit {
   id: number;
   brand: string;
@@ -26,23 +29,28 @@ export default function Booking() {
     service_ids: [] as string[],
     ac_unit_id: '',
     complaint: '',
-    date: new Date(Date.now() + 86400000).toISOString().split('T')[0]
+    date: new Date(Date.now() + 86400000).toISOString().split('T')[0],
+    product_id: ''
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successCode, setSuccessCode] = useState<string | null>(null);
 
-  const services = [
-    { id: 1, name: 'Cuci AC', price: 75000, desc: 'Pembersihan indoor & outdoor unit agar udara bersih dan dingin maksimal.' },
-    { id: 2, name: 'Service AC / Perbaikan', price: 150000, desc: 'Penanganan AC mati, bocor air, berisik, atau bau tak sedap.' },
-    { id: 3, name: 'Tambah / Isi Refrigerant', price: 150000, desc: 'Pengisian freon R32 / R410A / R22 sesuai tekanan standar pabrik.' },
-    { id: 4, name: 'Bongkar Pasang AC', price: 300000, desc: 'Relokasi atau instalasi unit AC baru dengan instalasi pipa rapi.' },
-    { id: 5, name: 'Pengecekan AC', price: 50000, desc: 'Inspeksi menyeluruh kompresor, kelistrikan, dan tekanan freon.' },
-    { id: 6, name: 'Pemeliharaan AC / Kontrak', price: 100000, desc: 'Perawatan berkala rutin terjadwal untuk ruko, kantor, atau hunian.' },
+  const defaultServices: ServiceItem[] = [
+    { id: 1, name: 'Cuci AC', base_price: 75000, category: 'Perawatan', description: 'Pembersihan indoor & outdoor unit agar udara bersih dan dingin maksimal.' },
+    { id: 2, name: 'Service AC / Perbaikan', base_price: 150000, category: 'Perbaikan', description: 'Penanganan AC mati, bocor air, berisik, atau bau tak sedap.' },
+    { id: 3, name: 'Tambah / Isi Refrigerant', base_price: 150000, category: 'Perawatan', description: 'Pengisian freon R32 / R410A / R22 sesuai tekanan standar pabrik.' },
+    { id: 4, name: 'Bongkar Pasang AC', base_price: 300000, category: 'Instalasi', description: 'Relokasi atau instalasi unit AC baru dengan instalasi pipa rapi.' },
+    { id: 5, name: 'Pengecekan AC', base_price: 50000, category: 'Pemeriksaan', description: 'Inspeksi menyeluruh kompresor, kelistrikan, dan tekanan freon.' },
+    { id: 6, name: 'Pemeliharaan AC / Kontrak', base_price: 100000, category: 'Perawatan', description: 'Perawatan berkala rutin terjadwal untuk ruko, kantor, atau hunian.' },
   ];
+  const [services, setServices] = useState<ServiceItem[]>(defaultServices);
+  const [products, setProducts] = useState<ProductItem[]>([]);
+  const [selectedProductId, setSelectedProductId] = useState('');
 
   useEffect(() => {
+    const initializeBooking = async () => {
     const userStr = localStorage.getItem('user');
     if (!userStr) {
       navigate('/login', {
@@ -62,6 +70,24 @@ export default function Booking() {
         return;
       }
       setUserData(user);
+
+      let loadedServices: ServiceItem[] = services;
+      try {
+        const [serviceRes, productRes] = await Promise.all([fetch('/api/services'), fetch('/api/products')]);
+        if (serviceRes.ok) {
+          const data = await serviceRes.json();
+          if (Array.isArray(data) && data.length) {
+            loadedServices = data.filter((x:any) => x.status === 'Aktif').map((x:any) => ({...x, base_price:Number(x.base_price)}));
+            setServices(loadedServices);
+          }
+        }
+        if (productRes.ok) {
+          const data = await productRes.json();
+          if (Array.isArray(data)) setProducts(data.map((x:any)=>({...x, price:Number(x.price)})));
+        }
+      } catch (catalogError) {
+        console.warn('Katalog database gagal dimuat, menggunakan layanan cadangan.', catalogError);
+      }
       
       // Check for preferred service from navigation state (e.g. from gallery)
       const navState = location.state as any;
@@ -71,7 +97,7 @@ export default function Booking() {
       let initialNotes = '';
 
       if (navState?.preferredService) {
-        const found = services.find(s => s.name.toLowerCase().includes(navState.preferredService.toLowerCase()) || navState.preferredService.toLowerCase().includes(s.name.toLowerCase()));
+        const found = loadedServices.find(s => s.name.toLowerCase().includes(navState.preferredService.toLowerCase()) || navState.preferredService.toLowerCase().includes(s.name.toLowerCase()));
         if (found) {
           initialService = found.name;
           initialServiceId = String(found.id);
@@ -91,6 +117,10 @@ export default function Booking() {
         else if (user.customer.address.includes('Bekasi') || user.customer.address.includes('Bogor')) initialArea = 'Bekasi & Bogor';
         else if (user.customer.address.includes('Pusat') || user.customer.address.includes('Barat')) initialArea = 'Jakarta Pusat & Barat';
         else if (user.customer.address.includes('Timur') || user.customer.address.includes('Utara')) initialArea = 'Jakarta Timur & Utara';
+      }
+
+      if (navState?.preferredProductId) {
+        setSelectedProductId(String(navState.preferredProductId));
       }
 
       // Auto populate customer contact info
@@ -122,6 +152,8 @@ export default function Booking() {
     } catch (e) {
       navigate('/login', { replace: true });
     }
+    };
+    initializeBooking();
   }, [navigate, location.state]);
 
   const validate = () => {
@@ -169,7 +201,8 @@ export default function Booking() {
         ac_unit_id: formData.ac_unit_id ? parseInt(formData.ac_unit_id, 10) : null,
         date: formData.date,
         complaint: combinedNotes,
-        customer_notes: combinedNotes
+        customer_notes: combinedNotes,
+        product_ids: selectedProductId ? [Number(selectedProductId)] : []
       };
 
       const res = await fetch('/api/requests', {
@@ -237,7 +270,8 @@ export default function Booking() {
             <button
               onClick={() => {
                 setSuccessCode(null);
-                setFormData(prev => ({ ...prev, complaint: '', ac_unit_id: '' }));
+                setFormData(prev => ({ ...prev, complaint: '', ac_unit_id: '', product_id: '' }));
+                setSelectedProductId('');
               }}
               className="px-6 py-3 bg-white dark:bg-black border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-black text-slate-700 dark:text-slate-300 font-semibold rounded-xl text-sm transition-all"
             >
@@ -392,17 +426,31 @@ export default function Booking() {
                       <span className="font-bold text-sm text-slate-800 dark:text-slate-200">{service.name}</span>
                     </div>
                     <span className="font-bold text-blue-600 dark:text-blue-400 whitespace-nowrap">
-                      Rp {service.price.toLocaleString('id-ID')}
+                      Rp {Number(service.base_price).toLocaleString('id-ID')}
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-2 pl-5">
-                    {service.desc}
+                    {service.description || 'Layanan servis AC sesuai kebutuhan pelanggan.'}
                   </p>
                 </label>
               ))}
             </div>
             {errors.serviceType && <p className="text-rose-500 dark:text-rose-400 text-xs mt-1">{errors.serviceType}</p>}
           </div>
+
+          {(() => {
+            const selectedNames = services.filter(s => formData.service_ids.includes(String(s.id))).map(s => s.name.toLowerCase()).join(' ');
+            const replacementCategory = selectedNames.includes('ganti indoor') ? 'indoor' : selectedNames.includes('ganti outdoor') ? 'outdoor' : '';
+            const replacementProducts = replacementCategory ? products.filter(p => p.category === replacementCategory) : [];
+            if (!replacementCategory) return null;
+            return <div>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Pilih Produk {replacementCategory === 'indoor' ? 'Unit Indoor' : 'Unit Outdoor'} *</label>
+              <select required value={selectedProductId} onChange={e=>setSelectedProductId(e.target.value)} className="w-full px-4 py-3 border border-slate-200 dark:border-white/10 rounded-xl bg-white dark:bg-black text-sm">
+                <option value="">-- Pilih merk produk --</option>
+                {replacementProducts.map(p=><option key={p.id} value={p.id}>{p.brand} — {p.name} — Rp {Number(p.price).toLocaleString('id-ID')}</option>)}
+              </select>
+            </div>;
+          })()}
 
           {/* Tanggal Kunjungan */}
           <div>

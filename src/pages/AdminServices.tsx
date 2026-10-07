@@ -40,7 +40,7 @@ export default function AdminServices() {
       
       const res = await fetch(url, {
         method,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token') || ''}` },
         body: JSON.stringify(formData)
       });
       
@@ -59,7 +59,7 @@ export default function AdminServices() {
   const handleDelete = async (id: string) => {
     if (!(await showConfirm('Layanan akan dihapus dari daftar. Tindakan ini tidak dapat dibatalkan.', { variant: 'danger', title: 'Hapus Layanan?' }))) return;
     try {
-      const res = await fetch(`/api/services/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/services/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${localStorage.getItem('token') || ''}` } });
       if (res.ok) {
         showAlert('Data berhasil dihapus');
         fetchServices();

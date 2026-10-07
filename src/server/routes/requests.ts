@@ -2,8 +2,38 @@ import { Router } from 'express';
 import db from '../db/connection.js';
 import { authenticateJWT, authorizeRoles, AuthRequest } from '../middleware/authMiddleware.js';
 import { getTechnicianIdsByUserId, isRequestAssignedToTechnician } from '../utils/technician.js';
+import { ensureProductsTable } from './products.js';
 
 const router = Router();
+
+async function ensureRequestProductTables() {
+  await ensureProductsTable();
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS request_services (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      request_id INT NOT NULL,
+      service_id INT NOT NULL,
+      price DECIMAL(12,2) NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE KEY uq_request_service (request_id, service_id),
+      FOREIGN KEY (request_id) REFERENCES service_requests(id) ON DELETE CASCADE,
+      FOREIGN KEY (service_id) REFERENCES services(id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+  `);
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS request_products (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      request_id INT NOT NULL,
+      product_id INT NOT NULL,
+      quantity INT NOT NULL DEFAULT 1,
+      price DECIMAL(12,2) NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE KEY uq_request_product (request_id, product_id),
+      FOREIGN KEY (request_id) REFERENCES service_requests(id) ON DELETE CASCADE,
+      FOREIGN KEY (product_id) REFERENCES products(id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+  `);
+}
 
 // Batas ukuran data URI bukti transfer (karakter). Gambar sudah dikompres ~600KB di browser.
 const MAX_PROOF_LENGTH = 3_500_000;
@@ -68,7 +98,8 @@ const LIST_SELECT = `
     c.address as customer_address,
     sr.service_id,
     COALESCE((SELECT GROUP_CONCAT(CONCAT(s2.name, ' (Rp ', FORMAT(rs2.price, 0), ')') ORDER BY rs2.id SEPARATOR ', ') FROM request_services rs2 JOIN services s2 ON s2.id = rs2.service_id WHERE rs2.request_id = sr.id), s.name) as service,
-    COALESCE((SELECT SUM(rs2.price) FROM request_services rs2 WHERE rs2.request_id = sr.id), s.base_price) as service_price,
+    COALESCE((SELECT SUM(rs2.price) FROM request_services rs2 WHERE rs2.request_id = sr.id), s.base_price) + COALESCE((SELECT SUM(rp.price * rp.quantity) FROM request_products rp WHERE rp.request_id = sr.id), 0) as service_price,
+    (SELECT GROUP_CONCAT(CONCAT(p.brand, ' - ', p.name, ' (Rp ', FORMAT(rp.price, 0), ')') ORDER BY rp.id SEPARATOR ', ') FROM request_products rp JOIN products p ON p.id = rp.product_id WHERE rp.request_id = sr.id) as product_summary,
     sr.ac_unit_id,
     u.brand as ac_brand,
     u.type as ac_type,
@@ -119,6 +150,7 @@ router.get('/', authenticateJWT, async (req: AuthRequest, res) => {
   const { customer_id, user_id, status } = req.query;
 
   try {
+    await ensureRequestProductTables();
     const conditions: string[] = [];
     const params: any[] = [];
 
@@ -213,6 +245,7 @@ router.get('/:id/payment-proof', authenticateJWT, async (req: AuthRequest, res) 
 router.get('/:id', authenticateJWT, async (req: AuthRequest, res) => {
   const target = req.params.id;
   try {
+    await ensureRequestProductTables();
     const { clause, params } = buildTargetClause(target, 'sr.');
     const query = `
       SELECT 
@@ -225,7 +258,8 @@ router.get('/:id', authenticateJWT, async (req: AuthRequest, res) => {
         c.address as customer_address,
         sr.service_id,
         COALESCE((SELECT GROUP_CONCAT(CONCAT(s2.name, ' (Rp ', FORMAT(rs2.price, 0), ')') ORDER BY rs2.id SEPARATOR ', ') FROM request_services rs2 JOIN services s2 ON s2.id = rs2.service_id WHERE rs2.request_id = sr.id), s.name) as service,
-        COALESCE((SELECT SUM(rs2.price) FROM request_services rs2 WHERE rs2.request_id = sr.id), s.base_price) as service_price,
+        COALESCE((SELECT SUM(rs2.price) FROM request_services rs2 WHERE rs2.request_id = sr.id), s.base_price) + COALESCE((SELECT SUM(rp.price * rp.quantity) FROM request_products rp WHERE rp.request_id = sr.id), 0) as service_price,
+    (SELECT GROUP_CONCAT(CONCAT(p.brand, ' - ', p.name, ' (Rp ', FORMAT(rp.price, 0), ')') ORDER BY rp.id SEPARATOR ', ') FROM request_products rp JOIN products p ON p.id = rp.product_id WHERE rp.request_id = sr.id) as product_summary,
         sr.ac_unit_id,
         u.brand as ac_brand,
         u.type as ac_type,
@@ -318,6 +352,7 @@ router.post('/', authenticateJWT, async (req: AuthRequest, res) => {
     customer_id,
     service_id,
     service_ids,
+    product_ids,
     serviceType,
     ac_unit_id,
     date,
@@ -329,6 +364,7 @@ router.post('/', authenticateJWT, async (req: AuthRequest, res) => {
   const requestDate = date || new Date().toISOString().split('T')[0];
 
   try {
+    await ensureRequestProductTables();
     // 1. Tentukan pelanggan
     let resolvedCustomerId: number | null = null;
 
@@ -372,11 +408,34 @@ router.post('/', authenticateJWT, async (req: AuthRequest, res) => {
       return res.status(400).json({ message: 'Pilih minimal satu layanan yang valid.' });
     }
     const placeholders = requestedServiceIds.map(() => '?').join(',');
-    const [serviceRows]: any = await db.query(`SELECT id, base_price FROM services WHERE id IN (${placeholders})`, requestedServiceIds);
+    const [serviceRows]: any = await db.query(`SELECT id, name, base_price FROM services WHERE id IN (${placeholders})`, requestedServiceIds);
     if (serviceRows.length !== requestedServiceIds.length) {
       return res.status(400).json({ message: 'Salah satu layanan yang dipilih tidak ditemukan.' });
     }
     const resolvedServiceId = requestedServiceIds[0];
+
+    const requestedProductIds: number[] = Array.isArray(product_ids)
+      ? [...new Set(product_ids.map((id: any) => Number(id)).filter((id: number) => Number.isInteger(id) && id > 0))]
+      : [];
+    if (requestedProductIds.length > 0) {
+      const productPlaceholders = requestedProductIds.map(() => '?').join(',');
+      const [productRows]: any = await db.query(
+        `SELECT id, category, price, brand, name FROM products WHERE id IN (${productPlaceholders}) AND status = 'Aktif'`,
+        requestedProductIds
+      );
+      if (productRows.length !== requestedProductIds.length) {
+        return res.status(400).json({ message: 'Produk yang dipilih tidak ditemukan atau sudah tidak aktif.' });
+      }
+      const selectedServiceNames = serviceRows.map((row:any) => String(row.name || '').toLowerCase());
+      const needsIndoor = selectedServiceNames.some((name:string) => name.includes('ganti indoor'));
+      const needsOutdoor = selectedServiceNames.some((name:string) => name.includes('ganti outdoor'));
+      if (needsIndoor && !productRows.some((p:any) => p.category === 'indoor')) {
+        return res.status(400).json({ message: 'Untuk layanan ganti indoor, pilih produk unit indoor.' });
+      }
+      if (needsOutdoor && !productRows.some((p:any) => p.category === 'outdoor')) {
+        return res.status(400).json({ message: 'Untuk layanan ganti outdoor, pilih produk unit outdoor.' });
+      }
+    }
 
     // 3. Validasi unit AC (harus milik pelanggan yang sama)
     const parsedAcUnitId = ac_unit_id ? parseInt(ac_unit_id, 10) : null;
@@ -407,6 +466,19 @@ router.post('/', authenticateJWT, async (req: AuthRequest, res) => {
           'INSERT INTO request_services (request_id, service_id, price) VALUES (?, ?, ?)',
           [insertResult.insertId, svc.id, svc.base_price]
         );
+      }
+      if (requestedProductIds.length > 0) {
+        const productPlaceholders = requestedProductIds.map(() => '?').join(',');
+        const [selectedProducts]: any = await connection.query(
+          `SELECT id, price FROM products WHERE id IN (${productPlaceholders}) AND status = 'Aktif'`,
+          requestedProductIds
+        );
+        for (const product of selectedProducts) {
+          await connection.query(
+            'INSERT INTO request_products (request_id, product_id, quantity, price) VALUES (?, ?, 1, ?)',
+            [insertResult.insertId, product.id, product.price]
+          );
+        }
       }
       if (parsedAcUnitId) {
         await connection.query('UPDATE ac_units SET status = ? WHERE id = ?', ['Perlu Servis', parsedAcUnitId]);

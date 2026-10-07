@@ -29,6 +29,7 @@ import AdminOrders from './pages/AdminOrders';
 import AdminTechnicians from './pages/AdminTechnicians';
 import AdminCustomers from './pages/AdminCustomers';
 import AdminServices from './pages/AdminServices';
+import AdminProducts from './pages/AdminProducts';
 import TechnicianDashboard from './pages/TechnicianDashboard';
 import TechnicianHistory from './pages/TechnicianHistory';
 import CustomerDashboard from './pages/CustomerDashboard';
@@ -59,6 +60,7 @@ export default function App() {
           <Route path="area-layanan" element={<ServiceArea />} />
           <Route path="area" element={<ServiceArea />} />
           <Route path="galeri" element={<Gallery />} />
+          <Route path="produk" element={<Pricing />} />
           <Route path="harga" element={<Pricing />} />
           <Route path="kontak" element={<Contact />} />
           <Route path="login" element={<Login />} />
@@ -72,6 +74,7 @@ export default function App() {
           <Route path="teknisi" element={<AdminTechnicians />} />
           <Route path="pelanggan" element={<AdminCustomers />} />
           <Route path="layanan" element={<AdminServices />} />
+          <Route path="produk" element={<AdminProducts />} />
           <Route path="pengaturan" element={<AccountSettings />} />
         </Route>
 

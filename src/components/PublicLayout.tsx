@@ -5,7 +5,8 @@ import {
   LogIn,
   MessageCircle,
   User,
-  LogOut
+  LogOut,
+  ChevronDown
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { COMPANY_INFO } from '../config/companyInfo.js';
@@ -58,7 +59,7 @@ export default function PublicLayout() {
     { name: 'Beranda', path: '/' },
     { name: 'Tentang Kami', path: '/tentang' },
     { name: 'Layanan', path: '/layanan' },
-    { name: 'Harga', path: '/harga' },
+    { name: 'Produk', path: '/produk' },
     { name: 'Galeri', path: '/galeri' },
     { name: 'Kontak', path: '/kontak' }
   ];
@@ -109,38 +110,301 @@ export default function PublicLayout() {
             {/* =================================================
                 DESKTOP NAVIGATION
             ================================================== */}
-            <nav className="hidden md:flex items-center space-x-6 lg:space-x-8">
+           <nav className="hidden md:flex items-center space-x-2 lg:space-x-4">
+  {navLinks.map((link) => {
+    const isActive =
+      location.pathname === link.path ||
+      (link.name === 'Produk' &&
+        (location.pathname.startsWith('/produk') ||
+          location.pathname === '/harga'));
 
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  to={link.path}
-                  className={`
-                    px-2 py-2
-                    text-sm
-                    font-medium
-                    transition-colors
-                    ${
-                      location.pathname === link.path
-                        ? `
-                          text-blue-600
-                          dark:text-blue-400
-                          font-semibold
-                        `
-                        : `
-                          text-slate-600
-                          dark:text-slate-300
-                          hover:text-blue-600
-                          dark:hover:text-blue-400
-                        `
-                    }
-                  `}
-                >
-                  {link.name}
-                </Link>
-              ))}
+    if (link.name === 'Produk') {
+      return (
+        <div key={link.name} className="relative group">
+          {/* PRODUK */}
+          <Link
+            to="/produk"
+            className={`
+              group/link
+              relative
+              inline-flex
+              items-center
+              gap-1
+              px-3
+              py-2
+              text-sm
+              font-medium
+              transition-all
+              duration-300
+              ease-out
+              hover:translate-x-1
+              ${
+                isActive
+                  ? 'text-blue-600 dark:text-blue-400 font-semibold'
+                  : 'text-slate-600 dark:text-slate-300'
+              }
+            `}
+          >
+            <span
+              className="
+                absolute
+                left-0
+                bottom-0
+                h-0.5
+                w-0
+                rounded-full
+                bg-blue-600
+                dark:bg-blue-400
+                transition-all
+                duration-300
+                group-hover/link:w-full
+              "
+            />
 
-            </nav>
+            <span
+              className="
+                transition-colors
+                duration-300
+                group-hover/link:text-blue-600
+                dark:group-hover/link:text-blue-400
+              "
+            >
+              Produk
+            </span>
+
+            <ChevronDown
+              size={14}
+              className="
+                transition-all
+                duration-300
+                group-hover/link:rotate-180
+                group-hover/link:text-blue-600
+                dark:group-hover/link:text-blue-400
+              "
+            />
+          </Link>
+
+          {/* DROPDOWN PRODUK */}
+          <div
+            className="
+              absolute
+              left-0
+              top-full
+              z-50
+              pt-2
+              invisible
+              opacity-0
+              translate-y-2
+              scale-95
+              pointer-events-none
+              transition-all
+              duration-200
+              ease-out
+              group-hover:visible
+              group-hover:opacity-100
+              group-hover:translate-y-0
+              group-hover:scale-100
+              group-hover:pointer-events-auto
+            "
+          >
+            <div
+              className="
+                w-52
+                overflow-hidden
+                rounded-xl
+                border
+                border-slate-200
+                bg-white
+                p-1.5
+                shadow-xl
+                dark:border-white/10
+                dark:bg-black
+              "
+            >
+              {/* UNIT INDOOR */}
+              <Link
+                to="/produk?kategori=indoor"
+                className="
+                  group/item
+                  flex
+                  items-center
+                  rounded-lg
+                  px-3
+                  py-2.5
+                  text-sm
+                  font-medium
+                  text-slate-600
+                  transition-all
+                  duration-200
+                  hover:translate-x-1
+                  hover:bg-blue-50
+                  hover:text-blue-600
+                  dark:text-slate-300
+                  dark:hover:bg-white/10
+                  dark:hover:text-blue-400
+                "
+              >
+                <span
+                  className="
+                    mr-2
+                    h-1.5
+                    w-1.5
+                    rounded-full
+                    bg-slate-300
+                    transition-all
+                    duration-200
+                    group-hover/item:bg-blue-600
+                    group-hover/item:scale-125
+                    dark:bg-slate-600
+                    dark:group-hover/item:bg-blue-400
+                  "
+                />
+                Unit Indoor
+              </Link>
+
+              {/* UNIT OUTDOOR */}
+              <Link
+                to="/produk?kategori=outdoor"
+                className="
+                  group/item
+                  flex
+                  items-center
+                  rounded-lg
+                  px-3
+                  py-2.5
+                  text-sm
+                  font-medium
+                  text-slate-600
+                  transition-all
+                  duration-200
+                  hover:translate-x-1
+                  hover:bg-blue-50
+                  hover:text-blue-600
+                  dark:text-slate-300
+                  dark:hover:bg-white/10
+                  dark:hover:text-blue-400
+                "
+              >
+                <span
+                  className="
+                    mr-2
+                    h-1.5
+                    w-1.5
+                    rounded-full
+                    bg-slate-300
+                    transition-all
+                    duration-200
+                    group-hover/item:bg-blue-600
+                    group-hover/item:scale-125
+                    dark:bg-slate-600
+                    dark:group-hover/item:bg-blue-400
+                  "
+                />
+                Unit Outdoor
+              </Link>
+
+              {/* FREON */}
+              <Link
+                to="/produk?kategori=freon"
+                className="
+                  group/item
+                  flex
+                  items-center
+                  rounded-lg
+                  px-3
+                  py-2.5
+                  text-sm
+                  font-medium
+                  text-slate-600
+                  transition-all
+                  duration-200
+                  hover:translate-x-1
+                  hover:bg-blue-50
+                  hover:text-blue-600
+                  dark:text-slate-300
+                  dark:hover:bg-white/10
+                  dark:hover:text-blue-400
+                "
+              >
+                <span
+                  className="
+                    mr-2
+                    h-1.5
+                    w-1.5
+                    rounded-full
+                    bg-slate-300
+                    transition-all
+                    duration-200
+                    group-hover/item:bg-blue-600
+                    group-hover/item:scale-125
+                    dark:bg-slate-600
+                    dark:group-hover/item:bg-blue-400
+                  "
+                />
+                Freon
+              </Link>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <Link
+        key={link.name}
+        to={link.path}
+        className={`
+          group
+          relative
+          px-3
+          py-2
+          text-sm
+          font-medium
+          transition-all
+          duration-300
+          ease-out
+          hover:translate-x-1
+          ${
+            isActive
+              ? 'text-blue-600 dark:text-blue-400 font-semibold'
+              : 'text-slate-600 dark:text-slate-300'
+          }
+        `}
+      >
+        {/* GARIS ANIMASI DARI KIRI KE KANAN */}
+        <span
+          className="
+            absolute
+            left-0
+            bottom-0
+            h-0.5
+            w-0
+            rounded-full
+            bg-blue-600
+            dark:bg-blue-400
+            transition-all
+            duration-300
+            group-hover:w-full
+          "
+        />
+
+        {/* TEKS */}
+        <span
+          className="
+            inline-block
+            transition-all
+            duration-300
+            group-hover:translate-x-1
+            group-hover:text-blue-600
+            dark:group-hover:text-blue-400
+          "
+        >
+          {link.name}
+        </span>
+      </Link>
+    );
+  })}
+</nav>
 
             {/* =================================================
                 DESKTOP ACTIONS
@@ -193,21 +457,7 @@ export default function PublicLayout() {
                 </>
               ) : (
                 <>
-                  {/* Pesan Servis */}
-                  <Link
-                    to="/layanan"
-                    className="
-                      bg-blue-50 dark:bg-white/10
-                      text-blue-700 dark:text-blue-300
-                      hover:bg-blue-100 dark:hover:bg-white/15
-                      px-4 py-2
-                      rounded-lg
-                      text-sm font-semibold
-                      transition-colors
-                    "
-                  >
-                    Pesan Servis
-                  </Link>
+                 
 
                   {/* Login */}
                   <Link
@@ -264,162 +514,402 @@ export default function PublicLayout() {
           </div>
         </div>
 
-        {/* =====================================================
-            MOBILE NAVIGATION
-        ====================================================== */}
-        {isOpen && (
-          <div
-            className="
-              md:hidden
-              bg-white/95 dark:bg-black/95
-              backdrop-blur-md
-              border-t border-slate-200 dark:border-white/10
-              shadow-lg
-              transition-colors duration-300
-            "
+{/* =====================================================
+    MOBILE NAVIGATION
+====================================================== */}
+{isOpen && (
+  <div
+    className="
+      md:hidden
+      bg-white/95 dark:bg-black/95
+      backdrop-blur-md
+      border-t border-slate-200 dark:border-white/10
+      shadow-lg
+      transition-colors duration-300
+    "
+  >
+    <div className="px-3 pt-2 pb-4 space-y-1 sm:px-3">
+
+      {navLinks.map((link, index) =>
+        link.name === 'Produk' ? (
+          /* =================================================
+             PRODUK MOBILE DROPDOWN
+          ================================================== */
+          <details
+            key={link.name}
+            className="group"
           >
-            <div className="px-3 pt-2 pb-4 space-y-1 sm:px-3">
-
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  to={link.path}
-                  onClick={() => setIsOpen(false)}
-                  className={`
-                    block
-                    px-3 py-2
-                    rounded-md
-                    text-base
-                    font-medium
-                    transition-colors
-                    ${
-                      location.pathname === link.path
-                        ? `
-                          text-blue-600
-                          dark:text-blue-400
-                          bg-blue-50
-                          dark:bg-white/10
-                        `
-                        : `
-                          text-slate-700
-                          dark:text-slate-300
-                          hover:text-blue-600
-                          dark:hover:text-blue-400
-                          hover:bg-slate-50
-                          dark:hover:bg-white/5
-                        `
-                    }
-                  `}
-                >
-                  {link.name}
-                </Link>
-              ))}
-
-              {/* Mobile User Actions */}
-              <div
+            <summary
+              className="
+                relative
+                flex
+                items-center
+                justify-between
+                overflow-hidden
+                px-3
+                py-3
+                rounded-xl
+                text-base
+                font-medium
+                text-slate-700
+                dark:text-slate-300
+                cursor-pointer
+                list-none
+                transition-all
+                duration-300
+                ease-out
+                hover:translate-x-2
+                hover:text-blue-600
+                dark:hover:text-blue-400
+                hover:bg-blue-50
+                dark:hover:bg-white/5
+              "
+            >
+              <span
                 className="
-                  pt-3
-                  flex flex-col gap-2
-                  border-t border-slate-200 dark:border-white/10
-                  mt-2
+                  relative
+                  z-10
+                  transition-transform
+                  duration-300
+                  group-hover:translate-x-2
                 "
               >
+                Produk
+              </span>
 
-                {currentUser ? (
-                  <>
-                    {/* Dashboard */}
-                    <Link
-                      to={getDashboardUrl()}
-                      onClick={() => setIsOpen(false)}
-                      className="
-                        w-full
-                        text-center
-                        bg-blue-600 dark:bg-blue-500
-                        hover:bg-blue-700 dark:hover:bg-blue-600
-                        text-white
-                        font-bold
-                        py-2.5
-                        rounded-lg
-                        shadow-sm
-                        flex items-center justify-center gap-2
-                        text-sm
-                        transition-colors
-                      "
-                    >
-                      <User size={16} />
-                      Masuk ke Dashboard ({currentUser.role})
-                    </Link>
+              <ChevronDown
+                size={18}
+                className="
+                  relative
+                  z-10
+                  transition-transform
+                  duration-300
+                  group-open:rotate-180
+                "
+              />
+            </summary>
 
-                    {/* Logout */}
-                    <button
-                      onClick={handleLogout}
-                      className="
-                        w-full
-                        text-center
-                        text-rose-600 dark:text-rose-400
-                        bg-rose-50 dark:bg-rose-950/40
-                        hover:bg-rose-100 dark:hover:bg-rose-950/60
-                        font-semibold
-                        py-2
-                        rounded-lg
-                        text-sm
-                        flex items-center justify-center gap-2
-                        transition-colors
-                      "
-                    >
-                      <LogOut size={16} />
-                      Keluar
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    {/* Pesan Servis */}
-                    <Link
-                      to="/layanan"
-                      onClick={() => setIsOpen(false)}
-                      className="
-                        w-full
-                        text-center
-                        bg-blue-50 dark:bg-white/10
-                        text-blue-700 dark:text-blue-300
-                        hover:bg-blue-100 dark:hover:bg-white/15
-                        font-semibold
-                        py-2
-                        rounded-lg
-                        text-sm
-                        transition-colors
-                      "
-                    >
-                      Pesan Servis
-                    </Link>
+            {/* SUBMENU PRODUK */}
+            <div
+              className="
+                ml-3
+                mt-1
+                pl-3
+                border-l
+                border-blue-200
+                dark:border-white/10
+                space-y-1
+              "
+            >
+              <Link
+                to="/produk?kategori=indoor"
+                onClick={() => setIsOpen(false)}
+                className="
+                  group
+                  block
+                  px-3
+                  py-2.5
+                  rounded-lg
+                  text-sm
+                  text-slate-600
+                  dark:text-slate-300
+                  transition-all
+                  duration-300
+                  hover:translate-x-2
+                  hover:text-blue-600
+                  dark:hover:text-blue-400
+                  hover:bg-blue-50
+                  dark:hover:bg-white/5
+                "
+              >
+                <span className="transition-transform duration-300">
+                  Unit Indoor
+                </span>
+              </Link>
 
-                    {/* Login */}
-                    <Link
-                      to="/login"
-                      onClick={() => setIsOpen(false)}
-                      className="
-                        w-full
-                        flex justify-center items-center gap-2
-                        bg-blue-600 dark:bg-blue-500
-                        hover:bg-blue-700 dark:hover:bg-blue-600
-                        text-white
-                        font-medium
-                        py-2
-                        rounded-lg
-                        text-sm
-                        transition-colors
-                      "
-                    >
-                      <LogIn size={18} />
-                      Login
-                    </Link>
-                  </>
-                )}
+              <Link
+                to="/produk?kategori=outdoor"
+                onClick={() => setIsOpen(false)}
+                className="
+                  group
+                  block
+                  px-3
+                  py-2.5
+                  rounded-lg
+                  text-sm
+                  text-slate-600
+                  dark:text-slate-300
+                  transition-all
+                  duration-300
+                  hover:translate-x-2
+                  hover:text-blue-600
+                  dark:hover:text-blue-400
+                  hover:bg-blue-50
+                  dark:hover:bg-white/5
+                "
+              >
+                <span className="transition-transform duration-300">
+                  Unit Outdoor
+                </span>
+              </Link>
 
-              </div>
+              <Link
+                to="/produk?kategori=freon"
+                onClick={() => setIsOpen(false)}
+                className="
+                  group
+                  block
+                  px-3
+                  py-2.5
+                  rounded-lg
+                  text-sm
+                  text-slate-600
+                  dark:text-slate-300
+                  transition-all
+                  duration-300
+                  hover:translate-x-2
+                  hover:text-blue-600
+                  dark:hover:text-blue-400
+                  hover:bg-blue-50
+                  dark:hover:bg-white/5
+                "
+              >
+                <span className="transition-transform duration-300">
+                  Freon
+                </span>
+              </Link>
             </div>
-          </div>
+          </details>
+        ) : (
+          /* =================================================
+             MENU LAIN
+          ================================================== */
+          <Link
+            key={link.name}
+            to={link.path}
+            onClick={() => setIsOpen(false)}
+            style={{
+              transitionDelay: `${index * 40}ms`,
+            }}
+            className={`
+              group
+              relative
+              block
+              overflow-hidden
+              px-3
+              py-3
+              rounded-xl
+              text-base
+              font-medium
+              transition-all
+              duration-300
+              ease-out
+              hover:translate-x-2
+              hover:text-blue-600
+              dark:hover:text-blue-400
+
+              ${
+                location.pathname === link.path
+                  ? `
+                    text-blue-600
+                    dark:text-blue-400
+                    bg-blue-50
+                    dark:bg-white/10
+                  `
+                  : `
+                    text-slate-700
+                    dark:text-slate-300
+                    hover:bg-blue-50
+                    dark:hover:bg-white/5
+                  `
+              }
+            `}
+          >
+            {/* Background slide */}
+            <span
+              className="
+                absolute
+                inset-y-0
+                left-0
+                w-0
+                bg-blue-50
+                dark:bg-white/10
+                group-hover:w-full
+                transition-all
+                duration-300
+                ease-out
+              "
+            />
+
+            {/* Garis kiri */}
+            <span
+              className="
+                absolute
+                left-0
+                top-1/2
+                -translate-y-1/2
+                h-0
+                w-1
+                rounded-full
+                bg-blue-600
+                dark:bg-blue-400
+                group-hover:h-8
+                transition-all
+                duration-300
+                ease-out
+              "
+            />
+
+            {/* Nama menu */}
+            <span
+              className="
+                relative
+                z-10
+                inline-block
+                transition-transform
+                duration-300
+                group-hover:translate-x-2
+              "
+            >
+              {link.name}
+            </span>
+          </Link>
+        )
+      )}
+
+      {/* =================================================
+          MOBILE USER ACTIONS
+      ================================================== */}
+      <div
+        className="
+          pt-3
+          mt-2
+          flex
+          flex-col
+          gap-2
+          border-t
+          border-slate-200
+          dark:border-white/10
+        "
+      >
+        {currentUser ? (
+          <>
+            <Link
+              to={getDashboardUrl()}
+              onClick={() => setIsOpen(false)}
+              className="
+                w-full
+                text-center
+                bg-blue-600
+                dark:bg-blue-500
+                hover:bg-blue-700
+                dark:hover:bg-blue-600
+                text-white
+                font-bold
+                py-2.5
+                rounded-lg
+                shadow-sm
+                flex
+                items-center
+                justify-center
+                gap-2
+                text-sm
+                transition-all
+                duration-300
+                hover:translate-x-1
+              "
+            >
+              <User size={16} />
+              Masuk ke Dashboard ({currentUser.role})
+            </Link>
+
+            <button
+              onClick={handleLogout}
+              className="
+                w-full
+                text-center
+                text-rose-600
+                dark:text-rose-400
+                bg-rose-50
+                dark:bg-rose-950/40
+                hover:bg-rose-100
+                dark:hover:bg-rose-950/60
+                font-semibold
+                py-2
+                rounded-lg
+                text-sm
+                flex
+                items-center
+                justify-center
+                gap-2
+                transition-all
+                duration-300
+                hover:translate-x-1
+              "
+            >
+              <LogOut size={16} />
+              Keluar
+            </button>
+          </>
+        ) : (
+          <>
+            <Link
+              to="/layanan"
+              onClick={() => setIsOpen(false)}
+              className="
+                w-full
+                text-center
+                bg-blue-50
+                dark:bg-white/10
+                text-blue-700
+                dark:text-blue-300
+                hover:bg-blue-100
+                dark:hover:bg-white/15
+                font-semibold
+                py-2
+                rounded-lg
+                text-sm
+                transition-all
+                duration-300
+                hover:translate-x-1
+              "
+            >
+              Pesan Servis
+            </Link>
+
+            <Link
+              to="/login"
+              onClick={() => setIsOpen(false)}
+              className="
+                w-full
+                flex
+                justify-center
+                items-center
+                gap-2
+                bg-blue-600
+                dark:bg-blue-500
+                hover:bg-blue-700
+                dark:hover:bg-blue-600
+                text-white
+                font-medium
+                py-2
+                rounded-lg
+                text-sm
+                transition-all
+                duration-300
+                hover:translate-x-1
+              "
+            >
+              <LogIn size={18} />
+              Login
+            </Link>
+          </>
         )}
+      </div>
+
+    </div>
+  </div>
+)}
       </header>
 
       {/* =====================================================

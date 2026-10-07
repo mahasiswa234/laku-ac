@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Wrench, Settings, Trash2, Calendar, AlertCircle, CheckCircle, X, MapPin, Loader2 } from 'lucide-react';
 import { showAlert, showConfirm } from '../utils/dialog';
 
+interface ServiceItem { id:number; name:string; base_price:number|string; status?:string }
+interface ProductItem { id:number; name:string; category:'indoor'|'outdoor'|'freon'; brand:string; price:number }
+
 interface ACUnit {
   id: number;
   customer_id: number;
@@ -39,17 +42,14 @@ export default function CustomerUnit() {
   const [bookingForm, setBookingForm] = useState({
     serviceType: 'Cuci AC',
     date: new Date(Date.now() + 86400000).toISOString().split('T')[0],
-    notes: ''
+    notes: '',
+    product_id: ''
   });
   const [bookingSubmitting, setBookingSubmitting] = useState(false);
 
-  const servicesList = [
-    { id: 1, name: 'Cuci AC', price: 75000 },
-    { id: 2, name: 'Service AC / Perbaikan', price: 150000 },
-    { id: 3, name: 'Tambah / Isi Refrigerant', price: 150000 },
-    { id: 4, name: 'Bongkar Pasang AC', price: 300000 },
-    { id: 5, name: 'Pengecekan AC', price: 50000 }
-  ];
+  const [servicesList, setServicesList] = useState<ServiceItem[]>([]);
+  const [products, setProducts] = useState<ProductItem[]>([]);
+  const [selectedProductId, setSelectedProductId] = useState('');
 
   useEffect(() => {
     initUserAndUnits();
@@ -90,6 +90,11 @@ export default function CustomerUnit() {
 
     setUserData(currentUser);
     await fetchUnits(currentUser);
+    try {
+      const [sr, pr] = await Promise.all([fetch('/api/services'), fetch('/api/products')]);
+      if (sr.ok) { const data = await sr.json(); setServicesList((Array.isArray(data)?data:[]).filter((x:any)=>x.status==='Aktif').map((x:any)=>({...x,base_price:Number(x.base_price)}))); }
+      if (pr.ok) { const data = await pr.json(); setProducts((Array.isArray(data)?data:[]).map((x:any)=>({...x,price:Number(x.price)}))); }
+    } catch (e) { console.error('Gagal memuat katalog:', e); }
   };
 
   const fetchUnits = async (user: any) => {
@@ -211,8 +216,9 @@ export default function CustomerUnit() {
 
   const handleOpenBooking = (unit: ACUnit) => {
     setSelectedUnitForBooking(unit);
+    setSelectedProductId('');
     setBookingForm({
-      serviceType: 'Cuci AC',
+      serviceType: servicesList[0]?.name || 'Cuci AC',
       date: new Date(Date.now() + 86400000).toISOString().split('T')[0],
       notes: `Servis unit ${unit.brand} (${unit.type}) di ${unit.location}`
     });
@@ -229,6 +235,7 @@ export default function CustomerUnit() {
     setBookingSubmitting(true);
     try {
       const svc = servicesList.find(s => s.name === bookingForm.serviceType) || servicesList[0];
+      if (!svc) { showAlert('Daftar layanan belum tersedia dari server.'); return; }
       const payload = {
         user_id: userData?.id,
         customer_id: userData?.customer?.id,
@@ -238,7 +245,8 @@ export default function CustomerUnit() {
         serviceType: svc.name,
         ac_unit_id: selectedUnitForBooking?.id,
         date: bookingForm.date,
-        customer_notes: bookingForm.notes
+        customer_notes: bookingForm.notes,
+        product_ids: selectedProductId ? [Number(selectedProductId)] : []
       };
 
       const res = await fetch('/api/requests', {
@@ -582,11 +590,24 @@ export default function CustomerUnit() {
                 >
                   {servicesList.map(s => (
                     <option key={s.id} value={s.name}>
-                      {s.name} - Rp {s.price.toLocaleString('id-ID')}
+                      {s.name} - Rp {Number(s.base_price).toLocaleString('id-ID')}
                     </option>
                   ))}
                 </select>
               </div>
+
+              {(() => {
+                const selected = (servicesList.find(s => s.name === bookingForm.serviceType)?.name || '').toLowerCase();
+                const category = selected.includes('ganti indoor') ? 'indoor' : selected.includes('ganti outdoor') ? 'outdoor' : '';
+                if (!category) return null;
+                const choices = products.filter(p => p.category === category);
+                return <div>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Pilih Merk {category === 'indoor' ? 'Unit Indoor' : 'Unit Outdoor'}</label>
+                  <select required value={selectedProductId} onChange={e=>setSelectedProductId(e.target.value)} className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-white/10 rounded-lg bg-white dark:bg-black">
+                    <option value="">-- Pilih merk --</option>{choices.map(p=><option key={p.id} value={p.id}>{p.brand} — Rp {Number(p.price).toLocaleString('id-ID')}</option>)}
+                  </select>
+                </div>;
+              })()}
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">

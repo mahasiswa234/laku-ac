@@ -135,7 +135,7 @@ const DEFAULT_SERVICES_DETAILS: ServiceDetail[] = [
     service_code: 'SVC-006',
     name: 'Pemeliharaan Kontrak Komersial',
     category: 'Kontrak Pemeliharaan',
-    base_price: 'Hubungi Kami',
+    base_price: 100000,
     badge: 'Perusahaan & Ruko',
     description: 'Layanan perawatan berkala terjadwal khusus perkantoran, ruko, restoran, klinik, atau gedung instansi dengan laporan berkala, penanganan darurat, dan tarif korporat hemat.',
     features: [
@@ -213,24 +213,20 @@ export default function Services() {
       })
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
-          // Merge API data with rich details
-          const merged = DEFAULT_SERVICES_DETAILS.map((detail) => {
-            const apiMatch = data.find(
-              (item: any) =>
-                item.id === detail.id ||
-                item.name.toLowerCase().includes(detail.name.toLowerCase().split(' ')[0])
-            );
-            if (apiMatch) {
-              return {
-                ...detail,
-                name: apiMatch.name || detail.name,
-                category: apiMatch.category || detail.category,
-                base_price: apiMatch.base_price || detail.base_price
-              };
-            }
-            return detail;
+          const richById = new Map(DEFAULT_SERVICES_DETAILS.map((detail) => [detail.id, detail]));
+          const merged = data.filter((item:any) => item.status === 'Aktif').map((item:any) => {
+            const detail = richById.get(Number(item.id));
+            return {
+              ...(detail || { id: item.id, service_code: item.service_code, description: 'Layanan servis AC sesuai kebutuhan pelanggan.', features: [], badge: item.category }),
+              id: item.id,
+              service_code: item.service_code,
+              name: item.name,
+              category: item.category || detail?.category || 'Lainnya',
+              base_price: Number(item.base_price || 0),
+              description: detail?.description || item.description || 'Layanan servis AC sesuai kebutuhan pelanggan.'
+            };
           });
-          setServicesList(merged);
+          setServicesList(merged.length ? merged : DEFAULT_SERVICES_DETAILS);
         }
       })
       .catch((err) => {
@@ -240,9 +236,9 @@ export default function Services() {
 
   const categories = useMemo(() => {
     const set = new Set<string>();
-    DEFAULT_SERVICES_DETAILS.forEach((s) => set.add(s.category));
+    servicesList.forEach((s) => set.add(s.category));
     return ['Semua', ...Array.from(set)];
-  }, []);
+  }, [servicesList]);
 
   const filteredServices = useMemo(() => {
     return servicesList.filter((item) => {
@@ -363,10 +359,9 @@ export default function Services() {
   };
 
   const formatPrice = (price: number | string) => {
-    if (typeof price === 'number') {
-      return `Rp ${new Intl.NumberFormat('id-ID').format(price)}`;
-    }
-    return price;
+    const value = Number(price);
+    if (Number.isFinite(value)) return `Rp ${new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(value)}`;
+    return 'Rp 0';
   };
 
   const getServiceIcon = (category: string) => {

@@ -8,6 +8,7 @@ import customerRoutes from './customers.js';
 import technicianRoutes from './technicians.js';
 import acUnitRoutes from './ac_units.js';
 import scheduleRoutes from './schedules.js';
+import productRoutes from './products.js';
 
 const router = Router();
 
@@ -27,5 +28,6 @@ router.use('/customers', customerRoutes);
 router.use('/technicians', technicianRoutes);
 router.use('/ac-units', acUnitRoutes);
 router.use('/schedules', scheduleRoutes);
+router.use('/products', productRoutes);
 
 export default router;
