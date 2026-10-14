@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { formatDateYMD } from '../utils/date';
 import { Link } from 'react-router-dom';
 import { compressImageToDataUrl } from '../utils/imageCompression.js';
 import { 
@@ -61,7 +62,7 @@ export default function TechnicianDashboard() {
           servicePrice: Number(item.service_price || 75000),
           address: item.customer_address || 'Alamat Pelanggan',
           time: item.start_time ? `${item.start_time.slice(0, 5)} - ${item.end_time ? item.end_time.slice(0, 5) : '12:00'}` : '09:00 - 12:00',
-          date: item.scheduled_date || item.date || 'Hari ini',
+          date: formatDateYMD(item.scheduled_date || item.date || 'Hari ini'),
           status: item.status,
           acUnit: item.ac_brand ? `${item.ac_brand} (${item.ac_location || 'Unit'})` : 'Unit AC',
           notes: item.customer_notes,
@@ -94,7 +95,7 @@ export default function TechnicianDashboard() {
             servicePrice: 75000,
             address: item.customer_address || 'Alamat Pelanggan',
             time: `${item.start_time ? item.start_time.slice(0, 5) : '09:00'} - ${item.end_time ? item.end_time.slice(0, 5) : '11:00'}`,
-            date: item.scheduled_date || 'Hari ini',
+            date: formatDateYMD(item.scheduled_date || 'Hari ini'),
             status: item.request_status || 'Dijadwalkan',
             acUnit: item.ac_brand ? `${item.ac_brand} (${item.ac_location || 'Unit'})` : 'Unit AC',
             notes: item.customer_notes,

@@ -69,6 +69,12 @@ function createMySQLPool(): mysql.Pool {
 
     charset: 'utf8mb4',
 
+    // Kolom bertipe DATE (mis. request_date, scheduled_date, last_service_date) dikirim sebagai
+    // teks 'YYYY-MM-DD' apa adanya. Tanpa ini mysql2 mengubahnya menjadi objek Date sehingga
+    // JSON-nya berbentuk '2026-10-05T17:00:00.000Z' (tanggal bergeser karena zona waktu server).
+    // Kolom DATETIME/TIMESTAMP (created_at, payment_date, dll.) tidak terpengaruh.
+    dateStrings: ['DATE'],
+
     // Aiven membutuhkan koneksi SSL/TLS.
     ssl: sslCa
       ? {

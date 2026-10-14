@@ -3,14 +3,17 @@ import {
   Menu,
   X,
   LogIn,
-  MessageCircle,
   User,
   LogOut,
-  ChevronDown
+  ChevronDown,
+  Phone,
+  Mail,
+  MapPin
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { COMPANY_INFO } from '../config/companyInfo.js';
 import ThemeToggle from './ThemeToggle';
+import { WhatsAppIcon } from './BrandIcons';
 
 export default function PublicLayout() {
   const [isOpen, setIsOpen] = useState(false);
@@ -1001,20 +1004,41 @@ export default function PublicLayout() {
                 dark:text-slate-400
               "
             >
-              <li>
-                📞 {COMPANY_INFO.phone}
+              <li className="flex items-center gap-2">
+                <Phone size={16} className="shrink-0 text-blue-600 dark:text-blue-400" aria-hidden="true" />
+                <a href={`tel:+${COMPANY_INFO.whatsapp}`} className="hover:underline">
+                  {COMPANY_INFO.phone}
+                </a>
               </li>
 
-              <li>
-                💬 WhatsApp: {COMPANY_INFO.phone}
+              <li className="flex items-center gap-2">
+                <WhatsAppIcon size={16} className="shrink-0 text-[#25D366]" />
+                <span>
+                  WhatsApp:{' '}
+                  <a
+                    href={`https://wa.me/${COMPANY_INFO.whatsapp}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:underline"
+                  >
+                    {COMPANY_INFO.phone}
+                  </a>
+                </span>
               </li>
 
-              <li>
-                📧 Email: {COMPANY_INFO.email}
+              <li className="flex items-center gap-2">
+                <Mail size={16} className="shrink-0 text-blue-600 dark:text-blue-400" aria-hidden="true" />
+                <span>
+                  Email:{' '}
+                  <a href={`mailto:${COMPANY_INFO.email}`} className="hover:underline">
+                    {COMPANY_INFO.email}
+                  </a>
+                </span>
               </li>
 
-              <li>
-                📍 Alamat: {COMPANY_INFO.address}
+              <li className="flex items-start gap-2">
+                <MapPin size={16} className="shrink-0 mt-0.5 text-blue-600 dark:text-blue-400" aria-hidden="true" />
+                <span>Alamat: {COMPANY_INFO.address}</span>
               </li>
             </ul>
 
@@ -1118,7 +1142,7 @@ export default function PublicLayout() {
           FLOATING WHATSAPP
       ====================================================== */}
       <a
-        href="https://wa.me/6281314022911"
+        href={`https://wa.me/${COMPANY_INFO.whatsapp}`}
         target="_blank"
         rel="noopener noreferrer"
         className="
@@ -1142,7 +1166,7 @@ export default function PublicLayout() {
         aria-label="Chat via WhatsApp"
       >
 
-        <MessageCircle size={28} />
+        <WhatsAppIcon size={28} />
 
         <span
           className="

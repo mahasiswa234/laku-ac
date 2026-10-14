@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { formatDateYMD } from '../utils/date';
 import { Calendar, CheckCircle, RefreshCw, Star, Image, X, FileText } from 'lucide-react';
 
 export default function TechnicianHistory() {
@@ -17,7 +18,7 @@ export default function TechnicianHistory() {
           customer: item.customer || 'Pelanggan',
           service: item.service || 'Service AC',
           address: item.customer_address || '-',
-          date: item.date || (item.created_at ? new Date(item.created_at).toLocaleDateString('id-ID') : 'Selesai'),
+          date: formatDateYMD(item.date || item.created_at || 'Selesai'),
           status: 'Selesai',
           rating: item.rating || 5,
           unit: item.ac_brand ? `${item.ac_brand} (${item.ac_location || 'Unit'})` : '',

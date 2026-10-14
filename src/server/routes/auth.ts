@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import db from '../db/connection.js';
 import { authenticateJWT, AuthRequest, JWT_SECRET } from '../middleware/authMiddleware.js';
 import { hashPassword, verifyPassword } from '../utils/password.js';
+import { isEmailTaken, isPhoneTaken, isDuplicateEntryError, EMAIL_TAKEN_MESSAGE, PHONE_TAKEN_MESSAGE } from '../utils/uniqueness.js';
 
 const router = Router();
 
@@ -255,17 +256,22 @@ router.put('/password', authenticateJWT, async (req: AuthRequest, res) => {
 
 // Register
 router.post('/register', async (req, res) => {
-  const { fullName, email, phone, password } = req.body;
+  const { fullName, password } = req.body;
+  const email = typeof req.body.email === 'string' ? req.body.email.trim() : '';
+  const phone = String(req.body.phone ?? '').trim();
   
   if (!fullName || !email || !password || !phone) {
     return res.status(400).json({ message: 'Semua field wajib diisi' });
   }
 
   try {
-    // 1. Check if email exists
-    const [existing]: any = await db.query('SELECT * FROM users WHERE email = ?', [email]);
-    if (existing.length > 0) {
-      return res.status(400).json({ message: 'Email sudah terdaftar' });
+    // 1. Email & no HP tidak boleh sudah terdaftar (aturan yang sama dipakai di
+    //    Tambah Teknisi dan Tambah Pelanggan pada dashboard admin)
+    if (await isEmailTaken(email)) {
+      return res.status(400).json({ message: EMAIL_TAKEN_MESSAGE });
+    }
+    if (await isPhoneTaken(phone)) {
+      return res.status(400).json({ message: PHONE_TAKEN_MESSAGE });
     }
 
     // 2. Insert into users
@@ -289,6 +295,9 @@ router.post('/register', async (req, res) => {
 
     res.status(201).json({ message: 'Pendaftaran berhasil' });
   } catch (error) {
+    if (isDuplicateEntryError(error)) {
+      return res.status(400).json({ message: EMAIL_TAKEN_MESSAGE });
+    }
     console.error(error);
     res.status(500).json({ message: 'Gagal melakukan pendaftaran' });
   }

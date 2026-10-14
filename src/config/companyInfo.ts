@@ -29,6 +29,8 @@ export const COMPANY_INFO = {
   tagline: 'Sistem Informasi Servis & Pemeliharaan AC',
   address: OFFICE_ADDRESS,
   phone: '0813-1402-2911',
+  /** Nomor WhatsApp format internasional (tanpa +, spasi, atau tanda hubung) untuk link wa.me. */
+  whatsapp: '6281314022911',
   email: 'info@lakuac.com',
 
   /**

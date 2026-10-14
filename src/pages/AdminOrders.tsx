@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { formatDateYMD } from '../utils/date';
 import { Link } from 'react-router-dom';
 import { 
   Search, 
@@ -443,7 +444,7 @@ export default function AdminOrders() {
                   <tr key={req.id} className="hover:bg-slate-50/60 dark:hover:bg-black transition-colors">
                     <td className="px-5 py-4 font-mono font-bold text-xs text-blue-600 dark:text-blue-400 whitespace-nowrap">
                       {req.request_code || `#REQ-${req.id}`}
-                      <p className="text-[10px] text-slate-400 font-sans mt-0.5">{req.date}</p>
+                      <p className="text-[10px] text-slate-400 font-sans mt-0.5">{formatDateYMD(req.date)}</p>
                     </td>
 
                     <td className="px-5 py-4">
@@ -609,7 +610,7 @@ export default function AdminOrders() {
               {selectedRequest.ac_brand && (
                 <p><span className="font-semibold text-slate-700 dark:text-slate-300">Unit:</span> {selectedRequest.ac_brand} ({selectedRequest.ac_location || 'AC'})</p>
               )}
-              <p><span className="font-semibold text-slate-700 dark:text-slate-300">Tanggal Rencana:</span> {selectedRequest.date}</p>
+              <p><span className="font-semibold text-slate-700 dark:text-slate-300">Tanggal Rencana:</span> {formatDateYMD(selectedRequest.date)}</p>
               <p>
                 <span className="font-semibold text-slate-700 dark:text-slate-300">Teknisi saat ini:</span>{' '}
                 {getTechnicianName(selectedRequest) || <span className="italic text-rose-500">Belum ditugaskan</span>}

@@ -7,7 +7,7 @@ export default function AdminCustomers() {
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({ id: '', full_name: '', phone: '', email: '', address: '' });
+  const [formData, setFormData] = useState({ id: '', full_name: '', phone: '', email: '', address: '', password: '' });
   const [isEdit, setIsEdit] = useState(false);
 
   // State for Customer AC Units Modal
@@ -68,12 +68,15 @@ export default function AdminCustomers() {
         body: JSON.stringify(formData)
       });
       
+      const data = await res.json().catch(() => ({}));
+
       if (res.ok) {
-        showAlert(isEdit ? 'Data berhasil diupdate!' : 'Data berhasil ditambahkan!');
+        showAlert(isEdit ? 'Data berhasil diupdate!' : 'Data pelanggan & akun login berhasil ditambahkan! Pelanggan dapat login memakai email dan password yang Anda isi.');
         setIsModalOpen(false);
         fetchCustomers();
       } else {
-        throw new Error('Gagal menyimpan');
+        // Contoh: "Email sudah terdaftar" / "No. WhatsApp / HP sudah terdaftar"
+        showAlert(data.error || data.message || 'Gagal menyimpan data pelanggan.');
       }
     } catch (error) {
       showAlert('Gagal menyimpan data ke server database.');
@@ -96,13 +99,13 @@ export default function AdminCustomers() {
   };
 
   const openEditModal = (customer: any) => {
-    setFormData(customer);
+    setFormData({ ...customer, email: customer.email || '', address: customer.address || '', password: '' });
     setIsEdit(true);
     setIsModalOpen(true);
   };
 
   const openAddModal = () => {
-    setFormData({ id: '', full_name: '', phone: '', email: '', address: '' });
+    setFormData({ id: '', full_name: '', phone: '', email: '', address: '', password: '' });
     setIsEdit(false);
     setIsModalOpen(true);
   };
@@ -209,11 +212,17 @@ export default function AdminCustomers() {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">Email</label>
-                <input type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full border rounded-lg px-3 py-2" />
+                <input required={!isEdit} type="email" placeholder="pelanggan@email.com" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full border rounded-lg px-3 py-2" />
               </div>
+              {!isEdit && (
+                <div>
+                  <label className="block text-sm font-medium mb-1">Password Login Pelanggan</label>
+                  <input required type="password" minLength={6} placeholder="Minimal 6 karakter" value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})} className="w-full border rounded-lg px-3 py-2" autoComplete="new-password" />
+                </div>
+              )}
               <div>
-                <label className="block text-sm font-medium mb-1">No Telepon</label>
-                <input required type="text" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full border rounded-lg px-3 py-2" />
+                <label className="block text-sm font-medium mb-1">No Telepon / WhatsApp</label>
+                <input required type="tel" placeholder="081234567890" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full border rounded-lg px-3 py-2" />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">Alamat</label>

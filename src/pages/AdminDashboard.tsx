@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { formatDateYMD } from '../utils/date';
 import { Users, Wrench, CalendarCheck, Clock, CheckCircle, AlertCircle, ArrowRight, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -202,7 +203,7 @@ export default function AdminDashboard() {
                       )}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-600 dark:text-slate-400">
-                      {req.date}
+                      {formatDateYMD(req.date)}
                     </td>
                     <td className="px-6 py-4">
                       <span className={`px-2.5 py-1 rounded-md text-xs font-semibold inline-flex items-center gap-1 ${

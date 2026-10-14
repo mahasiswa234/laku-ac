@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { formatRupiah } from '../utils/currency.js';
+import { formatDateYMD } from '../utils/date.js';
 import { compressImageToDataUrl } from '../utils/imageCompression.js';
 import { 
   Plus, 
@@ -362,7 +364,7 @@ export default function CustomerDashboard() {
                 if (req.status === 'Dijadwalkan') {
                   notifType = 'scheduled';
                   title = 'Pesanan Dijadwalkan Admin';
-                  msg = `Pesanan ${req.service} (${req.request_code}) telah disetujui & dijadwalkan untuk ${req.date}. Teknisi segera bersiap.`;
+                  msg = `Pesanan ${req.service} (${req.request_code}) telah disetujui & dijadwalkan untuk ${formatDateYMD(req.date)}. Teknisi segera bersiap.`;
                 } else if (req.status === 'Diproses') {
                   notifType = 'in_progress';
                   title = 'Teknisi Sedang Menuju / Mengerjakan';
@@ -877,7 +879,7 @@ export default function CustomerDashboard() {
                       </div>
                       <p className="text-xs font-semibold text-slate-600 dark:text-slate-400">Belum Ada Notifikasi Baru</p>
                       <p className="text-[11px] text-slate-400 mt-1 max-w-[220px] mx-auto">
-                        Pembaruan status pesanan Anda akan muncul otomatis di sini secara real-time.
+                        Status pesanan Anda akan muncul otomatis di sini.
                       </p>
                     </div>
                   ) : (
@@ -1134,7 +1136,7 @@ export default function CustomerDashboard() {
               </div>
               <div>
                 <h2 className="text-lg font-bold text-slate-800 dark:text-slate-200">Status Permintaan Servis</h2>
-                <p className="text-xs text-slate-500 dark:text-slate-400">Permintaan langsung terhubung ke sistem Admin</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Permintaan langsung terhubung ke Admin</p>
               </div>
             </div>
             <button
@@ -1188,7 +1190,7 @@ export default function CustomerDashboard() {
                         <span className="text-xs font-mono text-slate-400 font-semibold">{req.request_code}</span>
                       </div>
                       <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                        Jadwal: <span className="font-medium text-slate-700 dark:text-slate-300">{req.date}</span>
+                        Jadwal: <span className="font-medium text-slate-700 dark:text-slate-300">{formatDateYMD(req.date)}</span>
                         {req.ac_brand && ` • Unit: ${req.ac_brand} (${req.ac_location || 'AC'})`}
                       </p>
                     </div>
@@ -1274,7 +1276,7 @@ export default function CustomerDashboard() {
                             )}
                           </div>
                           <p className="text-xs font-bold text-slate-800 dark:text-slate-200 mt-1">
-                            Total Tagihan: Rp {(req.payment_amount || req.service_price || 75000).toLocaleString('id-ID')}
+                            Total Tagihan: {formatRupiah(req.payment_amount || req.service_price || 75000)}
                           </p>
                         </div>
 
@@ -1681,7 +1683,7 @@ export default function CustomerDashboard() {
                     <span className="font-mono text-sm font-bold text-slate-800 dark:text-slate-200 tracking-wide block mt-0.5">
                       8830-1234-5678
                     </span>
-                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block">a/n PT Laku AC Mandiri</span>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block">a/n PT Laku AC</span>
                     <button
                       type="button"
                       onClick={() => handleCopyAccount('883012345678', 'BCA')}
@@ -1704,7 +1706,7 @@ export default function CustomerDashboard() {
                     <span className="font-mono text-sm font-bold text-slate-800 dark:text-slate-200 tracking-wide block mt-0.5">
                       137-00-9876543-2
                     </span>
-                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block">a/n PT Laku AC Mandiri</span>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block">a/n PT Laku AC</span>
                     <button
                       type="button"
                       onClick={() => handleCopyAccount('1370098765432', 'Mandiri')}
@@ -1729,7 +1731,7 @@ export default function CustomerDashboard() {
                 <div>
                   <span className="text-xs text-slate-500 dark:text-slate-400 block">Total Nominal Yang Harus Ditransfer:</span>
                   <span className="text-lg font-bold text-blue-700 dark:text-blue-300">
-                    Rp {(selectedPayRequest.payment_amount || selectedPayRequest.service_price || 75000).toLocaleString('id-ID')}
+                    {formatRupiah(selectedPayRequest.payment_amount || selectedPayRequest.service_price || 75000)}
                   </span>
                 </div>
                 <span className="text-[11px] text-slate-500 dark:text-slate-400 bg-white dark:bg-black border border-slate-200 dark:border-white/10 px-2.5 py-1 rounded-lg">
